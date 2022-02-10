@@ -34,8 +34,7 @@ Point::Point(const Point& point)
 }
 
 Point::~Point()
-{
-}
+= default;
 
 Point::PointClassification Point::classify(Point& p0, Point& p1)
 {
