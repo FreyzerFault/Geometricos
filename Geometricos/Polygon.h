@@ -24,8 +24,7 @@ namespace GEO
 	{
 	protected:
 		std::vector<Vertex> _vertices;
-
-	protected:
+		
 		/**
 		*	@brief Checks if a vertex (not included in the PolygonGeo) creates a segment with the last vertex that collides with any other segment.
 		*/

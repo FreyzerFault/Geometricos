@@ -10,17 +10,16 @@
 
 
 
-    bool Circle::isInside (Point &p){
-        
-        //XXXX
-        return true;
-    }
+	bool GEO::Circle::isInside (Point &p){
+		
+		//XXXX
+		return true;
+	}
 
-    
-    PolygonGeo Circle:: getPointsCircle (){
-        
-        return PolygonGeo();
-    }
-    
+
+	GEO::Polygon GEO::Circle::getPointsCircle (){
+		return Polygon();
+	}
+	
   
    

@@ -3,8 +3,7 @@
 #include "Line.h"
 
 
-
-DrawLine::DrawLine (Line &t): dt (t), Draw(){
+GEO::DrawLine::DrawLine (Line &t): dt (t), Draw(){
     
  //XXXX
     
@@ -14,13 +13,13 @@ DrawLine::DrawLine (Line &t): dt (t), Draw(){
 }
 
 
-void DrawLine::drawIt (TypeColor c){
+void GEO::DrawLine::drawIt (TypeColor c){
     setColorActivo (c);
     drawIt();
 }
 
 
-void DrawLine::drawIt (){
+void GEO::DrawLine::drawIt (){
     setShaderProgram ( "algeom" );
     setDrawMode(TypeDraw::LINE );
     Scene::getInstance ()->addModel ( this );

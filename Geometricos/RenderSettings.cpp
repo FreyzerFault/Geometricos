@@ -8,7 +8,7 @@
  * Constructor parametrizado
  * @param tipo Identifica el tipo de luz a crear
  */
-Light::Light ( TypeLight tipo ): _type ( tipo )
+GEO::Light::Light ( TypeLight tipo ): _type ( tipo )
 { }
 
 
@@ -16,18 +16,18 @@ Light::Light ( TypeLight tipo ): _type ( tipo )
  * Constructor de copia
  * @param orig Luz de la que se copian los atributos
  */
-Light::Light ( const Light& orig ): _type ( orig._type ), _Ia ( orig._Ia ),
-                                        _Id ( orig._Id ), _Is ( orig._Is ),
-                                        _position ( orig._position ),
-                                        _direction ( orig._direction ),
-                                        _gamma ( orig._gamma ), _s ( orig._s )
+GEO::Light::Light ( const Light& orig ): _type ( orig._type ), _Ia ( orig._Ia ),
+                                         _Id ( orig._Id ), _Is ( orig._Is ),
+                                         _position ( orig._position ),
+                                         _direction ( orig._direction ),
+                                         _gamma ( orig._gamma ), _s ( orig._s )
 { }
 
 
 /**
  * Destructor
  */
-Light::~Light ( )
+GEO::Light::~Light ( )
 { }
 
 
@@ -37,7 +37,7 @@ Light::~Light ( )
  * @return Una referencia al propio objeto, para faciliar el encadenamiento de
  *         llamadas a métodos
  */
-Light& Light::setType ( TypeLight type )
+GEO::Light& GEO::Light::setType ( TypeLight type )
 {
    this->_type = type;
    return *this;
@@ -48,7 +48,7 @@ Light& Light::setType ( TypeLight type )
  * Consulta del tipo de luz
  * @return El tipo de luz que se trata
  */
-TypeLight Light::getType ( ) const
+GEO::TypeLight GEO::Light::getType ( ) const
 {
    return _type;
 }
@@ -64,7 +64,7 @@ TypeLight Light::getType ( ) const
  *         llamadas a métodos
  * @throw std::runtime_error Si el tipo de luz no es compatible con este método
  */
-Light& Light::setDirection ( glm::vec3 direction )
+GEO::Light& GEO::Light::setDirection ( glm::vec3 direction )
 {
    if ( ( _type != TypeLight::SPOT )
         && ( _type != TypeLight::DIRECTIONAL ) )
@@ -84,12 +84,12 @@ Light& Light::setDirection ( glm::vec3 direction )
  *         que apunta desde la fuente de luz hacia la escena
  * @throw std::runtime_error Si el tipo de luz no es compatible con este método
  */
-glm::vec3 Light::getDirection ( ) const
+glm::vec3 GEO::Light::getDirection ( ) const
 {
    if ( ( _type != TypeLight::SPOT )
         && ( _type != TypeLight::DIRECTIONAL ) )
    {
-      throw std::runtime_error ( "Light::getDireccion: tipo de luz incompatible" );
+      throw std::runtime_error ( "GEO::Light::getDireccion: tipo de luz incompatible" );
    }
 
    return _direction;
@@ -104,12 +104,12 @@ glm::vec3 Light::getDirection ( ) const
  *         llamadas
  * @throw std::runtime_error Si el tipo de luz no es compatible con este método
  */
-Light& Light::setPosition ( glm::vec3 posicion )
+GEO::Light& GEO::Light::setPosition ( glm::vec3 posicion )
 {
    if ( ( _type != TypeLight::SPOT )
         && ( _type != TypeLight::PUNCTUAL ) )
    {
-      throw std::runtime_error ( "Light::setPosicion: tipo de luz incompatible" );
+      throw std::runtime_error ( "GEO::Light::setPosicion: tipo de luz incompatible" );
    }
 
    this->_position = posicion;
@@ -123,12 +123,12 @@ Light& Light::setPosition ( glm::vec3 posicion )
  * @return La posición de la luz en coordenadas de la escena
  * @throw std::runtime_error Si el tipo de luz no es compatible con este método
  */
-glm::vec3 Light::getPosition ( ) const
+glm::vec3 GEO::Light::getPosition ( ) const
 {
    if ( ( _type != TypeLight::SPOT )
         && ( _type != TypeLight::PUNCTUAL ) )
    {
-      throw std::runtime_error ( "Light::getPosicion: tipo de luz incompatible" );
+      throw std::runtime_error ( "GEO::Light::getPosicion: tipo de luz incompatible" );
    }
 
    return _position;
@@ -144,11 +144,11 @@ glm::vec3 Light::getPosition ( ) const
  *         llamadas
  * @throw std::runtime_error Si el tipo de luz no es compatible con este método
  */
-Light& Light::setIs ( glm::vec3 Is )
+GEO::Light& GEO::Light::setIs ( glm::vec3 Is )
 {
    if ( _type == TypeLight::AMBIENT )
    {
-      throw std::runtime_error ( "Light::setIs: tipo de luz incompatible" );
+      throw std::runtime_error ( "GEO::Light::setIs: tipo de luz incompatible" );
    }
 
    this->_Is = Is;
@@ -162,11 +162,11 @@ Light& Light::setIs ( glm::vec3 Is )
  * @return Las coordenadas RGB del color
  * @throw std::runtime_error Si el tipo de luz no es compatible con este método
  */
-glm::vec3 Light::getIs ( ) const
+glm::vec3 GEO::Light::getIs ( ) const
 {
    if ( _type == TypeLight::AMBIENT )
    {
-      throw std::runtime_error ( "Light::getIs: tipo de luz incompatible" );
+      throw std::runtime_error ( "GEO::Light::getIs: tipo de luz incompatible" );
    }
 
    return _Is;
@@ -182,11 +182,11 @@ glm::vec3 Light::getIs ( ) const
  *         llamadas
  * @throw std::runtime_error Si el tipo de luz no es compatible con este método
  */
-Light& Light::setId ( glm::vec3 Id )
+GEO::Light& GEO::Light::setId ( glm::vec3 Id )
 {
    if ( _type == TypeLight::AMBIENT )
    {
-      throw std::runtime_error ( "Light::setId: tipo de luz incompatible" );
+      throw std::runtime_error ( "GEO::Light::setId: tipo de luz incompatible" );
    }
 
    this->_Id = Id;
@@ -200,11 +200,11 @@ Light& Light::setId ( glm::vec3 Id )
  * @return Las coordenadas RGB del color
  * @throw std::runtime_error Si el tipo de luz no es compatible con este método
  */
-glm::vec3 Light::getId ( ) const
+glm::vec3 GEO::Light::getId ( ) const
 {
    if ( _type == TypeLight::AMBIENT )
    {
-      throw std::runtime_error ( "Light::getId: tipo de luz incompatible" );
+      throw std::runtime_error ( "GEO::Light::getId: tipo de luz incompatible" );
    }
 
    return _Id;
@@ -219,11 +219,11 @@ glm::vec3 Light::getId ( ) const
  *         llamadas
  * @throw std::runtime_error Si el tipo de luz no es compatible con este método
  */
-Light& Light::setIa ( glm::vec3 Ia )
+GEO::Light& GEO::Light::setIa ( glm::vec3 Ia )
 {
    if ( _type != TypeLight::AMBIENT )
    {
-      throw std::runtime_error ( "Light::setIa: tipo de luz incompatible" );
+      throw std::runtime_error ( "GEO::Light::setIa: tipo de luz incompatible" );
    }
 
    this->_Ia = Ia;
@@ -236,11 +236,11 @@ Light& Light::setIa ( glm::vec3 Ia )
  * @return Coordenadas RGB del color
  * @throw std::runtime_error Si el tipo de luz no es compatible con este método
  */
-glm::vec3 Light::getIa ( ) const
+glm::vec3 GEO::Light::getIa ( ) const
 {
    if ( _type != TypeLight::AMBIENT )
    {
-      throw std::runtime_error ( "Light::getIa: tipo de luz incompatible" );
+      throw std::runtime_error ( "GEO::Light::getIa: tipo de luz incompatible" );
    }
 
    return _Ia;
@@ -253,7 +253,7 @@ glm::vec3 Light::getIa ( ) const
  * @return Una referencia al propio objeto, para permitir el encadenamiento de
  *         llamadas
  */
-Light& Light::operator = ( const Light& orig )
+GEO::Light& GEO::Light::operator = ( const Light& orig )
 {
    if ( this != &orig )
    {
@@ -271,9 +271,9 @@ Light& Light::operator = ( const Light& orig )
 }
 
 
-Material::Material ( const Material& orig ): _ambient ( orig._ambient ),
-                        _diffuse ( orig._diffuse ), _specular ( orig._specular ),
-                        _bright ( orig._bright ) //,
+GEO::Material::Material ( const Material& orig ): _ambient ( orig._ambient ),
+                                                  _diffuse ( orig._diffuse ), _specular ( orig._specular ),
+                                                  _bright ( orig._bright ) //,
                         //_textura ( new Textura ( *orig._textura ) )
 { }
 
@@ -282,7 +282,7 @@ Material::Material ( const Material& orig ): _ambient ( orig._ambient ),
  * Destructor
  * @post Si hay una textura asociada, la destruye
  */
-Material::~Material ( )
+GEO::Material::~Material ( )
 {
 //   if ( _textura != nullptr )
 //   {
@@ -296,7 +296,7 @@ Material::~Material ( )
  * Método para consultar el color ambiente
  * @return El color ambiente en formato RGBA
  */
-glm::vec4 Material::getAmbient ( )
+glm::vec4 GEO::Material::getAmbient ( )
 {
    return _ambient;
 }
@@ -306,7 +306,7 @@ glm::vec4 Material::getAmbient ( )
  * Método para consultar el color difuso
  * @return El color difuso en formato RGBA
  */
-glm::vec4 Material::getDiffuse ( )
+glm::vec4 GEO::Material::getDiffuse ( )
 {
    return _diffuse;
 }
@@ -316,7 +316,7 @@ glm::vec4 Material::getDiffuse ( )
  * Método para consultar el color especular
  * @return El color especular en formato RGBA
  */
-glm::vec4 Material::getSpecular ( )
+glm::vec4 GEO::Material::getSpecular ( )
 {
    return _specular;
 }
@@ -326,7 +326,7 @@ glm::vec4 Material::getSpecular ( )
  * Método para consultar el exponente para el cálculo de los brillos
  * @return El exponente para el cálculo de los brillos
  */
-GLfloat Material::getExpBright ( )
+GLfloat GEO::Material::getExpBright ( )
 {
    return _bright;
 }
@@ -339,7 +339,7 @@ GLfloat Material::getExpBright ( )
  * @return Una referencia al propio objeto, para permitir el encadenamiento de
  *         llamadas
  */
-Material& Material::setAmbient ( glm::vec4 a )
+GEO::Material& GEO::Material::setAmbient ( glm::vec4 a )
 {
    _ambient = a;
    return *this;
@@ -353,7 +353,7 @@ Material& Material::setAmbient ( glm::vec4 a )
  * @return Una referencia al propio objeto, para permitir el encadenamiento de
  *         llamadas
  */
-Material& Material::setDiffuse ( glm::vec4 d )
+GEO::Material& GEO::Material::setDiffuse ( glm::vec4 d )
 {
    _diffuse = d;
    return *this;
@@ -367,7 +367,7 @@ Material& Material::setDiffuse ( glm::vec4 d )
  * @return Una referencia al propio objeto, para permitir el encadenamiento de
  *         llamadas
  */
-Material& Material::setSpecular ( glm::vec4 e )
+GEO::Material& GEO::Material::setSpecular ( glm::vec4 e )
 {
    _specular = e;
    return *this;
@@ -381,7 +381,7 @@ Material& Material::setSpecular ( glm::vec4 e )
  * @return Una referencia al propio objeto, para permitir el encadenamiento de
  *         llamadas
  */
-Material& Material::setExpBright ( GLfloat s )
+GEO::Material& GEO::Material::setExpBright ( GLfloat s )
 {
    _bright = s;
    return *this;
@@ -397,7 +397,7 @@ Material& Material::setExpBright ( GLfloat s )
  * @post Si el material del que se copian los datos tiene una textura asociada,
  *       se crea una copia de la misma
  */
-Material& Material::operator = ( const Material& orig )
+GEO::Material& GEO::Material::operator = ( const Material& orig )
 {
    if ( this != &orig )
    {
@@ -413,14 +413,14 @@ Material& Material::operator = ( const Material& orig )
 
 
 
-GLfloat Camera::PAG_EPSILON = 0.001;
+GLfloat GEO::Camera::PAG_EPSILON = 0.001;
 
 /**
  * Constructor
  * @param pos Posición inicial de la cámara
  * @param lA Punto al que mira la cámara
  */
-Camera::Camera ( glm::vec3 pos, glm::vec3 lA ): _posicion ( pos ),
+GEO::Camera::Camera ( glm::vec3 pos, glm::vec3 lA ): _posicion ( pos ),
                                                      _lookAt ( lA )
 { }
 
@@ -429,7 +429,7 @@ Camera::Camera ( glm::vec3 pos, glm::vec3 lA ): _posicion ( pos ),
  * Constructor de copia
  * @param orig Objeto del que copia los parámetros
  */
-Camera::Camera ( const Camera& orig ): _posicion ( orig._posicion ),
+GEO::Camera::Camera ( const Camera& orig ): _posicion ( orig._posicion ),
                     _lookAt ( orig._lookAt ), _fovX ( orig._fovX ),
                     _zNear ( orig._zNear ), _zFar ( orig._zFar ),
                     _width ( orig._width ), _height ( orig._height )
@@ -439,7 +439,7 @@ Camera::Camera ( const Camera& orig ): _posicion ( orig._posicion ),
 /**
  * Destructor
  */
-Camera::~Camera ( )
+GEO::Camera::~Camera ( )
 { }
 
 
@@ -447,7 +447,7 @@ Camera::~Camera ( )
  * Método para consultar la matriz de visión asociada a la cámara
  * @return La matriz de visión tal cual la genera GLM
  */
-glm::mat4 Camera::getMvis ( )
+glm::mat4 GEO::Camera::getMvis ( )
 {
    return glm::lookAt ( _posicion, _lookAt, vectorUp() ) ;
 }
@@ -457,7 +457,7 @@ glm::mat4 Camera::getMvis ( )
  * Método para consultar la matriz de proyección asociada a la cámara
  * @return La matriz de proyección tal cual la genera GLM
  */
-glm::mat4 Camera::getMproy ( )
+glm::mat4 GEO::Camera::getMproy ( )
 {
    GLfloat aspecto = _width / _height;
    GLfloat fovY = 2 * atan ( tan ( glm::radians ( _fovX / 2 ) ) / aspecto );
@@ -471,7 +471,7 @@ glm::mat4 Camera::getMproy ( )
  * transformaciones de visión y proyección
  * @return La matriz resultado de componer las de visión y proyección
  */
-glm::mat4 Camera::getMvp ( )
+glm::mat4 GEO::Camera::getMvp ( )
 {
    return ( getMproy () * getMvis () );
 }
@@ -484,7 +484,7 @@ glm::mat4 Camera::getMvp ( )
  * coordenadas local de la cámara
  * @param incGradosSex Magnitud de la rotación en grados sexagesimales
  */
-void Camera::pan ( GLfloat incGradosSex )
+void GEO::Camera::pan ( GLfloat incGradosSex )
 {
    glm::vec3 u, v, n;
    calculateUVN ( u, v, n );
@@ -509,7 +509,7 @@ void Camera::pan ( GLfloat incGradosSex )
  * coordenadas local de la cámara
  * @param incGradosSex Magnitud de la rotación en grados sexagesimales
  */
-void Camera::tilt ( GLfloat incGradosSex )
+void GEO::Camera::tilt ( GLfloat incGradosSex )
 {
    glm::vec3 u, v, n;
    calculateUVN ( u, v, n );
@@ -531,7 +531,7 @@ void Camera::tilt ( GLfloat incGradosSex )
  * @param incX Unidades de desplazamiento en el eje X de la escena
  * @param incZ Unidades de desplazamiento en el eje Z de la escena
  */
-void Camera::dolly ( GLfloat incX, GLfloat incZ )
+void GEO::Camera::dolly ( GLfloat incX, GLfloat incZ )
 {
    _posicion[0] += incX;
    _posicion[2] += incZ;
@@ -546,7 +546,7 @@ void Camera::dolly ( GLfloat incX, GLfloat incZ )
  * cámara y el punto al que mira
  * @param incY Unidades de desplazamiento a aplicar
  */
-void Camera::crane ( GLfloat incY )
+void GEO::Camera::crane ( GLfloat incY )
 {
    _posicion[1] += incY;
    _lookAt[1] += incY;
@@ -560,7 +560,7 @@ void Camera::crane ( GLfloat incY )
  * @param incGradosSexLat Magnitud de la rotación en latitud en grados sexagesimales
  * @param incGradosSexLon Magnitud de la rotación en longitud en grados sexagesimales
  */
-void Camera::orbit ( GLfloat incGradosSexLat, GLfloat incGradosSexLon )
+void GEO::Camera::orbit ( GLfloat incGradosSexLat, GLfloat incGradosSexLon )
 {
    glm::vec3 u, v, n;
    calculateUVN ( u, v, n );
@@ -580,7 +580,7 @@ void Camera::orbit ( GLfloat incGradosSexLat, GLfloat incGradosSexLon )
  * @post No se permite que el zoom se reduzca a menos de 1 grado, ni que sea
  *       mayor de 180 grados
  */
-void Camera::zoom ( GLfloat incGradosSex )
+void GEO::Camera::zoom ( GLfloat incGradosSex )
 {
    GLfloat aux = _fovX + incGradosSex;
    if ( ( aux >= 1 ) && ( aux <= 180 ) )
@@ -599,7 +599,7 @@ void Camera::zoom ( GLfloat incGradosSex )
  * @param n A través de este parámetro se devuelve el eje N del sistema de
  *          coordenadas local de la cámara
  */
-void Camera::calculateUVN ( glm::vec3& u, glm::vec3& v, glm::vec3& n )
+void GEO::Camera::calculateUVN ( glm::vec3& u, glm::vec3& v, glm::vec3& n )
 {
    n = glm::normalize ( _posicion - _lookAt );
 
@@ -617,7 +617,7 @@ void Camera::calculateUVN ( glm::vec3& u, glm::vec3& v, glm::vec3& n )
  * para los cálculos de matriz de visión y sistema de coordenadas local.
  * @return El vector a utilizar como vector UP para los cálculos
  */
-glm::vec3 Camera::vectorUp ( )
+glm::vec3 GEO::Camera::vectorUp ( )
 {
    glm::vec3 n = glm::normalize ( _posicion - _lookAt );
 
@@ -646,7 +646,7 @@ glm::vec3 Camera::vectorUp ( )
  * Método para consultar la posición de la cámara
  * @return La posición de la cámara en la escena
  */
-glm::vec3 Camera::getPos ( )
+glm::vec3 GEO::Camera::getPos ( )
 {
    return _posicion;
 }
@@ -656,7 +656,7 @@ glm::vec3 Camera::getPos ( )
  * Método para consultar el punto al que mira la cámara
  * @return El punto al que mira la cámara en la escena
  */
-glm::vec3 Camera::getLA ( )
+glm::vec3 GEO::Camera::getLA ( )
 {
    return _lookAt;
 }
@@ -666,7 +666,7 @@ glm::vec3 Camera::getLA ( )
  * Método para consultar el ángulo de visión de la cámara
  * @return El ángulo de visión de la cámara
  */
-GLfloat Camera::getFov ( )
+GLfloat GEO::Camera::getFov ( )
 {
    return _fovX;
 }
@@ -676,7 +676,7 @@ GLfloat Camera::getFov ( )
  * Método para consultar la distancia a la que se encuentra el plano zNear
  * @return Distancia a la que se encuentra el plano zNear de la cámara
  */
-GLfloat Camera::getZnear ( )
+GLfloat GEO::Camera::getZnear ( )
 {
    return _zNear;
 }
@@ -686,7 +686,7 @@ GLfloat Camera::getZnear ( )
  * Método para consultar la distancia a la que se encuentra el plano zFar
  * @return Distancia a la que se encuentra el plano zFar de la cámara
  */
-GLfloat Camera::getZfar ( )
+GLfloat GEO::Camera::getZfar ( )
 {
    return _zFar;
 }
@@ -697,7 +697,7 @@ GLfloat Camera::getZfar ( )
  * @param ancho En este parámetro se almacenará el ancho del viewport
  * @param alto En este parámetro se almacenará el alto del viewport
  */
-void Camera::getViewport ( GLfloat& ancho, GLfloat& alto )
+void GEO::Camera::getViewport ( GLfloat& ancho, GLfloat& alto )
 {
    ancho = _width;
    alto = _height;
@@ -710,7 +710,7 @@ void Camera::getViewport ( GLfloat& ancho, GLfloat& alto )
  * @return Una referencia al mismo objeto, para facilitar el encadenamiento de
  *         llamadas a métodos
  */
-Camera& Camera::setPos ( glm::vec3 pos )
+GEO::Camera& GEO::Camera::setPos ( glm::vec3 pos )
 {
    _posicion = pos;
    return *this;
@@ -723,7 +723,7 @@ Camera& Camera::setPos ( glm::vec3 pos )
  * @return Una referencia al mismo objeto, para facilitar el encadenamiento de
  *         llamadas a métodos
  */
-Camera& Camera::setLA ( glm::vec3 lA )
+GEO::Camera& GEO::Camera::setLA ( glm::vec3 lA )
 {
    _lookAt = lA;
    return *this;
@@ -736,7 +736,7 @@ Camera& Camera::setLA ( glm::vec3 lA )
  * @return Una referencia al mismo objeto, para facilitar el encadenamiento de
  *         llamadas a métodos
  */
-Camera& Camera::setFov ( GLfloat fov )
+GEO::Camera& GEO::Camera::setFov ( GLfloat fov )
 {
    if ( fov <= 0 )
    {
@@ -758,7 +758,7 @@ Camera& Camera::setFov ( GLfloat fov )
  * @throw std::invalid_argument Si zN o zF son negativos, o si zF es menor o
  *                              igual que zN
  */
-Camera& Camera::setRangeZ ( GLfloat zN, GLfloat zF )
+GEO::Camera& GEO::Camera::setRangeZ ( GLfloat zN, GLfloat zF )
 {
    if ( zN <= 0 )
    {
@@ -793,7 +793,7 @@ Camera& Camera::setRangeZ ( GLfloat zN, GLfloat zF )
  * @throw std::invalid_argument Si el ancho o el alto que se pasan como
  *                              parámetros no son positivos
  */
-Camera& Camera::setViewport ( GLfloat ancho, GLfloat alto )
+GEO::Camera& GEO::Camera::setViewport ( GLfloat ancho, GLfloat alto )
 {
    if ( ancho <= 0 )
    {
@@ -820,7 +820,7 @@ Camera& Camera::setViewport ( GLfloat ancho, GLfloat alto )
  * @return Una referencia al mismo objeto, para facilitar el encadenamiento de
  *         llamadas a métodos
  */
-Camera& Camera::setView ( TypeView v )
+GEO::Camera& GEO::Camera::setView ( TypeView v )
 {
    switch (v)
    {

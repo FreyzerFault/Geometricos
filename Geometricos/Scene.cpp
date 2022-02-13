@@ -12,13 +12,13 @@
 #include "Scene.h"
 
 
-Scene* Scene::_instance = nullptr;
+GEO::Scene* GEO::Scene::_instance = nullptr;
 
 /**
  * Destructor.
  * Elimina los modelos, si los hubiera
  */
-Scene::~Scene ( )
+GEO::Scene::~Scene ( )
 {
    if ( ! _models.empty () )
    {
@@ -34,7 +34,7 @@ Scene::~Scene ( )
 }
 
 
-void Scene::setScene (GLint anchoViewport, GLint altoViewport){
+void GEO::Scene::setScene (GLint anchoViewport, GLint altoViewport){
       initScene ( anchoViewport, altoViewport);
       Light l;
       l.setType ( TypeLight::AMBIENT )
@@ -66,7 +66,7 @@ void Scene::setScene (GLint anchoViewport, GLint altoViewport){
  * @return Un puntero a la instancia única de la clase
  * @throw std::runtime_error Si hay algún error
  */
-Scene* Scene::getInstance ( )
+GEO::Scene* GEO::Scene::getInstance ( )
 {
    if ( !_instance )
    {
@@ -89,7 +89,7 @@ Scene* Scene::getInstance ( )
  * Método para hacer el refresco de la escena
  * @throw std::runtime_error Si hay algún error
  */
-void Scene::refresh ( )
+void GEO::Scene::refresh ( )
 {
    glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
    glPolygonMode ( GL_FRONT_AND_BACK, GL_FILL );
@@ -137,7 +137,7 @@ void Scene::refresh ( )
  * @param alto Alto del nuevo viewport
  * @pre Tanto alto como ancho deben ser valores positivos
  */
-void Scene::changeTamViewport ( GLint ancho, GLint alto )
+void GEO::Scene::changeTamViewport ( GLint ancho, GLint alto )
 {
    _camera.setViewport ( ancho, alto );
    glViewport ( 0, 0, ancho, alto );
@@ -152,7 +152,7 @@ void Scene::changeTamViewport ( GLint ancho, GLint alto )
  * @pre valores debe contener la dirección de memoria de un bloque correctamente
  *      alojado
  */
-void Scene::getColorBack ( GLfloat* valores )
+void GEO::Scene::getColorBack ( GLfloat* valores )
 {
    valores[0] = _backgroundColor[0];
    valores[1] = _backgroundColor[1];
@@ -168,7 +168,7 @@ void Scene::getColorBack ( GLfloat* valores )
  * @pre valores debe contener la dirección de memoria de un bloque correctamente
  *      alojado, y los valores almacenados deben estar en el intervalo [0,1]
  */
-void Scene::setColorBack ( GLfloat* valores )
+void GEO::Scene::setColorBack ( GLfloat* valores )
 {
    _backgroundColor[0] = valores[0];
    _backgroundColor[1] = valores[1];
@@ -188,7 +188,7 @@ void Scene::setColorBack ( GLfloat* valores )
  * @param a Color de la componente de transparencia del color
  * @pre Los valores de r, g, b y a han de estar en el rango [0,1]
  */
-void Scene::setColorBack ( GLfloat r, GLfloat g, GLfloat b, GLfloat a )
+void GEO::Scene::setColorBack ( GLfloat r, GLfloat g, GLfloat b, GLfloat a )
 {
    _backgroundColor[0] = r;
    _backgroundColor[1] = g;
@@ -203,7 +203,7 @@ void Scene::setColorBack ( GLfloat r, GLfloat g, GLfloat b, GLfloat a )
 /**
  * Método para activar el Z-buffer
  */
-void Scene::activateZBuffer ( )
+void GEO::Scene::activateZBuffer ( )
 {
    glEnable ( GL_DEPTH_TEST );
    glDepthFunc ( GL_LEQUAL );
@@ -215,7 +215,7 @@ void Scene::activateZBuffer ( )
  * @param anchoViewport Ancho del viewport a utilizar
  * @param altoViewport Alto del viewport a utilizar
  */
-void Scene::initScene ( GLint anchoViewport, GLint altoViewport )
+void GEO::Scene::initScene ( GLint anchoViewport, GLint altoViewport )
 {
    setColorBack ( 0.9, 0.9, 0.9, 1 );
    activateZBuffer ();
@@ -229,7 +229,7 @@ void Scene::initScene ( GLint anchoViewport, GLint altoViewport )
  * Método para añadir un modelo a la escena
  * @pre m almacena la dirección de memoria de un modelo correctamente creado
  */
-void Scene::addModel ( Draw* m )
+void GEO::Scene::addModel ( Draw* m )
 {
    _models.push_back ( m );
 }
@@ -243,7 +243,7 @@ void Scene::addModel ( Draw* m )
  * @throw std::invalid_argument Si el valor del índice no se corresponde con
  *        ningún modelo de la escena
  */
-void Scene::deleteModel ( int cual )
+void GEO::Scene::deleteModel ( int cual )
 {
    if ( _models.empty () )
    {
@@ -271,7 +271,7 @@ void Scene::deleteModel ( int cual )
  * @throw std::invalid_argument Si el valor del índice no se corresponde con
  *        ningún modelo de la escena
  */
-Draw* Scene::getModel ( int cual )
+GEO::Draw* GEO::Scene::getModel ( int cual )
 {
    if ( _models.empty () )
    {
@@ -291,7 +291,7 @@ Draw* Scene::getModel ( int cual )
  * Método para consultar el número de modelos en la escena actualmente
  * @return El número de modelos en la escena
  */
-int Scene::getNumModels ()
+int GEO::Scene::getNumModels ()
 {
    return _models.size ();
 }
@@ -302,7 +302,7 @@ int Scene::getNumModels ()
  * estándar (planta, alzado, perfil o isométrica)
  * @param v Identificador de la vista que se quiere aplicar
  */
-void Scene::setView ( TypeView v )
+void GEO::Scene::setView ( TypeView v )
 {
    _camera.setView ( v );
 }
@@ -313,7 +313,7 @@ void Scene::setView ( TypeView v )
  * @param m Identifica el tipo de movimiento a aplicar
  * @param factor Magnitud del movimiento a aplicar
  */
-void Scene::moveCamera ( Movements m, GLfloat factor )
+void GEO::Scene::moveCamera ( Movements m, GLfloat factor )
 {
    switch ( m )
    {
@@ -340,8 +340,8 @@ void Scene::moveCamera ( Movements m, GLfloat factor )
  * @param factor1 Primer factor de magnitud del movimiento a aplicar
  * @param factor2 Segundo factor de magnitud del movimiento a aplicar
  */
-void Scene::moveCamera ( Movements m, GLfloat factor1,
-                                  GLfloat factor2 )
+void GEO::Scene::moveCamera ( Movements m, GLfloat factor1,
+                              GLfloat factor2 )
 {
    switch ( m )
    {
@@ -363,7 +363,7 @@ void Scene::moveCamera ( Movements m, GLfloat factor1,
  * @throw std::runtime_error Si hay algún error
  *
  */
-void Scene::setDrawMode ( int modelo, TypeDraw modo )
+void GEO::Scene::setDrawMode ( int modelo, TypeDraw modo )
 {
    Draw* m;
 
@@ -397,7 +397,7 @@ void Scene::setDrawMode ( int modelo, TypeDraw modo )
  * @post Se crea una copia de la fuente de luz. No se mantiene ningún vínculo
  *       con la que se pasa como parámetro
  */
-void Scene::addLight ( Light& nueva )
+void GEO::Scene::addLight ( Light& nueva )
 {
    _lights.push_back ( nueva );
 }

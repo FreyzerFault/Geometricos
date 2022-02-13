@@ -1,47 +1,47 @@
 #include "Vec2D.h"
 
 
-Vect2d::Vect2d(const Point& point)
+GEO::Vec2D::Vec2D(const Point& point)
 	: Point(point)
 {
 }
 
-Vect2d::Vect2d(const Vect2d& v)
+GEO::Vec2D::Vec2D(const Vec2D& v)
 	: Point(v._x, v._y)
 {
 }
 
-Vect2d::~Vect2d()
+GEO::Vec2D::~Vec2D()
 {
 }
 
-Vect2d Vect2d::add(Vect2d& b)
+GEO::Vec2D GEO::Vec2D::add(Vec2D& b)
 {
     //XXXX
-	return Vect2d();
+	return Vec2D();
 }
 
-double Vect2d::dot(Vect2d& b)
+double GEO::Vec2D::dot(Vec2D& b)
 {
     //XXXX
 	return 0;
 }
 
-Vect2d & Vect2d::operator=(const Vect2d & vector)
+GEO::Vec2D & GEO::Vec2D::operator=(const Vec2D & vector)
 {
 	Point::operator=(vector);
 
 	return *this;
 }
 
-Vect2d Vect2d::scalarMult(double t)
+GEO::Vec2D GEO::Vec2D::scalarMult(double t)
 {
     //XXXX
-	return Vect2d();
+	return Vec2D();
 }
 
-Vect2d Vect2d::sub(Vect2d& b)
+GEO::Vec2D GEO::Vec2D::sub(Vec2D& b)
 {
     //XXXX
-	return Vect2d(); 
+	return Vec2D(); 
 }

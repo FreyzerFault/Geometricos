@@ -9,8 +9,7 @@
 #include "DrawPoint.h"
 
 
-
-DrawPoint::DrawPoint (Point &p): dp (p), Draw(){
+GEO::DrawPoint::DrawPoint (Point &p): dp (p), Draw(){
     
 
     _vertices.push_back (glm::vec3(p.getX(), p.getY(), 0.0));
@@ -21,14 +20,14 @@ DrawPoint::DrawPoint (Point &p): dp (p), Draw(){
     
 }
 
-void DrawPoint::drawIt (TypeColor c){
+void GEO::DrawPoint::drawIt (TypeColor c){
     setColorActivo (c);
     drawIt();
 }
 
 
 
-void DrawPoint::drawIt (){
+void GEO::DrawPoint::drawIt (){
     setShaderProgram ( "algeom" );
     setDrawMode(TypeDraw::POINT );
     Scene::getInstance ()->addModel ( this );

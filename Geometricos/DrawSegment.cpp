@@ -2,7 +2,7 @@
 #include "DrawSegment.h"
 
 
-DrawSegment::DrawSegment (SegmentLine &t): dt (t), Draw(){
+GEO::DrawSegment::DrawSegment (SegmentLine &t): dt (t), Draw(){
     
     _vertices.push_back ( glm::vec3 (dt._orig.getX(), dt._orig.getY() , 0.0 ) );
     _vertices.push_back ( glm::vec3 (dt._dest.getX(), dt._dest.getY() , 0.0 ) );
@@ -21,13 +21,13 @@ DrawSegment::DrawSegment (SegmentLine &t): dt (t), Draw(){
 }
 
 
-void DrawSegment::drawIt (TypeColor c){
+void GEO::DrawSegment::drawIt (TypeColor c){
     setColorActivo (c);
     drawIt();
 }
 
 
-void DrawSegment::drawIt (){
+void GEO::DrawSegment::drawIt (){
     setShaderProgram ( "algeom" );
     setDrawMode(TypeDraw::LINE );
     Scene::getInstance ()->addModel ( this );

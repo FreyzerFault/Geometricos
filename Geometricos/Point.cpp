@@ -7,13 +7,13 @@
 
 using namespace std;
 
-Point::Point()
+GEO::Point::Point()
 {
 	_x = DEFAULT_VALUE;
 	_y = DEFAULT_VALUE;
 }
 
-Point::Point(double x, double y, bool polar)
+GEO::Point::Point(double x, double y, bool polar)
 {
 	if (!polar)
 	{
@@ -27,16 +27,16 @@ Point::Point(double x, double y, bool polar)
 	}
 }
 
-Point::Point(const Point& point)
+GEO::Point::Point(const Point& point)
 {
 	_x = point._x;
 	_y = point._y;
 }
 
-Point::~Point()
+GEO::Point::~Point()
 = default;
 
-Point::PointClassification Point::classify(Point& p0, Point& p1)
+GEO::Point::PointClassification GEO::Point::classify(Point& p0, Point& p1)
 {
 	if (equal(p0))
 		return ORIGIN;
@@ -63,35 +63,35 @@ Point::PointClassification Point::classify(Point& p0, Point& p1)
 	return BETWEEN;
 }
 
-bool Point::colinear(Point& a, Point& b)
+bool GEO::Point::colinear(Point& a, Point& b)
 {
 	const PointClassification result = classify(a, b);
 	return (result != LEFT) && (result != RIGHT);
 }
 
-double Point::distPoint(Point& p) const
+double GEO::Point::distPoint(Point& p) const
 {
 	return std::sqrt(std::pow(p._x - _x, 2) + std::pow(p._y - _y, 2));
 }
 
-double Point::getAlpha() const
+double GEO::Point::getAlpha() const
 {
 	return glm::acos(_x);
 }
 
 
-double Point::getModule() const
+double GEO::Point::getModule() const
 {
 	return std::sqrt(std::pow(_x, 2) + std::pow(_y, 2));
 }
 
-bool Point::leftAbove(Point& a, Point& b)
+bool GEO::Point::leftAbove(Point& a, Point& b)
 {
 	PointClassification result = classify(a, b);
 	return (result == LEFT) || (result != RIGHT);
 }
 
-Point& Point::operator=(const Point& point)
+GEO::Point& GEO::Point::operator=(const Point& point)
 {
 	_x = point._x;
 	_y = point._y;
@@ -99,20 +99,20 @@ Point& Point::operator=(const Point& point)
 	return *this;
 }
 
-bool Point::rightAbove(Point& a, Point& b)
+bool GEO::Point::rightAbove(Point& a, Point& b)
 {
 	PointClassification result = classify(a, b);
 	return (result == RIGHT) || (result != LEFT);
 }
 
-double Point::slope(Point& p)
+double GEO::Point::slope(Point& p)
 {
 	//XXXXX
 
 	return 0;
 }
 
-double Point::triangleArea2(Point& a, Point& b) const
+double GEO::Point::triangleArea2(Point& a, Point& b) const
 {
 	return GEO::determinant3x3(
 		a.getX(), a.getY(), 1,
@@ -121,7 +121,7 @@ double Point::triangleArea2(Point& a, Point& b) const
 	);
 }
 
-void Point::out()
+void GEO::Point::out()
 {
 	string outstring = "Coordinate x: " + std::to_string(_x) + ", coordinate y: " + std::to_string(_y);
 	cout << outstring << endl;

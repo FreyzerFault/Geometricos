@@ -24,7 +24,7 @@
  * @throw std::invalid_argument Si el tipo no es correcto
  */
 
-Draw::Draw (){
+GEO::Draw::Draw (){
     
 }
 
@@ -40,7 +40,7 @@ Draw::Draw (){
  * @throw std::invalid_argument Si el tipo no es correcto
  * @throw std::runtime_error Si hay algún problema en la carga del archivo
  */
-Draw::Draw ( const TypeModel& type, std::string pathFile )
+GEO::Draw::Draw ( const TypeModel& type, std::string pathFile )
 {
    switch ( type )
    {
@@ -69,13 +69,13 @@ Draw::Draw ( const TypeModel& type, std::string pathFile )
  *       program asociado, también crea una copia de éste
  * @post Se crea un nuevo VAO para el modelo
  */
-Draw::Draw ( const Draw& orig ): _vertices ( orig._vertices ),
-                                                 _normals ( orig._normals ),
-                                                 //_cTextura ( orig._cTextura ),
-                                                 _indices ( orig._indices ),
-                                                 _mode ( orig._mode ),
-                                                 _material ( orig._material ),
-                                                 _tModeling ( orig._tModeling )
+GEO::Draw::Draw ( const Draw& orig ): _vertices ( orig._vertices ),
+                                      _normals ( orig._normals ),
+                                      //_cTextura ( orig._cTextura ),
+                                      _indices ( orig._indices ),
+                                      _mode ( orig._mode ),
+                                      _material ( orig._material ),
+                                      _tModeling ( orig._tModeling )
 {
    if ( orig._program != nullptr )
    {
@@ -91,7 +91,7 @@ Draw::Draw ( const Draw& orig ): _vertices ( orig._vertices ),
  * Borra el VAO, y si hay un shader program asociado al modelo, también lo
  * destruye
  */
-Draw::~Draw ( )
+GEO::Draw::~Draw ( )
 {
    glDeleteBuffers ( 1, &_idVBO );
    glDeleteBuffers ( 1, &_idIBO );
@@ -116,7 +116,7 @@ Draw::~Draw ( )
  * Los VBOs se crean en formato no entrelazado. Si hay coordenadas de textura
  * en el modelo, también crea un VBO con ellas
  */
-void Draw::buildVAO ( )
+void GEO::Draw::buildVAO ( )
 {
    // Crea el VAO y lo activa
    glGenVertexArrays ( 1, &_idVAO );
@@ -161,7 +161,7 @@ void Draw::buildVAO ( )
  * @throw std::runtime_error Si hay algún error cargando los shaders
  * @post Si el modelo tenía un shader asignado previamente, lo destruye
  */
-Draw& Draw::setShaderProgram ( const std::string& nombre )
+GEO::Draw& GEO::Draw::setShaderProgram ( const std::string& nombre )
 {
    if ( _program != nullptr )
    {
@@ -192,7 +192,7 @@ Draw& Draw::setShaderProgram ( const std::string& nombre )
  */
 
 
-void Draw::render ( glm::mat4 matrizV, glm::mat4 matrizVP, Light& l )
+void GEO::Draw::render ( glm::mat4 matrizV, glm::mat4 matrizVP, Light& l )
 {
    if ( _program == nullptr )
    {
@@ -302,7 +302,7 @@ void Draw::render ( glm::mat4 matrizV, glm::mat4 matrizVP, Light& l )
  *        rendering
  * @throw std::runtime_error
  */
-void Draw::setShader ( Light& l, glm::mat4 matrizV, glm::mat4 mvIT )
+void GEO::Draw::setShader ( Light& l, glm::mat4 matrizV, glm::mat4 mvIT )
 {
    TypeLight aux = l.getType ();
    try
@@ -380,7 +380,7 @@ void Draw::setShader ( Light& l, glm::mat4 matrizV, glm::mat4 mvIT )
  * @post El modo de visualización TEXTURA sólo se activa si el modelo tiene
  *       realmente asignada una textura
  */
-Draw& Draw::setDrawMode ( TypeDraw m )
+GEO::Draw& GEO::Draw::setDrawMode ( TypeDraw m )
 {
    switch ( m )
    {
@@ -406,7 +406,7 @@ Draw& Draw::setDrawMode ( TypeDraw m )
  * @post Se copia la información de m en el material del modelo. No se mantiene
  *       ninguna vinculación con m
  */
-Draw& Draw::setMaterial ( const Material& m )
+GEO::Draw& GEO::Draw::setMaterial ( const Material& m )
 {
    _material = m;
    return *this;
@@ -420,7 +420,7 @@ Draw& Draw::setMaterial ( const Material& m )
  * @pre Se asume que las componentes del color tienen valores correctos
  * @return Una referencia al propio objeto
  */
-Draw& Draw::setAmbient ( glm::vec4 a )
+GEO::Draw& GEO::Draw::setAmbient ( glm::vec4 a )
 {
    _material.setAmbient ( a );
    return *this;
@@ -434,7 +434,7 @@ Draw& Draw::setAmbient ( glm::vec4 a )
  * @pre Se asume que las componentes de color tienen valores correctos
  * @return Una referencia al propio objeto
  */
-Draw& Draw::setAmbient ( glm::vec3 a )
+GEO::Draw& GEO::Draw::setAmbient ( glm::vec3 a )
 {
    _material.setAmbient ( glm::vec4 ( a, 1 ) );
    return *this;
@@ -448,7 +448,7 @@ Draw& Draw::setAmbient ( glm::vec3 a )
  * @pre Se asume que las componentes de color tienen valores correctos
  * @return Una referencia al propio objeto
  */
-Draw& Draw::setDiffuse ( glm::vec4 d )
+GEO::Draw& GEO::Draw::setDiffuse ( glm::vec4 d )
 {
    _material.setDiffuse ( d );
    return *this;
@@ -462,7 +462,7 @@ Draw& Draw::setDiffuse ( glm::vec4 d )
  * @pre Se asume que las componentes de color tienen valores correctos
  * @return Una referencia al propio objeto
  */
-Draw& Draw::setDiffuse ( glm::vec3 d )
+GEO::Draw& GEO::Draw::setDiffuse ( glm::vec3 d )
 {
    _material.setDiffuse ( glm::vec4 ( d, 1 ) );
    return *this;
@@ -476,7 +476,7 @@ Draw& Draw::setDiffuse ( glm::vec3 d )
  * @pre Se asume que las componentes de color tienen valores correctos
  * @return Una referencia al propio objeto
  */
-Draw& Draw::setSpecular ( glm::vec4 e )
+GEO::Draw& GEO::Draw::setSpecular ( glm::vec4 e )
 {
    _material.setSpecular ( e );
    return *this;
@@ -490,7 +490,7 @@ Draw& Draw::setSpecular ( glm::vec4 e )
  * @pre Se asume que las componentes de color tienen valores correctos
  * @return Una referencia al propio objeto
  */
-Draw& Draw::setEspecular ( glm::vec3 e )
+GEO::Draw& GEO::Draw::setEspecular ( glm::vec3 e )
 {
    _material.setSpecular ( glm::vec4 ( e, 1 ) );
    return *this;
@@ -502,7 +502,7 @@ Draw& Draw::setEspecular ( glm::vec3 e )
  * @param s El nuevo valor de exponente a aplicar
  * @return Una referencia al propio objeto
  */
-Draw& Draw::setExpBright ( GLfloat s )
+GEO::Draw& GEO::Draw::setExpBright ( GLfloat s )
 {
    _material.setExpBright ( s );
    return *this;
@@ -517,7 +517,7 @@ Draw& Draw::setExpBright ( GLfloat s )
  *       modelo
  * @return Una referencia al propio objeto
  */
-Draw& Draw::apply ( glm::mat4 t )
+GEO::Draw& GEO::Draw::apply ( glm::mat4 t )
 {
    _tModeling = t * _tModeling;
    return *this;
@@ -535,7 +535,7 @@ Draw& Draw::apply ( glm::mat4 t )
  *       carga
  * @post Una vez cargada la geometría, se genera el VAO para dibujar el modelo
  */
-Draw& Draw::loadFile ( std::string pathfile )
+GEO::Draw& GEO::Draw::loadFile ( std::string pathfile )
 {
    cleaning ();
 
@@ -571,7 +571,7 @@ Draw& Draw::loadFile ( std::string pathfile )
  * @note Al procesar el nodo de manera recursiva, no se garantiza que se llegue
  *       a un desbordamiento de pila
  */
-void Draw::processNodeAssimp ( aiNode* node, const aiScene* scene )
+void GEO::Draw::processNodeAssimp ( aiNode* node, const aiScene* scene )
 {
    for ( int i = 0; i < node->mNumMeshes; i++ )
    {
@@ -593,7 +593,7 @@ void Draw::processNodeAssimp ( aiNode* node, const aiScene* scene )
  * @param escena Escena de Assimp con todo el contenido cargado del archivo
  * @post Carga vértices, normales, coordenadas de textura (si hubiera) e índices
  */
-void Draw::processMeshAssimp (  aiMesh* mesh, const aiScene* scene )
+void GEO::Draw::processMeshAssimp (  aiMesh* mesh, const aiScene* scene )
 {
    for ( int i = 0; i < mesh->mNumVertices; i++ )
    {
@@ -635,7 +635,7 @@ void Draw::processMeshAssimp (  aiMesh* mesh, const aiScene* scene )
  * Método para eliminar la geometría que hubiera cargada en el modelo, así como
  * los buffers de OpenGL asociados
  */
-void Draw::cleaning ( )
+void GEO::Draw::cleaning ( )
 {
    _vertices.clear ();
    _normals.clear ();
@@ -667,7 +667,7 @@ void Draw::cleaning ( )
  * @throw std::runtime_error Si hay algún error cargando los shaders
  * @post Si el modelo tenía un shader asignado previamente, lo destruye
  */
-Draw& Draw::setColorActivo ( glm::vec4 col )
+GEO::Draw& GEO::Draw::setColorActivo ( glm::vec4 col )
 {
    colorAct = col; 
 
@@ -675,14 +675,14 @@ Draw& Draw::setColorActivo ( glm::vec4 col )
 }
 
 
-Draw& Draw::setColorActivo ( glm::vec3 col )
+GEO::Draw& GEO::Draw::setColorActivo ( glm::vec3 col )
 {
    colorAct = glm::vec4(col,1.0); 
 
    return *this;
 }
 
-Draw& Draw::setColorActivo ( TypeColor col )
+GEO::Draw& GEO::Draw::setColorActivo ( TypeColor col )
 {
    colorAct = col; 
 

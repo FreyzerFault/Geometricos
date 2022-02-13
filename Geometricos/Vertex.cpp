@@ -4,53 +4,53 @@
 #include "Vertex.h"
 
 
-Vertex::Vertex()
+GEO::Vertex::Vertex()
 	: Point()
 {
 	_position = INVALID_POSITION;
 	_polygon = nullptr;
 }
 
-Vertex::Vertex(const Point& point)
-	: Point(point)
-{
-	_position = INVALID_POSITION;
-	_polygon = nullptr;
-}
 
-Vertex::Vertex(const Point & point, PolygonGeo* polygon, int pos)
+GEO::Vertex::Vertex(const Point & point, Polygon* polygon, int pos)
 	: Point(point)
 {
 	_position = pos;
 	_polygon = polygon;
 }
 
-Vertex::~Vertex()
+GEO::Vertex::Vertex(const Point& point)
+	: Point(point)
+{
+	_position = INVALID_POSITION;
+	_polygon = nullptr;
+}
+
+GEO::Vertex::~Vertex()
 {
 }
 
-bool Vertex::convex()
+bool GEO::Vertex::convex()
 {
 	//XXXX
 
 	return false;
 }
 
-bool Vertex::concave()
+bool GEO::Vertex::concave()
 {
     //XXXX
 	return 0;
 }
 
 
-
-SegmentLine Vertex::nextEdge()
+GEO::SegmentLine GEO::Vertex::nextEdge()
 {
 	//XXXX
 	return SegmentLine();
 }
 
-Vertex & Vertex::operator=(const Vertex & vertex)
+GEO::Vertex & GEO::Vertex::operator=(const Vertex & vertex)
 {
 	if (this != &vertex)
 	{
@@ -63,14 +63,14 @@ Vertex & Vertex::operator=(const Vertex & vertex)
 }
 
 
-SegmentLine Vertex::previousEdge()
+GEO::SegmentLine GEO::Vertex::previousEdge()
 {
 	//XXXX
 	return SegmentLine();
 }
 
 
-void Vertex::out()
+void GEO::Vertex::out()
 {
 	Point::out();
 	std::cout << "Position: " <<  std::to_string(_position);

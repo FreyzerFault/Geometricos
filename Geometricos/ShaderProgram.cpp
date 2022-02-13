@@ -23,7 +23,7 @@
  *               el vertex shader, y "-fs.glsl" para el fragment shader)
  * @throw std::runtime_error Si hay algún error
  */
-ShaderProgram::ShaderProgram ( std::string nombre )
+GEO::ShaderProgram::ShaderProgram ( std::string nombre )
 {
    try
    {
@@ -31,7 +31,7 @@ ShaderProgram::ShaderProgram ( std::string nombre )
    }
    catch ( std::runtime_error& e )
    {
-      std::string mensaje = "ShaderProgram::ShaderProgram -> ";
+      std::string mensaje = "GEO::ShaderProgram::ShaderProgram -> ";
       throw std::runtime_error ( mensaje + e.what () );
    }
 }
@@ -41,7 +41,7 @@ ShaderProgram::ShaderProgram ( std::string nombre )
  * identificadores OpenGL
  * @param orig Shader program del que copia los atributos
  */
-ShaderProgram::ShaderProgram ( const ShaderProgram& orig ):
+GEO::ShaderProgram::ShaderProgram ( const ShaderProgram& orig ):
                                     _idFS ( orig._idFS ), _idSP ( orig._idSP ),
                                     _idVS ( orig._idVS ), _ready ( orig._ready ),
                                     _subroutinesFS ( orig._subroutinesFS ),
@@ -51,7 +51,7 @@ ShaderProgram::ShaderProgram ( const ShaderProgram& orig ):
 /**
  * Destructor
  */
-ShaderProgram::~ShaderProgram ( )
+GEO::ShaderProgram::~ShaderProgram ( )
 {
    if ( _idVS != 0 )
    {
@@ -74,7 +74,7 @@ ShaderProgram::~ShaderProgram ( )
  * @retval true Si el shader program se puede utilizar
  * @retval false Si el shader program no está compilado y enlazado
  */
-bool ShaderProgram::isReady ( )
+bool GEO::ShaderProgram::isReady ( )
 {
    return _ready;
 }
@@ -84,11 +84,11 @@ bool ShaderProgram::isReady ( )
  * Método para activar el shader program en OpenGL
  * @throw std::runtime_error Si el shader program no se puede activar
  */
-void ShaderProgram::activate ( )
+void GEO::ShaderProgram::activate ( )
 {
    if ( !_ready )
    {
-      throw std::runtime_error ( "ShaderProgram::activate: el shader"
+      throw std::runtime_error ( "GEO::ShaderProgram::activate: el shader"
                                  " program no está listo" );
    }
 
@@ -100,7 +100,7 @@ void ShaderProgram::activate ( )
  * Método para crear, compilar y enlazar el shader program
  * @throw std::runtime_error Si hay algún problema
  */
-void ShaderProgram::loadProgram ( std::string nombre )
+void GEO::ShaderProgram::loadProgram ( std::string nombre )
 {
    try
    {
@@ -109,7 +109,7 @@ void ShaderProgram::loadProgram ( std::string nombre )
    }
    catch ( std::runtime_error& e )
    {
-      std::string mensaje = "ShaderProgram::cargaPrograma ->\n";
+      std::string mensaje = "GEO::ShaderProgram::cargaPrograma ->\n";
       throw std::runtime_error ( mensaje + e.what () );
    }
 
@@ -136,7 +136,7 @@ void ShaderProgram::loadProgram ( std::string nombre )
          msj = nullptr;
       }
 
-      throw std::runtime_error ( "ShaderProgram::cargaPrograma ->\n"
+      throw std::runtime_error ( "GEO::ShaderProgram::cargaPrograma ->\n"
                                  + mensaje );
    }
 
@@ -160,18 +160,18 @@ void ShaderProgram::loadProgram ( std::string nombre )
  *             GL_VERTEX_SHADER y GL_FRAGMENT_SHADER
  * @throw std::runtime_error Si hay algún problema
  */
-void ShaderProgram::loadShader ( std::string file, GLenum type )
+void GEO::ShaderProgram::loadShader ( std::string file, GLenum type )
 {
    if ( ( type != GL_VERTEX_SHADER ) && ( type != GL_FRAGMENT_SHADER ) )
    {
-      throw std::runtime_error ( "ShaderProgram::cargaShader: tipo no soportado" );
+      throw std::runtime_error ( "GEO::ShaderProgram::cargaShader: tipo no soportado" );
    }
 
    std::ifstream fich;
    fich.open ( file );
    if ( !fich.is_open () )
    {
-      throw std::runtime_error ( "ShaderProgram::cargaShader: no se puede abrir"
+      throw std::runtime_error ( "GEO::ShaderProgram::cargaShader: no se puede abrir"
                                  " el archivo " + file );
    }
 
@@ -205,7 +205,7 @@ void ShaderProgram::loadShader ( std::string file, GLenum type )
          msj = nullptr;
       }
 
-      throw std::runtime_error ( "ShaderProgram::cargaShader ->\n"
+      throw std::runtime_error ( "GEO::ShaderProgram::cargaShader ->\n"
                                  + mensaje );
    }
 
@@ -227,19 +227,19 @@ void ShaderProgram::loadShader ( std::string file, GLenum type )
  * @throw std::runtime_error Si el shader program no está listo para su uso, o
  *        si el uniform no se ha podido localizar
  */
-ShaderProgram& ShaderProgram::setUniform ( std::string name,
+GEO::ShaderProgram& GEO::ShaderProgram::setUniform ( std::string name,
                                                      glm::mat4 value )
 {
    if ( !_ready )
    {
-      throw std::runtime_error ( "ShaderProgram::setUniform: el shader"
+      throw std::runtime_error ( "GEO::ShaderProgram::setUniform: el shader"
                                  " program no está listo aún" );
    }
 
    GLint position = glGetUniformLocation ( _idSP, name.c_str () );
    if ( position == -1 )
    {
-      std::string message = "ShaderProgram::setUniform: el uniform "
+      std::string message = "GEO::ShaderProgram::setUniform: el uniform "
                             + name + " no se ha podido localizar";
       throw std::runtime_error ( message );
    }
@@ -256,19 +256,19 @@ ShaderProgram& ShaderProgram::setUniform ( std::string name,
  * @throw std::runtime_error Si el shader program no está listo para su uso, o
  *        si el uniform no se ha podido localizar
  */
-ShaderProgram& ShaderProgram::setUniform ( std::string nombre,
+GEO::ShaderProgram& GEO::ShaderProgram::setUniform ( std::string nombre,
                                                      glm::vec4 valor )
 {
    if ( !_ready )
    {
-      throw std::runtime_error ( "ShaderProgram::setUniform: el shader"
+      throw std::runtime_error ( "GEO::ShaderProgram::setUniform: el shader"
                                  " program no está listo aún" );
    }
 
    GLint posicion = glGetUniformLocation ( _idSP, nombre.c_str () );
    if ( posicion == -1 )
    {
-      std::string mensaje = "ShaderProgram::setUniform: el uniform "
+      std::string mensaje = "GEO::ShaderProgram::setUniform: el uniform "
                             + nombre + " no se ha podido localizar";
       throw std::runtime_error ( mensaje );
    }
@@ -285,19 +285,19 @@ ShaderProgram& ShaderProgram::setUniform ( std::string nombre,
  * @throw std::runtime_error Si el shader program no está listo para su uso, o
  *        si el uniform no se ha podido localizar
  */
-ShaderProgram& ShaderProgram::setUniform ( std::string nombre,
+GEO::ShaderProgram& GEO::ShaderProgram::setUniform ( std::string nombre,
                                                      glm::vec3 valor )
 {
    if ( !_ready )
    {
-      throw std::runtime_error ( "ShaderProgram::setUniform: el shader"
+      throw std::runtime_error ( "GEO::ShaderProgram::setUniform: el shader"
                                  " program no está listo aún" );
    }
 
    GLint posicion = glGetUniformLocation ( _idSP, nombre.c_str () );
    if ( posicion == -1 )
    {
-      std::string mensaje = "ShaderProgram::setUniform: el uniform "
+      std::string mensaje = "GEO::ShaderProgram::setUniform: el uniform "
                             + nombre + " no se ha podido localizar";
       throw std::runtime_error ( mensaje );
    }
@@ -314,19 +314,19 @@ ShaderProgram& ShaderProgram::setUniform ( std::string nombre,
  * @throw std::runtime_error Si el shader program no está listo para su uso, o
  *        si el uniform no se ha podido localizar
  */
-ShaderProgram& ShaderProgram::setUniform ( std::string nombre,
+GEO::ShaderProgram& GEO::ShaderProgram::setUniform ( std::string nombre,
                                                      GLfloat valor )
 {
    if ( !_ready )
    {
-      throw std::runtime_error ( "ShaderProgram::setUniform: el shader"
+      throw std::runtime_error ( "GEO::ShaderProgram::setUniform: el shader"
                                  " program no está listo aún" );
    }
 
    GLint posicion = glGetUniformLocation ( _idSP, nombre.c_str () );
    if ( posicion == -1 )
    {
-      std::string mensaje = "ShaderProgram::setUniform: el uniform "
+      std::string mensaje = "GEO::ShaderProgram::setUniform: el uniform "
                             + nombre + " no se ha podido localizar";
       throw std::runtime_error ( mensaje );
    }
@@ -343,19 +343,19 @@ ShaderProgram& ShaderProgram::setUniform ( std::string nombre,
  * @throw std::runtime_error Si el shader program no está listo para su uso, o
  *        si el uniform no se ha podido localizar
  */
-ShaderProgram& ShaderProgram::setUniform ( std::string nombre,
+GEO::ShaderProgram& GEO::ShaderProgram::setUniform ( std::string nombre,
                                                      GLint valor )
 {
    if ( !_ready )
    {
-      throw std::runtime_error ( "ShaderProgram::setUniform: el shader"
+      throw std::runtime_error ( "GEO::ShaderProgram::setUniform: el shader"
                                  " program no está listo aún" );
    }
 
    GLint posicion = glGetUniformLocation ( _idSP, nombre.c_str () );
    if ( posicion == -1 )
    {
-      std::string mensaje = "ShaderProgram::setUniform: el uniform "
+      std::string mensaje = "GEO::ShaderProgram::setUniform: el uniform "
                             + nombre + " no se ha podido localizar";
       throw std::runtime_error ( mensaje );
    }
@@ -376,10 +376,10 @@ ShaderProgram& ShaderProgram::setUniform ( std::string nombre,
  * @throw std::runtime_error Si la subrutina o la implementación no se han
  *        podido localizar
  * @note Este método no activa la implementación elegida. Para esto, hay que
- *       llamar a ShaderProgram::aplicaSubrutinas una vez que se hayan
+ *       llamar a GEO::ShaderProgram::aplicaSubrutinas una vez que se hayan
  *       seleccionado todas las implementaciones a activar
  */
-void ShaderProgram::selectRoutine ( GLenum tipoShader,
+void GEO::ShaderProgram::selectRoutine ( GLenum tipoShader,
                                           std::string nombreUniform,
                                           std::string nombreImplementacion )
 {
@@ -387,7 +387,7 @@ void ShaderProgram::selectRoutine ( GLenum tipoShader,
                                                        nombreUniform.c_str () );
    if ( posUniform == -1 )
    {
-      throw std::runtime_error ( "ShaderProgram::eligeSubrutina: no se"
+      throw std::runtime_error ( "GEO::ShaderProgram::eligeSubrutina: no se"
                                  " ha podido localizar el uniform" );
    }
 
@@ -396,7 +396,7 @@ void ShaderProgram::selectRoutine ( GLenum tipoShader,
 
    if ( aux == GL_INVALID_INDEX )
    {
-      throw std::runtime_error ( "ShaderProgram::eligeSubrutina: no se"
+      throw std::runtime_error ( "GEO::ShaderProgram::eligeSubrutina: no se"
                                  " ha podido localizar la implementación" );
    }
 
@@ -413,11 +413,11 @@ void ShaderProgram::selectRoutine ( GLenum tipoShader,
 
 /**
  * Método para activar todas las implementaciones de subrutinas seleccionadas
- * previamente con ShaderProgram::eligeSubrutina
+ * previamente con GEO::ShaderProgram::eligeSubrutina
  * @param tipoShader Shader para el que se activan las implementaciones de
  *        subrutinas
  */
-void ShaderProgram::applyRoutines ( GLenum tipoShader )
+void GEO::ShaderProgram::applyRoutines ( GLenum tipoShader )
 {
    switch ( tipoShader )
    {

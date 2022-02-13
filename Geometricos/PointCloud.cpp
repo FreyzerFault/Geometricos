@@ -6,36 +6,36 @@
 #include "PointCloud.h"
 
 
-PointCloud::PointCloud()
+GEO::PointCloud::PointCloud()
 {
 }
 
-PointCloud::PointCloud(int size, float max_x, float max_y)
+GEO::PointCloud::PointCloud(int size, float max_x, float max_y)
 {
 	//XXXX
 }
 
-PointCloud::PointCloud(const std::string& filename)
+GEO::PointCloud::PointCloud(const std::string& filename)
 {
 		//XXXX
 }
 
-PointCloud::~PointCloud()
+GEO::PointCloud::~PointCloud()
 {
 }
 
-void PointCloud::addPoint(Point& p)
+void GEO::PointCloud::addPoint(Point& p)
 {
 	_points.push_back(p);
 }
 
-Point PointCloud::centralPoint()
+GEO::Point GEO::PointCloud::centralPoint()
 {
 	//XXXX
     return Point();
 }
 
-void PointCloud::deletePoint(int index)
+void GEO::PointCloud::deletePoint(int index)
 {
 	if (index < _points.size())
 	{
@@ -44,8 +44,7 @@ void PointCloud::deletePoint(int index)
 }
 
 
-
-Point PointCloud::getPoint(int position)
+GEO::Point GEO::PointCloud::getPoint(int position)
 {
 	if ((position >= 0) && (position < _points.size())) 
 	{
@@ -55,7 +54,7 @@ Point PointCloud::getPoint(int position)
 	return Point();
 }
 
-PointCloud & PointCloud::operator=(const PointCloud& pointCloud)
+GEO::PointCloud & GEO::PointCloud::operator=(const PointCloud& pointCloud)
 {
 	if (this != &pointCloud)
 	{
@@ -65,7 +64,7 @@ PointCloud & PointCloud::operator=(const PointCloud& pointCloud)
 	return *this;
 }
 
-void PointCloud::save(const std::string& filename)
+void GEO::PointCloud::save(const std::string& filename)
 {
 		//XXXX
 }

@@ -5,31 +5,31 @@
 #include "RayLine.h"
 
 
-SegmentLine::SegmentLine()
+GEO::SegmentLine::SegmentLine()
 {
 }
 
-SegmentLine::SegmentLine(const Point& a, const Point& b)
+GEO::SegmentLine::SegmentLine(const Point& a, const Point& b)
 	: _orig(a), _dest(b)
 {
 }
 
-SegmentLine::SegmentLine(const SegmentLine& segment)
+GEO::SegmentLine::SegmentLine(const SegmentLine& segment)
 	: _orig(segment._orig), _dest(segment._dest)
 {
 }
 
-SegmentLine::SegmentLine(double ax, double ay, double bx, double by)
+GEO::SegmentLine::SegmentLine(double ax, double ay, double bx, double by)
 	: _orig(ax, ay), _dest(bx, by)
 {
 }
 
-SegmentLine::~SegmentLine()
+GEO::SegmentLine::~SegmentLine()
 {
 }
 
 
-SegmentLine & SegmentLine::operator=(const SegmentLine & segment)
+GEO::SegmentLine & GEO::SegmentLine::operator=(const SegmentLine & segment)
 {
 	if (this != &segment)
 	{
@@ -42,33 +42,33 @@ SegmentLine & SegmentLine::operator=(const SegmentLine & segment)
 
 
 
-bool SegmentLine::distinct(SegmentLine & segment)
+bool GEO::SegmentLine::distinct(SegmentLine & segment)
 {
 	return !equal(segment);
 }
 
 
 
-bool SegmentLine::equal(SegmentLine & segment)
+bool GEO::SegmentLine::equal(SegmentLine & segment)
 {
 	return (_orig.equal(segment._orig) && _dest.equal(segment._dest)) || (_orig.equal(segment._dest) && _dest.equal(segment._orig));
 }
 
-Point SegmentLine::getPoint(double t)
+GEO::Point GEO::SegmentLine::getPoint(double t)
 {
 
-    //XXXX
+	//XXXX
 	return Point();
 }
 
 
-bool SegmentLine::impSegmentIntersection(SegmentLine& segment)
+bool GEO::SegmentLine::impSegmentIntersection(SegmentLine& segment)
 {
 //XXXX
-    return true;
+	return true;
 }
 
-bool SegmentLine::isHorizontal()
+bool GEO::SegmentLine::isHorizontal()
 {
 	return true;
 }
@@ -76,18 +76,18 @@ bool SegmentLine::isHorizontal()
 
 
 
-bool SegmentLine::isVertical()
+bool GEO::SegmentLine::isVertical()
 {
-    //XXXX
+	//XXXX
 	return true; 
 }
 
 
-double SegmentLine::slope()
+double GEO::SegmentLine::slope()
 {
 	//XXXX
-    
-    return 0;
+	
+	return 0;
 }
 
 
@@ -97,7 +97,7 @@ double SegmentLine::slope()
 
 
 
-void SegmentLine::out()
+void GEO::SegmentLine::out()
 {
 	std::cout << "Point A: )";
 	_orig.out();

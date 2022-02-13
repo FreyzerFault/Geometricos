@@ -2,7 +2,7 @@
 #include "DrawPointCloud.h"
 
 
-DrawPointCloud::DrawPointCloud (PointCloud &t): dt (t), Draw(){
+GEO::DrawPointCloud::DrawPointCloud (PointCloud &t): dt (t), Draw(){
     
    //XXXXX
 
@@ -11,13 +11,13 @@ DrawPointCloud::DrawPointCloud (PointCloud &t): dt (t), Draw(){
 }
 
 
-void DrawPointCloud::drawIt (TypeColor c){
+void GEO::DrawPointCloud::drawIt (TypeColor c){
     setColorActivo (c);
     drawIt();
 }
 
 
-void DrawPointCloud::drawIt (){
+void GEO::DrawPointCloud::drawIt (){
     setShaderProgram ( "algeom" );
     setDrawMode(TypeDraw::POINT );
     Scene::getInstance ()->addModel ( this );

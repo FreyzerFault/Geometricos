@@ -3,7 +3,7 @@
 #include "DrawTriangle.h"
 
 
-DrawTriangle::DrawTriangle (Triangle &t): dt (t), Draw(){
+GEO::DrawTriangle::DrawTriangle (Triangle &t): dt (t), Draw(){
     
     _vertices.push_back ( glm::vec3 (dt.a.getX(), dt.a.getY() , 0.0 ) );
     _vertices.push_back ( glm::vec3 (dt.b.getX(), dt.b.getY() , 0.0 ) );
@@ -22,13 +22,13 @@ DrawTriangle::DrawTriangle (Triangle &t): dt (t), Draw(){
 }
 
 
-void DrawTriangle::drawIt (TypeColor c){
+void GEO::DrawTriangle::drawIt (TypeColor c){
     setColorActivo (c);
     drawIt();
 }
 
 
-void DrawTriangle::drawIt (){
+void GEO::DrawTriangle::drawIt (){
     setShaderProgram ( "algeom" );
     setDrawMode(TypeDraw::WIREFRAME );
     Scene::getInstance ()->addModel ( this );

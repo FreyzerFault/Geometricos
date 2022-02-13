@@ -20,6 +20,8 @@
 #include "InclGeom2D.h"
 #include "InclDraw2D.h"
 
+using namespace GEO;
+
 
 // Colores
 const TypeColor magenta(1.0, 0.0, 1.0);
@@ -228,9 +230,9 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		{
 			try
 			{
-				Vect2d a(3.0, 2.0);
-				Vect2d b(0.0, 0.0);
-				Vect2d c(-2.0, 1.0);
+				Vec2D a(3.0, 2.0);
+				Vec2D b(0.0, 0.0);
+				Vec2D c(-2.0, 1.0);
 
 			}
 			catch (std::exception& e)
@@ -250,9 +252,9 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		{
 			try
 			{
-				Vect2d a(3.0, 2.0);
-				Vect2d b(0.0, 0.0);
-				Vect2d c(-2.0, 1.0);
+				Vec2D a(3.0, 2.0);
+				Vec2D b(0.0, 0.0);
+				Vec2D c(-2.0, 1.0);
 
 				Triangle t1(a, b, c);
 				auto dt1 = new DrawTriangle(t1);
@@ -281,10 +283,10 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		{
 			try
 			{
-				Vect2d a(2.0, 1.0);
-				Vect2d b(0.0, 1.0);
-				Vect2d c(-2.0, -2.0);
-				Vect2d d(3.0, 0.0);
+				Vec2D a(2.0, 1.0);
+				Vec2D b(0.0, 1.0);
+				Vec2D c(-2.0, -2.0);
+				Vec2D d(3.0, 0.0);
 
 
 
@@ -293,7 +295,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 				ds1->drawIt(green);
 				ds1 = nullptr;
 
-				PolygonGeo s2;
+				GEO::Polygon s2;
 				s2.add(a); s2.add(b); s2.add(c); s2.add(d);
 				DrawPolygon *ds2 = new DrawPolygon (s2);
 				ds2->drawIt(green);
@@ -308,7 +310,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 				ds3->drawIt(green);
 				ds3 = nullptr;
 
-				Vect2d s4(0.0, 0.0);
+				Vec2D s4(0.0, 0.0);
 				auto ds4 = new DrawPoint(s4);
 				ds4->drawIt(blue);
 				ds4 = nullptr;

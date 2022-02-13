@@ -12,18 +12,16 @@
 #include "Point.h"
 #include "SegmentLine.h"
 
-class PolygonGeo;			// Forward declaration due to circular reference betwen both classes.
-
-
 namespace GEO
 {
+	class Polygon;			// Forward declaration due to circular reference betwen both classes.
+
 	class Vertex : public Point
 	{
 	protected:
 		const static int INVALID_POSITION = -1;
-
-	protected:
-		PolygonGeo* _polygon;							// Polygon where the vertex belongs to.
+		
+		Polygon* _polygon;							// Polygon where the vertex belongs to.
 		int _position;										// Position of the vertex in the polygon.
 
 	public:
@@ -40,7 +38,7 @@ namespace GEO
 		/**
 		*	@brief Constructor of a valid point associated to a polygon.
 		*/
-		Vertex(const Point& point, PolygonGeo* polygon, int pos = -1);
+		Vertex(const Point& point, Polygon* polygon, int pos = -1);
 
 		/**
 		*	@brief Destructor.
@@ -65,7 +63,7 @@ namespace GEO
 		/**
 		*	@brief Returns the polygon associated to this vertex.
 		*/
-		PolygonGeo* getPolygon() { return _polygon; }
+		Polygon* getPolygon() { return _polygon; }
 
 		/**
 		*	@brief Returns the position of the current vertex in the polygon, if any.
@@ -110,7 +108,7 @@ namespace GEO
 		/**
 		*	@brief Modifies the polygon associated to this vertex.
 		*/
-		void setPolygon(PolygonGeo* polygon) { _polygon = polygon; }
+		void setPolygon(Polygon* polygon) { _polygon = polygon; }
 
 		/**
 		*	@brief Modifies the position of the vertex in the polygon, if any.

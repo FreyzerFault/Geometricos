@@ -4,7 +4,7 @@
 #include "Polygon.h"
 
 
-DrawPolygon::DrawPolygon (PolygonGeo &t): dt (t), Draw(){
+GEO::DrawPolygon::DrawPolygon (Polygon &t): dt (t), Draw(){
     
     for (int i=0; i<dt.getNumVertices(); i++){
         
@@ -22,13 +22,13 @@ DrawPolygon::DrawPolygon (PolygonGeo &t): dt (t), Draw(){
 }
 
 
-void DrawPolygon::drawIt (TypeColor c){
+void GEO::DrawPolygon::drawIt (TypeColor c){
     setColorActivo (c);
     drawIt();
 }
 
 
-void DrawPolygon::drawIt (){
+void GEO::DrawPolygon::drawIt (){
     setShaderProgram ( "algeom" );
     setDrawMode(TypeDraw::PolygonGeo );
     Scene::getInstance ()->addModel ( this );

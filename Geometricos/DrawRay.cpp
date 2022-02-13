@@ -3,8 +3,7 @@
 #include "DrawRay.h"
 
 
-
-DrawRay::DrawRay (RayLine &t): dt (t), Draw(){
+GEO::DrawRay::DrawRay (RayLine &t): dt (t), Draw(){
     
     
        //XXXXX
@@ -15,13 +14,13 @@ DrawRay::DrawRay (RayLine &t): dt (t), Draw(){
 }
 
 
-void DrawRay::drawIt (TypeColor c){
+void GEO::DrawRay::drawIt (TypeColor c){
     setColorActivo (c);
     drawIt();
 }
 
 
-void DrawRay::drawIt (){
+void GEO::DrawRay::drawIt (){
     setShaderProgram ( "algeom" );
     setDrawMode(TypeDraw::LINE );
     Scene::getInstance ()->addModel ( this );

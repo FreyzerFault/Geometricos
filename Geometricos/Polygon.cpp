@@ -6,36 +6,36 @@
 #include "Polygon.h"
 
 
-PolygonGeo::PolygonGeo()
+GEO::Polygon::Polygon()
 {
 }
 
-PolygonGeo::PolygonGeo(const PolygonGeo& PolygonGeo)
+GEO::Polygon::Polygon(const Polygon& PolygonGeo)
 {
 	_vertices = std::vector<Vertex>(PolygonGeo._vertices);
 }
 
-PolygonGeo::PolygonGeo(std::vector<Vertex>& vertices)
+GEO::Polygon::Polygon(std::vector<Vertex>& vertices)
 {
 	_vertices = std::vector<Vertex>(vertices);
 }
 
-SegmentLine PolygonGeo::getEdge(int i)
+GEO::SegmentLine GEO::Polygon::getEdge(int i)
 {
 	return SegmentLine(getVertexAt(i), getVertexAt((i + 1) % _vertices.size()));
 }
 
-PolygonGeo::PolygonGeo(const std::string & filename)
+GEO::Polygon::Polygon(const std::string & filename)
 {
 	//XXXX
-    
+	
 }
 
-PolygonGeo::~PolygonGeo()
+GEO::Polygon::~Polygon()
 {
 }
 
-bool PolygonGeo::add(Vertex & vertex)
+bool GEO::Polygon::add(GEO::Vertex & vertex)
 {
 	int index = _vertices.size();
 
@@ -48,14 +48,14 @@ bool PolygonGeo::add(Vertex & vertex)
 	return true;
 }
 
-bool PolygonGeo::add(Point & point)
+bool GEO::Polygon::add(GEO::Point & point)
 {
 	Vertex vertex(point);
 
 	return this->add(vertex);
 }
 
-Vertex PolygonGeo::getVertexAt(int pos)
+GEO::Vertex GEO::Polygon::getVertexAt(int pos)
 {
 	if (pos >= 0 && pos < _vertices.size()) 
 	{
@@ -67,15 +67,14 @@ Vertex PolygonGeo::getVertexAt(int pos)
 	}
 }
 
-bool PolygonGeo::convex()
+bool GEO::Polygon::convex()
 {
 	//XXXX
 	return true;
 }
 
 
-
-Vertex PolygonGeo::next(int index)
+GEO::Vertex GEO::Polygon::next(int index)
 {
 	if (index >= 0 && index < _vertices.size())
 	{
@@ -85,14 +84,14 @@ Vertex PolygonGeo::next(int index)
 	return Vertex();
 }
 
-void PolygonGeo::out()
+void GEO::Polygon::out()
 {
 	for (int i = 0; i < _vertices.size(); i++) {
 		_vertices[i].out();
 	}
 }
 
-Vertex PolygonGeo::previous(int index)
+GEO::Vertex GEO::Polygon::previous(int index)
 {
 	if (index >= 0 && index < _vertices.size())
 	{
@@ -102,7 +101,7 @@ Vertex PolygonGeo::previous(int index)
 	return Vertex();
 }
 
-PolygonGeo & PolygonGeo::operator=(const PolygonGeo &polygon)
+GEO::Polygon& GEO::Polygon::operator=(const Polygon &polygon)
 {
 	if (this != &polygon)
 	{
@@ -112,18 +111,18 @@ PolygonGeo & PolygonGeo::operator=(const PolygonGeo &polygon)
 	return *this;
 }
 
-bool PolygonGeo::pointInConvexPolygonGeo(Point& point)
+bool GEO::Polygon::pointInConvexPolygonGeo(GEO::Point& point)
 {
-    //XXXX
+	//XXXX
 	return true;
 }
 
-void PolygonGeo::save(const std::string& filename)
+void GEO::Polygon::save(const std::string& filename)
 {
 	//XXXX
 }
 
-void PolygonGeo::set(Vertex& vertex, int pos)
+void GEO::Polygon::set(GEO::Vertex& vertex, int pos)
 {
 	if (pos >= 0 && pos < _vertices.size()) {
 		_vertices[pos] = vertex;

@@ -4,35 +4,34 @@
 #include "RayLine.h"
 #include "SegmentLine.h"
 
-
-Line::Line(const Point & a, const Point & b)
+GEO::Line::Line(const GEO::Point & a, const GEO::Point & b)
 	: SegmentLine(a, b)
 {
 }
 
-Line::Line(const Line & s)
+GEO::Line::Line(const Line & s)
 	: SegmentLine(s)
 {
 }
 
-Line::~Line()
+GEO::Line::~Line()
 {
 }
 
 
 
-Line & Line::operator=(const Line & line)
+GEO::Line & GEO::Line::operator=(const Line & line)
 {
 	if (this != &line)
 	{
-		SegmentLine::operator=(line);
+		GEO::SegmentLine::operator=(line);
 	}
 
 	return *this;
 }
 
 
-void Line::out()
+void GEO::Line::out()
 {
 	std::cout << "Line: ";
 	std::cout << "Point A: ";
