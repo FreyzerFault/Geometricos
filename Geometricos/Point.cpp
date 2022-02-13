@@ -65,7 +65,7 @@ Point::PointClassification Point::classify(Point& p0, Point& p1)
 
 bool Point::colinear(Point& a, Point& b)
 {
-	PointClassification result = classify(a, b);
+	const PointClassification result = classify(a, b);
 	return (result != LEFT) && (result != RIGHT);
 }
 

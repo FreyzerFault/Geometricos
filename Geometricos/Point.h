@@ -1,6 +1,7 @@
 #pragma once
 
-#include <limits.h>
+#include <climits>
+#include <string>
 #include <cmath>
 #include "BasicGeometry.h"
 
@@ -24,6 +25,29 @@ public:
 		ORIGIN,
 		DEST
 	};
+
+	// Para sacar por consola la posicion
+	static std::string classifyToString(PointClassification c)
+	{
+		switch (c)
+		{
+		case LEFT:
+			return "LEFT";
+		case RIGHT:
+			return "RIGHT";
+		case FORWARD:
+			return "FORWARD";
+		case BACKWARD:
+			return "BACKWARD";
+		case BETWEEN:
+			return "BETWEEN";
+		case ORIGIN:
+			return "ORIGIN";
+		case DEST:
+			return "DEST";
+		}
+		return "?";
+	}
 
 protected:
 	double _x, _y;
@@ -49,10 +73,6 @@ public:
 	*/
 	virtual ~Point();
 
-	/**
-	*	@brief Checks the position of the point respect to other two points (a, b).
-	*/
-	bool backward(Point& a, Point& b) { return classify(a, b) == BACKWARD; }
 
 	/**
 	*	@brief Determines the relative position of a point (this) with respect to other two given as _a parameter (which can form a segment).
@@ -72,20 +92,26 @@ public:
 	/**
 	*	@brief Checks if the coordinates of this point are different from the coordinates of a point p.
 	*/
-	bool distinct(Point& p)
+	bool distinct(Point& p) const
 	{
 		return (abs(_x - p._x) > BasicGeometry::EPSILON || std::abs(_y - p._y) > BasicGeometry::EPSILON);
 	}
 
+
 	/**
 	*	@brief Checks if the coordinates of this point are equal from the coordinates of a point p.
 	*/
-	bool equal(Point& pt) { return (BasicGeometry::equal(_x, pt._x) && BasicGeometry::equal(_y, pt._y)); }
+	bool equal(Point& pt) const { return (BasicGeometry::equal(_x, pt._x) && BasicGeometry::equal(_y, pt._y)); }
 
 	/**
 	*	@brief Checks the position of the point respect to other two points (a, b).
 	*/
 	bool forward(Point& a, Point& b) { return classify(a, b) == FORWARD; }
+
+	/**
+	*	@brief Checks the position of the point respect to other two points (a, b).
+	*/
+	bool backward(Point& a, Point& b) { return classify(a, b) == BACKWARD; }
 
 	/**
 	*	@brief Returns the coordinate X of the point.
@@ -115,7 +141,7 @@ public:
 	/**
 	*	@brief Checks the value of the coordinates. If the values are the DEFAULT, then the point is not valid.
 	*/
-	bool isValid() { return (_x != DEFAULT_VALUE) && (_y != DEFAULT_VALUE); }
+	bool isValid() const { return (_x != DEFAULT_VALUE) && (_y != DEFAULT_VALUE); }
 
 	/**
 	*	@brief Checks the position of the point respect to other two points (a, b).
