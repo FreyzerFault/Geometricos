@@ -9,9 +9,9 @@ namespace GEO
 {
 	class Vector;
 	/**
-*	@brief This class represents a 2D structure. This will be also the skeleton for other 2D structures such as Vertex or Vector.
-*	@author Lidia
-*/
+	*	@brief This class represents a 2D structure. This will be also the skeleton for other 2D structures such as Vertex or Vector.
+	*	@author Lidia
+	*/
 	class Point
 	{
 	protected:
@@ -19,8 +19,7 @@ namespace GEO
 
 	public:
 		enum PointClassification
-		{
-			LEFT,
+		{	LEFT,
 			RIGHT,
 			FORWARD,
 			BACKWARD,

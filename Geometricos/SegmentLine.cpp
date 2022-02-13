@@ -1,7 +1,6 @@
 #include <cmath>
 #include <iostream>
 #include "SegmentLine.h"
-#include "Line.h"
 #include "RayLine.h"
 #include "Vector.h"
 

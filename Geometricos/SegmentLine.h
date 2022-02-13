@@ -12,7 +12,6 @@
 #include "Point.h"
 #include "Vec2D.h"
 
-class Line;
 class RayLine;
 
 

@@ -29,7 +29,7 @@ namespace GEO
         void drawIt();
         void drawIt(TypeColor c);
 
-        virtual ~DrawTriangle() {};
+        virtual ~DrawTriangle() = default;
     };
 }
 

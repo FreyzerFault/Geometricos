@@ -293,10 +293,10 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 				ds1->drawIt(green);
 				ds1 = nullptr;
 
-				GEO::Line line (a,b);
+				/*GEO::Line line (a,b);
 				DrawLine *dl = new DrawLine (line);
 				ds1->drawIt(green);
-				ds1 = nullptr;
+				ds1 = nullptr;*/
 
 				GEO::Polygon s2;
 				s2.add(a); s2.add(b); s2.add(c); s2.add(d);

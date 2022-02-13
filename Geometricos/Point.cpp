@@ -3,7 +3,6 @@
 #include <string>
 #include "glm/glm.hpp"
 #include "Point.h"
-#include "SegmentLine.h"
 #include "Vector.h"
 
 using namespace std;
