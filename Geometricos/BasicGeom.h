@@ -1,4 +1,5 @@
 #pragma once
+#include <cfloat>
 #include <cmath>
 
 namespace GEO
@@ -8,6 +9,9 @@ namespace GEO
 		constexpr double EPSILON = 0.00001;			// Avoids problems with the resolution.
 
 		constexpr double CERO = 0.00000000;
+
+		constexpr double INFINITO = DBL_MAX;
+		constexpr double menosINFINITO = DBL_MIN;
 
 		/**
 		*	@brief Checks if two values are equal.

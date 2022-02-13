@@ -288,10 +288,13 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 				Vec2D c(-2.0, -2.0);
 				Vec2D d(3.0, 0.0);
 
-
-
 				SegmentLine s1 (a,b);
 				DrawSegment *ds1 = new DrawSegment (s1);
+				ds1->drawIt(green);
+				ds1 = nullptr;
+
+				GEO::Line line (a,b);
+				DrawLine *dl = new DrawLine (line);
 				ds1->drawIt(green);
 				ds1 = nullptr;
 

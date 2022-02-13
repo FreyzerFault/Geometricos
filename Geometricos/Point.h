@@ -7,6 +7,7 @@
 
 namespace GEO
 {
+	class Vector;
 	/**
 *	@brief This class represents a 2D structure. This will be also the skeleton for other 2D structures such as Vertex or Vector.
 *	@author Lidia
@@ -163,7 +164,7 @@ namespace GEO
 		/**
 		*	@brief Shows in the debug dialog some information about the point.
 		*/
-		void out();
+		void out() const;
 
 		/**
 		*	@brief Checks the position of the point respect to other two points (a, b).
@@ -203,5 +204,8 @@ namespace GEO
 		*	@brief Calculates the double area of the triangle formed by (this, a, b).
 		*/
 		double triangleArea2(Point& a, Point& b) const;
+
+		Point operator+(Vector v);
+		Vector operator-(Point v);
 	};
 }

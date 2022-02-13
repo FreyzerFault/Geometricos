@@ -99,17 +99,12 @@ namespace GEO
 		/**
 		*	@brief Checks if a segment is equal to this one.
 		*/
-		bool equal(SegmentLine& segment);
+		bool equal(SegmentLine& segment) const;
 
 		/**
 		*	@brief It obtains the point belonging to the segment or colineal to it for a concrete t in the parametric equation: result = a + t (b-a).
 		*/
 		Point getPoint(double t);
-
-		/**
-		*	@brief Determines whether two segments intersect improperly, that is, when one end of a segment is contained in the other. Use integer arithmetic.
-		*/
-		bool impSegmentIntersection(SegmentLine& segment);
 
 		/**
 		*	@brief Determines whether a segment is horizontal or not (using EPSILON).
@@ -144,31 +139,34 @@ namespace GEO
 		virtual SegmentLine& operator=(const SegmentLine& segment);
 
 		/**
-		*	@brief Shows some information of the segment in the debug dialog.
-		*/
-		virtual void out();
-
-		/**
-		*	@brief Determines whether two segments intersect in their own way, that is, when they intersect completely. Use only arithmetic.
-		*/
-		bool segmentIntersection(SegmentLine& l);
-
-		/**
-		*	@brief Modifies the origin of the segment.
-		*/
-		void setA(Point& p) { _orig = p; }
-
-		/**
 		*	@brief Returns the slope of the implied straight line equation: m = (yb-ya) / (xb-xa).
 		*/
 		double slope();
 
 		/**
+		*	@brief Determines whether two segments intersect in their own way, that is, when they intersect completely. Use only arithmetic.
+		*/
+		bool segmentIntersection(const SegmentLine& segment) const;
+		
+		/**
+		*	@brief Determines whether two segments intersect improperly, that is, when one end of a segment is contained in the other. Use integer arithmetic.
+		*/
+		bool impSegmentIntersection(const SegmentLine& segment) const;
+		
+		void setA(Point& p) { _orig = p; }
+		void setB(Point& p) { _dest = p; }
+
+
+		/**
 		*	@brief Returns the area formed by the triangle composed of the current SegmentLine and the union of its bounds with p.
 		*/
 		double triangleArea2(Point& p) { return p.triangleArea2(_orig, _dest); }
-
-			
+		
+	protected:
+		/**
+		*	@brief Shows some information of the segment in the debug dialog.
+		*/
+		virtual void out();
 	};
 
 }

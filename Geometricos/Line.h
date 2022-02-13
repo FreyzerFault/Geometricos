@@ -13,7 +13,6 @@
 
 namespace GEO
 {
-
 	class Line : public SegmentLine
 	{
 	public:
@@ -58,7 +57,12 @@ namespace GEO
 		/**
 		*	@brief Checks if a segment line generates a non-proper intersection.
 		*/
-		bool impSegmentIntersection(SegmentLine& l);
+		bool impSegmentIntersection(SegmentLine& segment) const;
+		
+		/**
+		*	@brief Checks if a segment intersects with this line (proper intersection).
+		*/
+		bool segmentIntersection(SegmentLine& segment) const;
 
 		/**
 		*	@brief Checks if the parameter t is valid to obtain a point for a line (it's always valid, we just need to override).
@@ -75,10 +79,6 @@ namespace GEO
 		*/
 		virtual void out();
 
-		/**
-		*	@brief Checks if a segment intersects with this line (proper intersection).
-		*/
-		bool segmentIntersection(SegmentLine& l);
 	};
 
 }

@@ -24,7 +24,7 @@ namespace GEO
 	        
 	    DrawLine (Line &t); 
 	    
-	    DrawLine (const DrawLine &ddt): dt (ddt.dt) , Draw() {}
+	    DrawLine (const DrawLine &ddt) : dt (ddt.dt) , Draw() {}
 	    
 	    void drawIt ();
 	    void drawIt (TypeColor c);

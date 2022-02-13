@@ -122,7 +122,17 @@ double GEO::Point::triangleArea2(Point& a, Point& b) const
 	);
 }
 
-void GEO::Point::out()
+GEO::Point GEO::Point::operator+(Vector v)
+{
+	return {_x + v.getX(), _y + v.getY()};
+}
+
+GEO::Vector GEO::Point::operator-(Point v)
+{
+	return {v.getX() - _x, v.getY() - _y};
+}
+
+void GEO::Point::out() const
 {
 	string outstring = "Coordinate x: " + std::to_string(_x) + ", coordinate y: " + std::to_string(_y);
 	cout << outstring << endl;

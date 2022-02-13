@@ -11,11 +11,10 @@
 
 
 #include "Line.h"
-#include "Point.h"
+#include "Vector.h"
 #include "PointCloud.h"
 #include "Polygon.h"
 #include "RayLine.h"
-#include "SegmentLine.h"
 #include "Triangle.h"
 #include "Vec2D.h"
 
