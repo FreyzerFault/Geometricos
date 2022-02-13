@@ -25,8 +25,7 @@ namespace GEO
 	    DrawPoint (const DrawPoint &ddp): dp (ddp.dp) , Draw() {}
 	    void drawIt ();
 	    void drawIt (TypeColor c);
-	    virtual ~DrawPoint(){};
-
+	    virtual ~DrawPoint() = default;
 	};
 }
 

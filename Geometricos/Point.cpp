@@ -4,6 +4,7 @@
 #include "glm/glm.hpp"
 #include "Point.h"
 #include "SegmentLine.h"
+#include "Vector.h"
 
 using namespace std;
 
@@ -52,8 +53,8 @@ GEO::Point::PointClassification GEO::Point::classify(Point& p0, Point& p1)
 
 	// Si Area = 0 Esta contenido en la recta
 	// Para que este detras, el vector p0->this debe ser inverso al vector p0->p1
-	Point a = *this - p0;
-	Point b = p1 - p0;
+	Vector a(p0, *this);
+	Vector b(p0, p1);
 
 	if ((a.getX() * b.getX() < 0.0) || (a.getY() * b.getY() < 0.0))
 		return BACKWARD;
@@ -114,7 +115,7 @@ double GEO::Point::slope(Point& p)
 
 double GEO::Point::triangleArea2(Point& a, Point& b) const
 {
-	return GEO::determinant3x3(
+	return BasicGeom::determinant3x3(
 		a.getX(), a.getY(), 1,
 		b.getX(), b.getY(), 1,
 		_x,			_y,	1

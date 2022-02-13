@@ -3,7 +3,7 @@
 #include <climits>
 #include <string>
 #include <cmath>
-#include "GEO.h"
+#include "BasicGeom.h"
 
 namespace GEO
 {
@@ -96,14 +96,14 @@ namespace GEO
 		*/
 		bool distinct(Point& p) const
 		{
-			return (abs(_x - p._x) > GEO::EPSILON || std::abs(_y - p._y) > GEO::EPSILON);
+			return (abs(_x - p._x) > BasicGeom::EPSILON || std::abs(_y - p._y) > BasicGeom::EPSILON);
 		}
 
 
 		/**
 		*	@brief Checks if the coordinates of this point are equal from the coordinates of a point p.
 		*/
-		bool equal(Point& pt) const { return (GEO::equal(_x, pt._x) && GEO::equal(_y, pt._y)); }
+		bool equal(Point& pt) const { return (BasicGeom::equal(_x, pt._x) && BasicGeom::equal(_y, pt._y)); }
 
 		/**
 		*	@brief Checks the position of the point respect to other two points (a, b).
@@ -203,26 +203,5 @@ namespace GEO
 		*	@brief Calculates the double area of the triangle formed by (this, a, b).
 		*/
 		double triangleArea2(Point& a, Point& b) const;
-
-
-		/**
-		 *	@brief Resta otro Punto, devuelve un Vector
-		 */
-		Point operator-(Point& p) const { return { _x - p.getX(), _y - p.getY() }; }
-
-		/**
-		 *	@brief Punto > p si su modulo es mayor
-		 */
-		bool operator>(Point& p) const { return this->getModule() > p.getModule(); }
-
-		/**
-		 *	@brief Punto < p si su modulo es menor
-		 */
-		bool operator<(Point& p) const { return this->getModule() < p.getModule(); }
-
-		/**
-		 *	@brief Punto == p si su modulo es igual
-		 */
-		bool operator==(Point& p) const { return this->getModule() == p.getModule(); }
 	};
 }

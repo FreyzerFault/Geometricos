@@ -14,10 +14,8 @@
 
 namespace GEO
 {
-
 	class Circle {
 
-	private:
 		Point _c; // centro
 		double _r;  //radio
 

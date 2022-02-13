@@ -27,7 +27,7 @@
     <ClInclude Include="Triangle.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="GEO.h">
+    <ClInclude Include="BasicGeom.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="Draw.h">

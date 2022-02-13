@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GEO.h" />
+    <ClInclude Include="BasicGeom.h" />
     <ClInclude Include="Circle.h" />
     <ClInclude Include="Draw.h" />
     <ClInclude Include="DrawLine.h" />
