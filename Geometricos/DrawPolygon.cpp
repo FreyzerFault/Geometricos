@@ -1,7 +1,7 @@
 
 
 #include "DrawPolygon.h"
-#include "PolygonGeo.h"
+#include "Polygon.h"
 
 
 DrawPolygon::DrawPolygon (PolygonGeo &t): dt (t), Draw(){

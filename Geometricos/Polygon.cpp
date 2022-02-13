@@ -3,7 +3,7 @@
 #include <sstream>
 #include <cstring>
 #include <fstream>
-#include "PolygonGeo.h"
+#include "Polygon.h"
 
 
 PolygonGeo::PolygonGeo()

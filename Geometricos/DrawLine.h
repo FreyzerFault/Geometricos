@@ -14,22 +14,24 @@
 #include "Line.h"
 #include "Draw.h"
 
-class DrawLine: public Draw {
-    
-    Line dt;
-    
-    public:
-        
-    DrawLine (Line &t); 
-    
-    DrawLine (const DrawLine &ddt): dt (ddt.dt) , Draw() {}
-    
-    void drawIt ();
-    void drawIt (TypeColor c);
-    
-    virtual ~DrawLine(){};
-};
-
+namespace GEO
+{
+	class DrawLine: public Draw {
+	    
+	    Line dt;
+	    
+	    public:
+	        
+	    DrawLine (Line &t); 
+	    
+	    DrawLine (const DrawLine &ddt): dt (ddt.dt) , Draw() {}
+	    
+	    void drawIt ();
+	    void drawIt (TypeColor c);
+	    
+	    virtual ~DrawLine(){};
+	};
+}
 
 
 #endif /* DRAWLINE_H */

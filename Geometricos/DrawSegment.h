@@ -15,22 +15,25 @@
 #include "Draw.h"
 
 
-class DrawSegment: public Draw {
-    
-    SegmentLine dt;
-    
-    public:
-        
-    DrawSegment (SegmentLine &t); 
-    
-    DrawSegment (const DrawSegment &ddt): dt (ddt.dt) , Draw() {}
-    
-    void drawIt ();
-    void drawIt (TypeColor c);
-    
-    virtual ~DrawSegment(){};
-};
+namespace GEO
+{
+    class DrawSegment : public Draw {
 
+        SegmentLine dt;
+
+    public:
+
+        DrawSegment(SegmentLine& t);
+
+        DrawSegment(const DrawSegment& ddt) : dt(ddt.dt), Draw() {}
+
+        void drawIt();
+        void drawIt(TypeColor c);
+
+        virtual ~DrawSegment() {};
+    };
+
+}
 
 
 #endif /* DRAWSEGMENT_H */

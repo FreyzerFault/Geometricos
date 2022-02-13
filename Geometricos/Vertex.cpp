@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "PolygonGeo.h"
+#include "Polygon.h"
 #include "Vertex.h"
 
 

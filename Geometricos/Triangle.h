@@ -9,49 +9,52 @@
 #define TRIANGLE_H
 
 
-#include "Vect2d.h"
+#include "Vec2D.h"
 
-class Triangle
+namespace GEO
 {
-	Vect2d a, b, c;
+	class Triangle
+	{
+		Vec2D a, b, c;
 
-public:
-	friend class DrawTriangle; //evitar
+	public:
+		friend class DrawTriangle; //evitar
 
-	/**
-	 * @brief Constructor  
-	 * @param aa vertex
-	 * @param bb vertex 
-	 * @param cc vertex
-	 */
-	Triangle(Vect2d& aa, Vect2d& bb, Vect2d& cc);
+		/**
+		 * @brief Constructor
+		 * @param aa vertex
+		 * @param bb vertex
+		 * @param cc vertex
+		 */
+		Triangle(Vec2D& aa, Vec2D& bb, Vec2D& cc);
 
-	/**
-	 * @brief Copy constructor
-	 * @param t
-	 */
+		/**
+		 * @brief Copy constructor
+		 * @param t
+		 */
 
-	Triangle(const Triangle& t);
+		Triangle(const Triangle& t);
 
-	/**
-	 * @brief getters 
-	 * @return vertex A 
-	 */
+		/**
+		 * @brief getters
+		 * @return vertex A
+		 */
 
-	Vect2d getA() { return a; }
+		Vec2D getA() { return a; }
 
-	/**
-	 * @brief getters 
-	 * @return vertex A 
-	 */
-	Vect2d getB() { return b; }
+		/**
+		 * @brief getters
+		 * @return vertex A
+		 */
+		Vec2D getB() { return b; }
 
-	/**
-	 * @brief getters 
-	 * @return vertex A 
-	 */
-	Vect2d getC() { return c; }
-};
+		/**
+		 * @brief getters
+		 * @return vertex A
+		 */
+		Vec2D getC() { return c; }
+	};
+}
 
 
 #endif /* TRIANGLE_H */

@@ -14,69 +14,72 @@
 #include "SegmentLine.h"
 
 
-class RayLine : public SegmentLine
+namespace GEO
 {
-    
-public:
-	/**
-	*	@brief Constructor of a rayline given its two points.
-	*/
-	RayLine(const Point& a, const Point& b);
+	class RayLine : public SegmentLine
+	{
 
-	/**
-	*	@brief Copy constructor.
-	*/
-	RayLine(const RayLine& s);
+	public:
+		/**
+		*	@brief Constructor of a rayline given its two points.
+		*/
+		RayLine(const Point& a, const Point& b);
 
-	/**
-	*	@brief Destructor.
-	*/
-	~RayLine();
+		/**
+		*	@brief Copy constructor.
+		*/
+		RayLine(const RayLine& s);
 
-	/**
-	*	@brief Distance from a point defined by 'vector' to this rayline.
-	*/
-	float distPointRayline(Vect2d& vector);
+		/**
+		*	@brief Destructor.
+		*/
+		~RayLine();
 
-	/**
-	*	@brief Checks if this rayline intersects with a segment in a non-proper way.
-	*/
-	bool impSegmentIntersection(SegmentLine& segment);
+		/**
+		*	@brief Distance from a point defined by 'vector' to this rayline.
+		*/
+		float distPointRayline(Vec2D& vector);
 
-	/**
-	*	@brief Checks if a rayline intersects with a line.
-	*	@param intersection If rayline and line intersect, then this point is the intersection. Otherwise this point is not valid.
-	*/
-	//virtual bool intersects(Line& line, Vect2d& intersetion);
+		/**
+		*	@brief Checks if this rayline intersects with a segment in a non-proper way.
+		*/
+		bool impSegmentIntersection(SegmentLine& segment);
 
-	/**
-	*	@brief Checks if a rayline intersects with this one.
-	*	@param intersection If both raylines intersect, then this point is the intersection. Otherwise this point is not valid.
-	*/
-	//virtual bool intersects(RayLine& rayline, Vect2d& intersetion);
+		/**
+		*	@brief Checks if a rayline intersects with a line.
+		*	@param intersection If rayline and line intersect, then this point is the intersection. Otherwise this point is not valid.
+		*/
+		//virtual bool intersects(Line& line, Vect2d& intersetion);
 
-	/**
-	*	@brief Checks if a segment intersects with a segment. 
-	*	@param intersection If rayline and segment intersect, then this point is the intersection. Otherwise this point is not valid.
-	*/
-	//virtual bool intersects(SegmentLine& segment, Vect2d& intersetion);
+		/**
+		*	@brief Checks if a rayline intersects with this one.
+		*	@param intersection If both raylines intersect, then this point is the intersection. Otherwise this point is not valid.
+		*/
+		//virtual bool intersects(RayLine& rayline, Vect2d& intersetion);
 
-	/**
-	*	@brief Checks if the parameter t is valid to get a point of the rayline.
-	*/
-	virtual bool isTvalid(double t) { return t >= 0; }
+		/**
+		*	@brief Checks if a segment intersects with a segment.
+		*	@param intersection If rayline and segment intersect, then this point is the intersection. Otherwise this point is not valid.
+		*/
+		//virtual bool intersects(SegmentLine& segment, Vect2d& intersetion);
 
-	/**
-	*	@brief Assignment operator.
-	*/
-	virtual RayLine& operator=(const RayLine& rayline);
+		/**
+		*	@brief Checks if the parameter t is valid to get a point of the rayline.
+		*/
+		virtual bool isTvalid(double t) { return t >= 0; }
 
-	/**
-	*	@brief Shows some information about the rayline in the debug dialog.
-	*/
-	virtual void out();
-};
+		/**
+		*	@brief Assignment operator.
+		*/
+		virtual RayLine& operator=(const RayLine& rayline);
 
+		/**
+		*	@brief Shows some information about the rayline in the debug dialog.
+		*/
+		virtual void out();
+	};
+
+}
 
 
 #endif /* RAYLINE_H */

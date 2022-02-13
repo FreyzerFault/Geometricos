@@ -15,22 +15,25 @@
 #include "Draw.h"
 
 
-class DrawRay: public Draw {
-    
-    RayLine dt;
-    
-    public:
-        
-    DrawRay (RayLine &t); 
-    
-    DrawRay (const DrawRay &ddt): dt (ddt.dt) , Draw() {}
-    
-    void drawIt ();
-    void drawIt (TypeColor c);
-    
-    virtual ~DrawRay(){};
-};
+namespace GEO
+{
+    class DrawRay : public Draw {
 
+        RayLine dt;
+
+    public:
+
+        DrawRay(RayLine& t);
+
+        DrawRay(const DrawRay& ddt) : dt(ddt.dt), Draw() {}
+
+        void drawIt();
+        void drawIt(TypeColor c);
+
+        virtual ~DrawRay() {};
+    };
+
+}
 
 
 #endif /* DRAWRAY_H */

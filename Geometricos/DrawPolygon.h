@@ -10,26 +10,29 @@
 #define DRAWPolygon_H
 
 #include "Scene.h"
-#include "PolygonGeo.h"
+#include "Polygon.h"
 #include "Draw.h"
 
 
-class DrawPolygon : public Draw {
-    
-    PolygonGeo dt;
-    
-    public:
-        
-    DrawPolygon(PolygonGeo &t);
-    
-    DrawPolygon(const DrawPolygon&ddt): dt (ddt.dt) , Draw() {}
-    
-    void drawIt ();
-    void drawIt (TypeColor c);
-    
-    virtual ~DrawPolygon(){};
-};
+namespace GEO
+{
+    class DrawPolygon : public Draw {
 
+        Polygon dt;
+
+    public:
+
+        DrawPolygon(Polygon& t);
+
+        DrawPolygon(const DrawPolygon& ddt) : dt(ddt.dt), Draw() {}
+
+        void drawIt();
+        void drawIt(TypeColor c);
+
+        virtual ~DrawPolygon() {};
+    };
+
+}
 
 
 #endif /* DRAWPolygonGeo_H */

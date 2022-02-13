@@ -19,7 +19,11 @@
 #include "ShaderProgram.h"
 #include "RenderSettings.h"
 
-   /**
+
+namespace GEO
+{
+
+	/**
     * @brief Enumeración para los tipos de modelos a gestionar
     */
     
@@ -103,6 +107,7 @@
          Draw& setColorActivo (glm::vec3 col);
          Draw& setColorActivo (TypeColor col);
    };
+}
    
 #endif /* DRAW_H */
 

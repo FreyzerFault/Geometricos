@@ -27,7 +27,7 @@
     <ClInclude Include="Triangle.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="BasicGeometry.h">
+    <ClInclude Include="GEO.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="Draw.h">
@@ -48,7 +48,7 @@
     <ClInclude Include="DrawPolygon.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="Vect2d.h">
+    <ClInclude Include="Vec2D.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
@@ -84,7 +84,7 @@
     <ClInclude Include="PointCloud.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="PolygonGeo.h">
+    <ClInclude Include="Polygon.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
@@ -134,7 +134,7 @@
     <ClCompile Include="SegmentLine.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="Vect2d.cpp">
+    <ClCompile Include="Vec2D.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="Point.cpp">
@@ -152,7 +152,7 @@
     <ClCompile Include="ShaderProgram.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="PolygonGeo.cpp">
+    <ClCompile Include="Polygon.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>

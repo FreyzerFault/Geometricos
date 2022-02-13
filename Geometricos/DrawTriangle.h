@@ -14,21 +14,24 @@
 #include "Draw.h"
 
 
-class DrawTriangle: public Draw {
-    
-    Triangle dt;
-    
+namespace GEO
+{
+    class DrawTriangle : public Draw {
+
+        Triangle dt;
+
     public:
-        
-    DrawTriangle (Triangle &t); 
-    
-    DrawTriangle (const DrawTriangle &ddt): dt (ddt.dt) , Draw() {}
-    
-    void drawIt ();
-    void drawIt (TypeColor c);
-    
-    virtual ~DrawTriangle(){};
-};
+
+        DrawTriangle(Triangle& t);
+
+        DrawTriangle(const DrawTriangle& ddt) : dt(ddt.dt), Draw() {}
+
+        void drawIt();
+        void drawIt(TypeColor c);
+
+        virtual ~DrawTriangle() {};
+    };
+}
 
 
 #endif /* DRAWTRIANGLE_H */

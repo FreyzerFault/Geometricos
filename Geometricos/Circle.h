@@ -10,49 +10,53 @@
 #define CIRCLE_H
 
 #include "Point.h"
-#include "PolygonGeo.h"
+#include "Polygon.h"
 
-class Circle {
+namespace GEO
+{
 
-private:
-	Point _c; // centro
-	double _r;  //radio
+	class Circle {
 
-public:
-	/**
-	*	@brief Default constructor. Coordinates are initialized with an invalid value.
-	*/
-	Circle (): _c(Point (0,0)), _r(1.0){}
-	/**
-	//	*	@brief Constructor.
-	*/
-	Circle(Point &c, double r): _c(c), _r(r){}
-	/**
-	*	@brief Copy constructor.
-	*/
-	Circle (const Circle& orig): _c(orig._c), _r(orig._r){}  ;
-	
-	/**
-	*	@brief Destructor.
-	*/
-	
-	
-	virtual ~Circle();
+	private:
+		Point _c; // centro
+		double _r;  //radio
 
-	/**
-	 * 
-	 * @param p
-	 * @return true if p is inside the circle 
-	 */
-	
-	bool isInside (Point &p);
-	
-	/**
-	 * 
-	 * @return a PolygonGeo with circular shape 
-	 */
-	PolygonGeo getPointsCircle ();
-};
+	public:
+		/**
+		*	@brief Default constructor. Coordinates are initialized with an invalid value.
+		*/
+		Circle (): _c(Point (0,0)), _r(1.0){}
+		/**
+		//	*	@brief Constructor.
+		*/
+		Circle(Point &c, double r): _c(c), _r(r){}
+		/**
+		*	@brief Copy constructor.
+		*/
+		Circle (const Circle& orig): _c(orig._c), _r(orig._r){}  ;
+		
+		/**
+		*	@brief Destructor.
+		*/
+		
+		
+		virtual ~Circle();
+
+		/**
+		 * 
+		 * @param p
+		 * @return true if p is inside the circle 
+		 */
+		
+		bool isInside (Point &p);
+		
+		/**
+		 * 
+		 * @return a PolygonGeo with circular shape 
+		 */
+		Polygon getPointsCircle ();
+	};
+}
 
 #endif /* CIRCLE_H */
 

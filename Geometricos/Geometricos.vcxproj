@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BasicGeometry.h" />
+    <ClInclude Include="GEO.h" />
     <ClInclude Include="Circle.h" />
     <ClInclude Include="Draw.h" />
     <ClInclude Include="DrawLine.h" />
@@ -34,14 +34,14 @@
     <ClInclude Include="Line.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="PointCloud.h" />
-    <ClInclude Include="PolygonGeo.h" />
+    <ClInclude Include="Polygon.h" />
     <ClInclude Include="RayLine.h" />
     <ClInclude Include="RenderSettings.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SegmentLine.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Triangle.h" />
-    <ClInclude Include="Vect2d.h" />
+    <ClInclude Include="Vec2D.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
@@ -58,14 +58,14 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="PointCloud.cpp" />
-    <ClCompile Include="PolygonGeo.cpp" />
+    <ClCompile Include="Polygon.cpp" />
     <ClCompile Include="RayLine.cpp" />
     <ClCompile Include="RenderSettings.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SegmentLine.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Triangle.cpp" />
-    <ClCompile Include="Vect2d.cpp" />
+    <ClCompile Include="Vec2D.cpp" />
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

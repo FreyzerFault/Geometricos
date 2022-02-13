@@ -114,7 +114,7 @@ double Point::slope(Point& p)
 
 double Point::triangleArea2(Point& a, Point& b) const
 {
-	return BasicGeometry::determinant3x3(
+	return GEO::determinant3x3(
 		a.getX(), a.getY(), 1,
 		b.getX(), b.getY(), 1,
 		_x,			_y,	1

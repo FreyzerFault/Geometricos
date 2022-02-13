@@ -14,21 +14,24 @@
 #include "Draw.h"
 
 
-class DrawPointCloud: public Draw {
-    
-    PointCloud dt;
-    
-    public:
-        
-    DrawPointCloud (PointCloud &t); 
-    
-    DrawPointCloud (const DrawPointCloud &ddt): dt (ddt.dt) , Draw() {}
-    
-    void drawIt ();
-    void drawIt (TypeColor c);
-    
-    virtual ~DrawPointCloud(){};
-};
+namespace GEO
+{
+	class DrawPointCloud: public Draw {
+	    
+	    PointCloud dt;
+	    
+	    public:
+	        
+	    DrawPointCloud (PointCloud &t); 
+	    
+	    DrawPointCloud (const DrawPointCloud &ddt): dt (ddt.dt) , Draw() {}
+	    
+	    void drawIt ();
+	    void drawIt (TypeColor c);
+	    
+	    virtual ~DrawPointCloud(){};
+	};
+}
 
 
 

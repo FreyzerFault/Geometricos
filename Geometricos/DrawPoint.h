@@ -14,17 +14,21 @@
 #include "Point.h"
 #include "Draw.h"
 
-class DrawPoint: public Draw {
-    Point dp;
-public:
-    
-    DrawPoint(Point &p);
-    DrawPoint (const DrawPoint &ddp): dp (ddp.dp) , Draw() {}
-    void drawIt ();
-    void drawIt (TypeColor c);
-    virtual ~DrawPoint(){};
 
-};
+namespace GEO
+{
+	class DrawPoint: public Draw {
+	    Point dp;
+	public:
+	    
+	    DrawPoint(Point &p);
+	    DrawPoint (const DrawPoint &ddp): dp (ddp.dp) , Draw() {}
+	    void drawIt ();
+	    void drawIt (TypeColor c);
+	    virtual ~DrawPoint(){};
+
+	};
+}
 
 #endif /* DRAWPOINT_H */
 
