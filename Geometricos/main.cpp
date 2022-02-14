@@ -19,6 +19,7 @@
 
 #include "InclGeom2D.h"
 #include "InclDraw2D.h"
+#include "RayLine.h"
 
 using namespace GEO;
 
@@ -27,6 +28,9 @@ using namespace GEO;
 const TypeColor magenta(1.0, 0.0, 1.0);
 const TypeColor green(0.0, 1.0, 0.0);
 const TypeColor blue(0.0, 0.0, 1.0);
+const TypeColor red(1.0, 0.0, 0.0);
+const TypeColor cyan(0.0, 1.0, 1.0);
+const TypeColor yellow(1.0, 1.0, 0.0);
 
 
 
@@ -290,19 +294,26 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 
 				SegmentLine s1 (a,b);
 				DrawSegment *ds1 = new DrawSegment (s1);
-				ds1->drawIt(green);
+				ds1->drawIt(blue);
 				ds1 = nullptr;
 
-				/*GEO::Line line (a,b);
+				Line line (a,b);
 				DrawLine *dl = new DrawLine (line);
-				ds1->drawIt(green);
-				ds1 = nullptr;*/
+				dl->drawIt(yellow);
+				dl = nullptr;
+
+				GEO::RayLine ray (a,b);
+				DrawRay *dr = new DrawRay (ray);
+				dr->drawIt(cyan);
+				dr = nullptr;
 
 				GEO::Polygon s2;
 				s2.add(a); s2.add(b); s2.add(c); s2.add(d);
 				DrawPolygon *ds2 = new DrawPolygon (s2);
 				ds2->drawIt(green);
 				ds2 = nullptr;
+
+				s2.save("Poligono1");
 
 				PointCloud s3;
 				s3.addPoint(a);

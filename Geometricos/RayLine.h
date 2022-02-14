@@ -1,4 +1,3 @@
-
 /* 
  * File:   RayLine.h
  * Author: lidia
@@ -38,12 +37,12 @@ namespace GEO
 		/**
 		*	@brief Distance from a point defined by 'vector' to this rayline.
 		*/
-		float distPointRayline(Vec2D& vector);
+		//float distPointRayline(Vec2D& vector);
 
 		/**
 		*	@brief Checks if this rayline intersects with a segment in a non-proper way.
 		*/
-		bool impSegmentIntersection(SegmentLine& segment);
+		//bool impSegmentIntersection(SegmentLine& segment);
 
 		/**
 		*	@brief Checks if a rayline intersects with a line.

@@ -11,6 +11,7 @@
 
 
 #include "Line.h"
+#include "RayLine.h"
 #include "Vector.h"
 #include "PointCloud.h"
 #include "Polygon.h"

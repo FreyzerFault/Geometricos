@@ -27,15 +27,33 @@ GEO::SegmentLine GEO::Polygon::getEdge(int i)
 
 GEO::Polygon::Polygon(const std::string & filename)
 {
-	//XXXX
+	static std::string folderName = "Polygon/";
+	std::ifstream is(folderName + filename + ".txt");
+	if (!is.good())
+		std::cout << "Archivo " + folderName + filename + " no se pudo abrir para crear el Poligono" << std::endl;
+
+	std::string line;
+	std::getline(is, line);
 	
+	while (std::getline(is, line))
+	{
+		// Formato: x,y
+
+		if (!std::isdigit(line[0]) && line.find(';'))
+			std::cout << "Formato de archivo de Poligono erroneo (" + line + ")" << std::endl;
+
+		Point p(std::stod(line.substr(0, line.find(';'))), std::stod(line.substr(line.find(';') + 1)));
+
+		add(p);
+	}
+
+	is.close();
 }
 
 GEO::Polygon::~Polygon()
-{
-}
+= default;
 
-bool GEO::Polygon::add(GEO::Vertex & vertex)
+bool GEO::Polygon::add(Vertex & vertex)
 {
 	int index = _vertices.size();
 
@@ -119,7 +137,17 @@ bool GEO::Polygon::pointInConvexPolygonGeo(GEO::Point& point)
 
 void GEO::Polygon::save(const std::string& filename)
 {
-	//XXXX
+	static std::string folderName = "Polygon/";
+	std::ofstream os(folderName + filename + ".txt");
+	if (!os.good())
+		std::cout << "Archivo " + folderName + filename + " no se pudo abrir para guardar el Poligono" << std::endl;
+
+	for (auto vertex : _vertices)
+	{
+		os << std::to_string(vertex.getX()) + ';' + std::to_string(vertex.getY()) << std::endl;
+	}
+
+	os.close();
 }
 
 void GEO::Polygon::set(GEO::Vertex& vertex, int pos)

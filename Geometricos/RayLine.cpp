@@ -19,6 +19,7 @@ GEO::RayLine::~RayLine()
 }
 
 
+
 GEO::RayLine & GEO::RayLine::operator=(const RayLine & rayline)
 {
 	if (this != &rayline)

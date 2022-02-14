@@ -14,7 +14,6 @@
 #include <iostream>
 #include "Line.h"
 #include "RayLine.h"
-#include "SegmentLine.h"
 #include "Vec2D.h"
 #include "Vertex.h"
 

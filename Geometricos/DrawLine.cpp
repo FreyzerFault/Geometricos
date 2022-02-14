@@ -5,8 +5,8 @@
 GEO::DrawLine::DrawLine (Line &t): dt (t), Draw(){
 	// Usando la Parametrica
 	const Vector v(dt.getB() - dt.getA());
-	Point inicio = dt.getA() + (v * BasicGeom::menosINFINITO);
-	Point fin = dt.getA() + (v * BasicGeom::INFINITO);
+	Point inicio = dt.getA() + (v * -1000);
+	Point fin = dt.getA() + (v * 1000);
 
 	_vertices.emplace_back(inicio.getX(), inicio.getY(), 0.0);
 	_vertices.emplace_back(fin.getX(), fin.getY(), 0.0);
