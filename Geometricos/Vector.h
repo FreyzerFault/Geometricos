@@ -11,6 +11,7 @@ namespace GEO
 
 		Vector(double x, double y, bool polar = false) : Point(x,y, polar) {}
 		Vector(Point& p0, Point& p1) : Vector(p1.getX() - p0.getX(), p1.getY() - p0.getY()) {}
+		Vector(Point& p) : Vector(p.getX(), p.getY()) {}
 
 		Vector(const Vector& orig) : Vector(orig._x, orig._y) {}
 

@@ -158,7 +158,7 @@ int main(int argc, char** argv)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
 	GLFWwindow* miVentana;
-	miVentana = glfwCreateWindow(1024, 576, "Algoritmos Geométricos", nullptr, nullptr);
+	miVentana = glfwCreateWindow(1024, 576, "Algoritmos Geometricos", nullptr, nullptr);
 
 	if (miVentana == nullptr)
 	{
