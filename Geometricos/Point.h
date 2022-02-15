@@ -7,7 +7,7 @@
 
 namespace GEO
 {
-	class Vector;
+	class Vec2D;
 	/**
 	*	@brief This class represents a 2D structure. This will be also the skeleton for other 2D structures such as Vertex or Vector.
 	*	@author Lidia
@@ -204,7 +204,8 @@ namespace GEO
 		*/
 		double triangleArea2(Point& a, Point& b) const;
 
-		Point operator+(Vector v);
-		Vector operator-(Point v);
+		Point operator+(Vec2D v);
+		Vec2D operator-(Point v);
+		Vec2D operator*(double s);
 	};
 }

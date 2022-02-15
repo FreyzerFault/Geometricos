@@ -12,7 +12,7 @@
 
 #include "Line.h"
 #include "RayLine.h"
-#include "Vector.h"
+#include "Vec2D.h"
 #include "PointCloud.h"
 #include "Polygon.h"
 #include "RayLine.h"

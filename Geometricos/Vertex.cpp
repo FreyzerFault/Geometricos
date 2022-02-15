@@ -32,17 +32,23 @@ GEO::Vertex::~Vertex()
 
 bool GEO::Vertex::convex()
 {
-	//XXXX
+	// El vertice debe estar a la izquierda de i+1 -> i-1
+	Vertex nextVertex(next());
+	Vertex previousVertex(previous());
 
-	return false;
+	return left(nextVertex,previousVertex);
 }
 
 bool GEO::Vertex::concave()
 {
-    //XXXX
-	return 0;
+	return !convex();
 }
 
+
+GEO::Vertex GEO::Vertex::next() const
+{
+	return _polygon->next(_position);
+}
 
 GEO::SegmentLine GEO::Vertex::nextEdge()
 {
@@ -74,6 +80,11 @@ void GEO::Vertex::out()
 {
 	Point::out();
 	std::cout << "Position: " <<  std::to_string(_position);
+}
+
+GEO::Vertex GEO::Vertex::previous()
+{
+	return _polygon->previous(_position);
 }
 
 

@@ -87,7 +87,8 @@ GEO::Vertex GEO::Polygon::getVertexAt(int pos)
 
 bool GEO::Polygon::convex()
 {
-	//XXXX
+	// TODOS Angulos internos < PI
+	// o que el vertice este a la derecha de los vertices i+1 y i-1
 	return true;
 }
 

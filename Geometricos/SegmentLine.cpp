@@ -2,7 +2,7 @@
 #include <iostream>
 #include "SegmentLine.h"
 #include "RayLine.h"
-#include "Vector.h"
+#include "Vec2D.h"
 
 
 GEO::SegmentLine::SegmentLine()
@@ -65,7 +65,7 @@ bool GEO::SegmentLine::equal(SegmentLine & segment) const
 GEO::Point GEO::SegmentLine::getPoint(double t)
 {
 	// a + t(b-a)
-	return {_orig + Vector(_orig, _dest) * t};
+	return {_orig + Vec2D(_orig, _dest) * t};
 }
 
 
@@ -106,10 +106,12 @@ bool GEO::SegmentLine::segmentIntersection(const SegmentLine& segment) const
 	Point c = segment._orig;
 	Point d = segment._dest;
 
-	// Cada punto del segmento izquierda y derecha de los del otro segmento
-	// en cualquier orden a-b o b-a
-	return ((a.left(c,d) && b.right(c,d)) || (a.left(d,c) && b.right(d,c))
-		&& (c.left(a,b) && d.right(a,b)) || (c.left(b,a) && d.right(b,a)));
+	// Siempre que no sea colineal para evitar falsos V / F
+	if (a.colinear(c,d) || b.colinear(c,d) || c.colinear(a,b) || d.colinear(a,b))
+		return false;
+
+	// Con el XOR, Uno de los puntos del segmento debe estar a la izquierda
+	return (a.left(c,d) ^ b.left(c,d) && c.left(a,b) ^ d.left(a,b));
 }
 
 bool GEO::SegmentLine::impSegmentIntersection(const SegmentLine& segment) const

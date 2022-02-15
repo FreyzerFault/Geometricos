@@ -1,75 +1,37 @@
-
-/* 
- * File:   Vect2d.h
- * Author: lidia
- *
- * Created on 5 de enero de 2021, 14:01
- */
-
-#ifndef VECT2D_H
-#define VECT2D_H
-
+﻿#pragma once
+#include "BasicGeom.h"
 #include "Point.h"
-
 
 namespace GEO
 {
-	class Vec2D : public Point {
-		//double x, y;
-
+	class Vec2D : public Point
+	{
 	public:
+		Vec2D() : Point() {}
 
-		Vec2D() : Point() {};
-		Vec2D(double x, double y) : Point(x, y) {}
+		Vec2D(double x, double y, bool polar = false) : Point(x,y, polar) {}
+		Vec2D(Point& p0, Point& p1) : Vec2D(p1.getX() - p0.getX(), p1.getY() - p0.getY()) {}
+		Vec2D(Point& p) : Vec2D(p.getX(), p.getY()) {}
 
+		Vec2D(const Vec2D& orig) : Vec2D(orig._x, orig._y) {}
 
-		double getX() { return _x; }
-		double getY() { return _y; }
+		Vec2D add(Vec2D& v) const { return *this + v;}
+		Vec2D sub(Vec2D& v) const { return *this - v;}
 
-		/**
-		*	@brief Copy constructor.
-		*/
-		Vec2D(const Vec2D& vector);
+		double dot(Vec2D& v) const { return *this * v;}
+		Vec2D scalarMult(const double s) const { return *this * s;}
 
-		/**
-		*	@brief Copy constructor.
-		*/
-		Vec2D(const Point& point);
+		
+		Vec2D operator+(Vec2D& p) const { return { _x - p.getX(), _y - p.getY() }; }
+		Vec2D operator-(Vec2D& p) const { return { _x - p.getX(), _y - p.getY() }; }
+		Vec2D operator*(const double s) const { return { _x * s, _y * s }; }
+		double operator*(Vec2D& v) const { return (_x * v.getX()) + (_y * v.getY()); }
 
-		/**
-		*	@brief Destructor.
-		*/
-		virtual ~Vec2D();
-
-		/**
-		*	@brief Returns this + b (sum of vectors).
-		*/
-		Vec2D add(Vec2D& b);
-		//Vect2d operator+ (const Vect2d &b);
-
-	/**
-	*	@brief Returns a . b (scalar product).
-	*/
-		double dot(Vec2D& b);
-
-		/**
-		*	@brief Assignment operator.
-		*/
-		virtual Vec2D& operator=(const Vec2D& vector);
-
-		/**
-		*	@brief Returns t . a (vector product by _a scalar).
-		*/
-		Vec2D scalarMult(double t);
-
-		/**
-		*	@brief Returns a - b (substraction of vectors).
-		*/
-		Vec2D sub(Vec2D& b);
+		// Compara Modulos
+		bool operator>(Point& p) const { return this->getModule() > p.getModule(); }
+		bool operator<(Point& p) const { return this->getModule() < p.getModule(); }
+		bool operator==(Point& p) const { return BasicGeom::equal(getModule(), p.getModule()); }
+		bool operator<=(Point& p) const { return BasicGeom::lequal(getModule(), p.getModule()); }
+		bool operator>=(Point& p) const { return BasicGeom::gequal(getModule(), p.getModule()); }
 	};
 }
-
-
-
-#endif /* VECT2D_H */
-

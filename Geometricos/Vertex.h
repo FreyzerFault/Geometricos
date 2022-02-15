@@ -73,7 +73,7 @@ namespace GEO
 		/**
 		*	@brief Next vertex in counterclockwise order.
 		*/
-		Vertex next();
+		Vertex next() const;
 
 		/**
 		*	@brief Next edge in counterclockwise order.

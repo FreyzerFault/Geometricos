@@ -1,10 +1,10 @@
-#include "Vector.h"
+#include "Vec2D.h"
 #include "DrawLine.h"
 
 
 GEO::DrawLine::DrawLine (Line &t): dt (t), Draw(){
 	// Usando la Parametrica
-	const Vector v(dt.getB() - dt.getA());
+	const Vec2D v(dt.getB() - dt.getA());
 	Point inicio = dt.getPoint(-1000);
 	Point fin = dt.getPoint(1000);
 

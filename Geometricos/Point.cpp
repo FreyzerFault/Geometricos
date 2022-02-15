@@ -3,7 +3,7 @@
 #include <string>
 #include "glm/glm.hpp"
 #include "Point.h"
-#include "Vector.h"
+#include "Vec2D.h"
 
 using namespace std;
 
@@ -52,8 +52,8 @@ GEO::Point::PointClassification GEO::Point::classify(Point& p0, Point& p1)
 
 	// Si Area = 0 Esta contenido en la recta
 	// Para que este detras, el vector p0->this debe ser inverso al vector p0->p1
-	Vector a(p0, *this);
-	Vector b(p0, p1);
+	Vec2D a(p0, *this);
+	Vec2D b(p0, p1);
 
 	if ((a.getX() * b.getX() < 0.0) || (a.getY() * b.getY() < 0.0))
 		return BACKWARD;
@@ -121,14 +121,19 @@ double GEO::Point::triangleArea2(Point& a, Point& b) const
 	);
 }
 
-GEO::Point GEO::Point::operator+(Vector v)
+GEO::Point GEO::Point::operator+(Vec2D v)
 {
 	return {_x + v.getX(), _y + v.getY()};
 }
 
-GEO::Vector GEO::Point::operator-(Point v)
+GEO::Vec2D GEO::Point::operator-(Point v)
 {
 	return {v.getX() - _x, v.getY() - _y};
+}
+
+GEO::Vec2D GEO::Point::operator*(double s)
+{
+	return Vec2D(*this) * s;
 }
 
 void GEO::Point::out() const

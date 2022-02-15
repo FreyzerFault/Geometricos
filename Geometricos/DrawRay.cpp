@@ -2,7 +2,7 @@
 #include "Point.h"
 #include "DrawRay.h"
 
-#include "Vector.h"
+#include "Vec2D.h"
 
 
 GEO::DrawRay::DrawRay (RayLine &t): dt (t), Draw(){
