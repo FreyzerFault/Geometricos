@@ -37,7 +37,7 @@ GEO::Polygon::Polygon(const std::string & filename)
 	
 	while (std::getline(is, line))
 	{
-		// Formato: x,y
+		// Formato: x;y
 
 		if (!std::isdigit(line[0]) && line.find(';'))
 			std::cout << "Formato de archivo de Poligono erroneo (" + line + ")" << std::endl;
@@ -81,14 +81,18 @@ GEO::Vertex GEO::Polygon::getVertexAt(int pos)
 	}
 	else 
 	{
-		return Vertex();
+		return {};
 	}
 }
 
 bool GEO::Polygon::convex()
 {
-	// TODOS Angulos internos < PI
-	// o que el vertice este a la derecha de los vertices i+1 y i-1
+	// Si todos los vertices son Convexos (a la izquierda de sus vertices adyacentes)
+	for (auto vertex : _vertices)
+	{
+		if (!vertex.convex())
+			return false;
+	}
 	return true;
 }
 
@@ -138,13 +142,13 @@ bool GEO::Polygon::pointInConvexPolygon(GEO::Point& point)
 		Vertex* v1 = &_vertices[i+1 % getNumVertices()];
 
 		// Si el punto no esta a la izquierda y no esta en mitad de la arista no esta contenido en el poligono
-		if (!point.left(*v0,*v1) == Point::LEFT && !point.isBetween(*v0,*v1))
+		if (!point.left(*v0,*v1))
 			return false;
 	}
 	return true;
 }
 
-void GEO::Polygon::save(const std::string& filename)
+void GEO::Polygon::save(const std::string& filename) const
 {
 	static std::string folderName = "Polygon/";
 	std::ofstream os(folderName + filename + ".txt");

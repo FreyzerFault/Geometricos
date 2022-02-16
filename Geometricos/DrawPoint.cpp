@@ -12,8 +12,8 @@
 GEO::DrawPoint::DrawPoint (Point &p): dp (p), Draw(){
     
 
-    _vertices.push_back (glm::vec3(p.getX(), p.getY(), 0.0));
-    _normals.push_back ( glm::vec3 ( 0, 0, 1 ) );
+    _vertices.emplace_back(p.getX(), p.getY(), 0.0);
+    _normals.emplace_back(0, 0, 1);
     _indices.push_back(0);
     
     buildVAO ();

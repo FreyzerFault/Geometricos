@@ -321,7 +321,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 				s3.addPoint(c);
 				s3.addPoint(d);
 				auto ds3 = new DrawPointCloud(s3);
-				ds3->drawIt(green);
+				ds3->drawIt(magenta);
 				ds3 = nullptr;
 
 				Vec2D s4(0.0, 0.0);

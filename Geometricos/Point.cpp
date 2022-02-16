@@ -7,6 +7,28 @@
 
 using namespace std;
 
+std::string GEO::Point::classifyToString(PointClassification c)
+{
+	switch (c)
+	{
+	case PointClassification::LEFT:
+		return "LEFT";
+	case PointClassification::RIGHT:
+		return "RIGHT";
+	case PointClassification::FORWARD:
+		return "FORWARD";
+	case PointClassification::BACKWARD:
+		return "BACKWARD";
+	case PointClassification::BETWEEN:
+		return "BETWEEN";
+	case PointClassification::ORIGIN:
+		return "ORIGIN";
+	case PointClassification::DEST:
+		return "DEST";
+	}
+	return "?";
+}
+
 GEO::Point::Point()
 {
 	_x = DEFAULT_VALUE;
@@ -27,6 +49,11 @@ GEO::Point::Point(double x, double y, bool polar)
 	}
 }
 
+GEO::Point::Point(Vec2D v)
+	: _x(v.getX()), _y(v.getY())
+{
+}
+
 GEO::Point::Point(const Point& point)
 {
 	_x = point._x;
@@ -39,16 +66,16 @@ GEO::Point::~Point()
 GEO::Point::PointClassification GEO::Point::classify(Point& p0, Point& p1)
 {
 	if (equal(p0))
-		return ORIGIN;
+		return PointClassification::ORIGIN;
 	if (equal(p1))
-		return DEST;
+		return PointClassification::DEST;
 
 	const double areaTri = triangleArea2(p0, p1) / 2;
 
 	if (areaTri > 0)
-		return LEFT;
+		return PointClassification::LEFT;
 	if (areaTri < 0)
-		return RIGHT;
+		return PointClassification::RIGHT;
 
 	// Si Area = 0 Esta contenido en la recta
 	// Para que este detras, el vector p0->this debe ser inverso al vector p0->p1
@@ -56,17 +83,17 @@ GEO::Point::PointClassification GEO::Point::classify(Point& p0, Point& p1)
 	Vec2D b(p0, p1);
 
 	if ((a.getX() * b.getX() < 0.0) || (a.getY() * b.getY() < 0.0))
-		return BACKWARD;
+		return PointClassification::BACKWARD;
 	if (a > b)
-		return FORWARD;
+		return PointClassification::FORWARD;
 
-	return BETWEEN;
+	return PointClassification::BETWEEN;
 }
 
 bool GEO::Point::colinear(Point& a, Point& b)
 {
 	const PointClassification result = classify(a, b);
-	return (result != LEFT) && (result != RIGHT);
+	return (result != PointClassification::LEFT) && (result != PointClassification::RIGHT);
 }
 
 double GEO::Point::distPoint(Point& p) const
@@ -88,7 +115,7 @@ double GEO::Point::getModule() const
 bool GEO::Point::leftAbove(Point& a, Point& b)
 {
 	PointClassification result = classify(a, b);
-	return (result == LEFT) || (result != RIGHT);
+	return (result == PointClassification::LEFT) || (result != PointClassification::RIGHT);
 }
 
 GEO::Point& GEO::Point::operator=(const Point& point)
@@ -102,7 +129,7 @@ GEO::Point& GEO::Point::operator=(const Point& point)
 bool GEO::Point::rightAbove(Point& a, Point& b)
 {
 	PointClassification result = classify(a, b);
-	return (result == RIGHT) || (result != LEFT);
+	return (result == PointClassification::RIGHT) || (result != PointClassification::LEFT);
 }
 
 double GEO::Point::slope(Point& p)

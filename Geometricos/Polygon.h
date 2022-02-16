@@ -131,7 +131,7 @@ namespace GEO
 		/**
 		*	@brief Saves the coordinates of the PolygonGeo in file with the same format as the constructor.
 		*/
-		void save(const std::string& filename);
+		void save(const std::string& filename) const;
 
 		/**
 		*	@brief Modifies the vertex in a position.

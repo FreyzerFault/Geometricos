@@ -27,8 +27,7 @@ GEO::Vertex::Vertex(const Point& point)
 }
 
 GEO::Vertex::~Vertex()
-{
-}
+= default;
 
 bool GEO::Vertex::convex()
 {
@@ -52,11 +51,11 @@ GEO::Vertex GEO::Vertex::next() const
 
 GEO::SegmentLine GEO::Vertex::nextEdge()
 {
-	//XXXX
-	return SegmentLine();
+	// A partir de dos Point de el this y el next()
+	return {getPoint(), next().getPoint()};
 }
 
-GEO::Vertex & GEO::Vertex::operator=(const Vertex & vertex)
+GEO::Vertex& GEO::Vertex::operator=(const Vertex & vertex)
 {
 	if (this != &vertex)
 	{
@@ -82,7 +81,7 @@ void GEO::Vertex::out()
 	std::cout << "Position: " <<  std::to_string(_position);
 }
 
-GEO::Vertex GEO::Vertex::previous()
+GEO::Vertex GEO::Vertex::previous() const
 {
 	return _polygon->previous(_position);
 }

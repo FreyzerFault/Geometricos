@@ -29,7 +29,7 @@ namespace GEO
 		/**
 		*	@brief Constructor of a point cloud of random form giving the total number of points and the maximum range of those points ((-max_x, max_x), or (-max_y, max_y)).
 		*/
-		PointCloud(int size, float max_x, float max_y);
+		PointCloud(int size, double max_x, double max_y);
 
 		/**
 		*	@brief Constructor of a point cloud from the coordinates of points stored in file.
@@ -45,11 +45,12 @@ namespace GEO
 		*	@brief Adds a point to the point cloud.
 		*/
 		void addPoint(Point& p);
+		void addPoint(double x, double y);
 
 		/**
 		*	@brief Returns the points that minimizes the distance to any point from the cloud.
 		*/
-		Point centralPoint();
+		Point centralPoint() const;
 
 		/**
 		*	@brief Deletes a point identified by its index.
@@ -79,13 +80,14 @@ namespace GEO
 		/**
 		*	@brief Saves the cloud of points in file with the same format used by the constructor.
 		*/
-		void save(const std::string& filename);
+		void save(const std::string& filename) const;
 
 		/**
 		*	@brief Returns the size of the point cloud.
 		*/
 		int size() { return _points.size(); }
 	};
+	
 }
 
 

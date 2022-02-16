@@ -20,8 +20,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BasicGeom.h" />
+    <ClInclude Include="Bezier.h" />
     <ClInclude Include="Circle.h" />
     <ClInclude Include="Draw.h" />
+    <ClInclude Include="DrawBezier.h" />
     <ClInclude Include="DrawLine.h" />
     <ClInclude Include="DrawPoint.h" />
     <ClInclude Include="DrawPointCloud.h" />
@@ -45,8 +47,10 @@
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bezier.cpp" />
     <ClCompile Include="Circle.cpp" />
     <ClCompile Include="Draw.cpp" />
+    <ClCompile Include="DrawBezier.cpp" />
     <ClCompile Include="DrawLine.cpp" />
     <ClCompile Include="DrawPoint.cpp" />
     <ClCompile Include="DrawPointCloud.cpp" />

@@ -58,17 +58,17 @@ namespace GEO
 		/**
 		*	@brief Returns the point value.
 		*/
-		Point getPoint() { return Point(_x, _y); }
+		Point getPoint() const { return {_x, _y}; }
 
 		/**
 		*	@brief Returns the polygon associated to this vertex.
 		*/
-		Polygon* getPolygon() { return _polygon; }
+		Polygon* getPolygon() const { return _polygon; }
 
 		/**
 		*	@brief Returns the position of the current vertex in the polygon, if any.
 		*/
-		int getPositionInPolygon() { return _position; }
+		int getPositionInPolygon() const { return _position; }
 
 		/**
 		*	@brief Next vertex in counterclockwise order.
@@ -93,7 +93,7 @@ namespace GEO
 		/**
 		*	@brief Next vertex in clockwise order.
 		*/
-		Vertex previous();
+		Vertex previous() const;
 
 		/**
 		*	@brief Next edge in clockwise order.

@@ -18,7 +18,7 @@ namespace GEO
 		const static int DEFAULT_VALUE = INT_MAX; // Value of X and Y coordinates for an incomplete Point.
 
 	public:
-		enum PointClassification
+		enum class PointClassification
 		{	LEFT,
 			RIGHT,
 			FORWARD,
@@ -29,27 +29,7 @@ namespace GEO
 		};
 
 		// Para sacar por consola la posicion
-		static std::string classifyToString(PointClassification c)
-		{
-			switch (c)
-			{
-			case LEFT:
-				return "LEFT";
-			case RIGHT:
-				return "RIGHT";
-			case FORWARD:
-				return "FORWARD";
-			case BACKWARD:
-				return "BACKWARD";
-			case BETWEEN:
-				return "BETWEEN";
-			case ORIGIN:
-				return "ORIGIN";
-			case DEST:
-				return "DEST";
-			}
-			return "?";
-		}
+		static std::string classifyToString(PointClassification c);
 
 	protected:
 		double _x, _y;
@@ -64,6 +44,7 @@ namespace GEO
 		*	@brief Constructor. Depending on the value of polar, x may be an angle (radians) and y the vector module.
 		*/
 		Point(double x, double y, bool polar = false);
+		Point(Vec2D v);
 
 		/**
 		*	@brief Copy constructor.
@@ -108,12 +89,12 @@ namespace GEO
 		/**
 		*	@brief Checks the position of the point respect to other two points (a, b).
 		*/
-		bool forward(Point& a, Point& b) { return classify(a, b) == FORWARD; }
+		bool forward(Point& a, Point& b) { return classify(a, b) == PointClassification::FORWARD; }
 
 		/**
 		*	@brief Checks the position of the point respect to other two points (a, b).
 		*/
-		bool backward(Point& a, Point& b) { return classify(a, b) == BACKWARD; }
+		bool backward(Point& a, Point& b) { return classify(a, b) == PointClassification::BACKWARD; }
 
 		/**
 		*	@brief Returns the coordinate X of the point.
@@ -138,7 +119,7 @@ namespace GEO
 		/**
 		*	@brief Checks the position of the point respect to other two points (a, b).
 		*/
-		bool isBetween(Point& a, Point& b) { return classify(a, b) == BETWEEN; }
+		bool isBetween(Point& a, Point& b) { return classify(a, b) == PointClassification::BETWEEN; }
 
 		/**
 		*	@brief Checks the value of the coordinates. If the values are the DEFAULT, then the point is not valid.
@@ -148,7 +129,7 @@ namespace GEO
 		/**
 		*	@brief Checks the position of the point respect to other two points (a, b).
 		*/
-		bool left(Point& a, Point& b) { return classify(a, b) == LEFT; }
+		bool left(Point& a, Point& b) { return classify(a, b) == PointClassification::LEFT; }
 
 		/**
 		*	@brief Checks the position of the point respect to other two points (a, b).
@@ -173,7 +154,7 @@ namespace GEO
 		/**
 		*	@brief Checks the position of the point respect to other two points (a, b).
 		*/
-		bool right(Point& a, Point& b) { return classify(a, b) == RIGHT; }
+		bool right(Point& a, Point& b) { return classify(a, b) == PointClassification::RIGHT; }
 
 		/**
 		*	@brief Modifies the coordinate values.
