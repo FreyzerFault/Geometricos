@@ -124,9 +124,9 @@ namespace GEO
 		Polygon& operator=(const Polygon& PolygonGeo);
 
 		/**
-		*	@brief Assuming that this is a convex PolygonGeo, this method indicates if the point p is inside the PolygonGeo.
+		*	@brief Assuming that this is a convex Polygon, this method indicates if the point p is inside the Polygon.
 		*/
-		bool pointInConvexPolygonGeo(Point& point);
+		bool pointInConvexPolygon(Point& point);
 
 		/**
 		*	@brief Saves the coordinates of the PolygonGeo in file with the same format as the constructor.

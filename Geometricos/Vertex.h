@@ -16,7 +16,7 @@ namespace GEO
 {
 	class Polygon;			// Forward declaration due to circular reference betwen both classes.
 
-	class Vertex : public Point
+	class   Vertex : public Point
 	{
 	protected:
 		const static int INVALID_POSITION = -1;
