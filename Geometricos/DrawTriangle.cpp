@@ -3,22 +3,21 @@
 #include "DrawTriangle.h"
 
 
-GEO::DrawTriangle::DrawTriangle (Triangle &t): dt (t), Draw(){
+GEO::DrawTriangle::DrawTriangle (Triangle& triangle): Draw(), _triangle (triangle){
     
-    _vertices.push_back ( glm::vec3 (dt.a.getX(), dt.a.getY() , 0.0 ) );
-    _vertices.push_back ( glm::vec3 (dt.b.getX(), dt.b.getY() , 0.0 ) );
-    _vertices.push_back ( glm::vec3 (dt.c.getX(), dt.c.getY() , 0.0 ) );
+    _vertices.emplace_back(_triangle.a.getX(), _triangle.a.getY() , 0.0);
+    _vertices.emplace_back(_triangle.b.getX(), _triangle.b.getY() , 0.0);
+    _vertices.emplace_back(_triangle.c.getX(), _triangle.c.getY() , 0.0);
     
-    _normals.push_back ( glm::vec3 ( 0, 0, 1 ) );
-    _normals.push_back ( glm::vec3 ( 0, 0, 1 ) );
-    _normals.push_back ( glm::vec3 ( 0, 0, 1 ) );
+    _normals.emplace_back(0, 0, 1);
+    _normals.emplace_back(0, 0, 1);
+    _normals.emplace_back(0, 0, 1);
 
     _indices.push_back ( 0 );
     _indices.push_back ( 1 );
     _indices.push_back ( 2 );
 
     buildVAO ();
-    
 }
 
 

@@ -19,18 +19,18 @@ namespace GEO
 {
     class DrawRay : public Draw {
 
-        RayLine dt;
+        RayLine* ray;
 
     public:
 
         DrawRay(RayLine& t);
 
-        DrawRay(const DrawRay& ddt) : dt(ddt.dt), Draw() {}
+        DrawRay(const DrawRay& ddt): Draw(), ray(ddt.ray) {}
 
         void drawIt();
         void drawIt(TypeColor c);
 
-        virtual ~DrawRay() {};
+        virtual ~DrawRay() = default;
     };
 
 }

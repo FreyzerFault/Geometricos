@@ -2,11 +2,11 @@
 #include "DrawLine.h"
 
 
-GEO::DrawLine::DrawLine (Line &t): dt (t), Draw(){
+GEO::DrawLine::DrawLine (Line &line): Draw(), _line (&line){
 	// Usando la Parametrica
-	const Vec2D v(dt.getB() - dt.getA());
-	Point inicio = dt.getPoint(-1000);
-	Point fin = dt.getPoint(1000);
+	const Vec2D v(_line->getB() - _line->getA());
+	Point inicio = _line->getPoint(-1000);
+	Point fin = _line->getPoint(1000);
 
 	_vertices.emplace_back(inicio.getX(), inicio.getY(), 0.0);
 	_vertices.emplace_back(fin.getX(), fin.getY(), 0.0);

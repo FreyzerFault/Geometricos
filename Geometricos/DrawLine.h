@@ -18,18 +18,18 @@ namespace GEO
 {
 	class DrawLine: public Draw {
 	    
-	    Line dt;
+	    Line* _line;
 	    
 	    public:
 	        
-	    DrawLine (Line &t); 
+	    DrawLine (Line &line); 
 	    
-	    DrawLine (const DrawLine &ddt) : dt (ddt.dt) , Draw() {}
+	    DrawLine (const DrawLine &drawLine) : Draw() , _line (drawLine._line) {}
 	    
 	    void drawIt ();
 	    void drawIt (TypeColor c);
 	    
-	    virtual ~DrawLine(){};
+	    virtual ~DrawLine() = default;
 	};
 }
 

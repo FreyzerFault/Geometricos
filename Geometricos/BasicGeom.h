@@ -50,6 +50,9 @@ namespace GEO
 		*/
 		double max2(double a, double b);
 
+		// COMBINATORIA
+		double combinatoria(double n, double k);
+
 
 		inline bool BasicGeom::equal(double a, double b)
 		{
@@ -94,6 +97,27 @@ namespace GEO
 		inline double BasicGeom::max2(double a, double b)
 		{
 			return (a > b ? a : b);
+		}
+
+		inline double combinatoria(double n, double k)
+		{
+			if (equal(k,0))
+				return 1;
+
+			if (equal(k,1))
+				return n;
+
+			// Combinatoria = n(n-1)(n-2)...(n - k+1) / k!
+			double comb = n;
+			for (int i = 1; i < k ; ++i)
+				comb *= n - i;
+
+			// Factorial de k = 1*2*3*4*...*k
+			double factorial = 1;
+			for (int i = 1; i <= k; ++i)
+				factorial *= i;
+
+			return comb / factorial;
 		}
 	}
 }

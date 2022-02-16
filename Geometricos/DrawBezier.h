@@ -7,13 +7,13 @@ namespace GEO
 	class DrawBezier : public Draw
 	{
 		
-	    Bezier dt;
+	    Bezier* _bezier;
 	    
 	public:
 	        
 	    DrawBezier (Bezier &bezier); 
 	    
-	    DrawBezier (const DrawBezier &ddt) : Draw() , dt (ddt.dt) {}
+	    DrawBezier (const DrawBezier &drawBezier) : Draw() , _bezier(drawBezier._bezier) {}
 	    
 	    void drawIt ();
 	    void drawIt (TypeColor c);

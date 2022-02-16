@@ -5,11 +5,11 @@
 #include "Vec2D.h"
 
 
-GEO::DrawRay::DrawRay (RayLine &t): dt (t), Draw(){
+GEO::DrawRay::DrawRay (RayLine &t): Draw(), ray (&t){
 
 	// Usando la Parametrica
-	Point inicio = dt.getA();
-	Point fin = dt.getPoint(1000);
+	Point inicio = ray->getA();
+	Point fin = ray->getPoint(1000);
 
 	_vertices.emplace_back(inicio.getX(), inicio.getY(), 0.0);
 	_vertices.emplace_back(fin.getX(), fin.getY(), 0.0);

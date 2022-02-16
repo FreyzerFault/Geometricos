@@ -4,21 +4,18 @@
 #include "Polygon.h"
 
 
-GEO::DrawPolygon::DrawPolygon (Polygon &t): dt (t), Draw(){
+GEO::DrawPolygon::DrawPolygon (Polygon &polygon): Draw(), _polygon(&polygon){
     
-    for (int i=0; i<dt.getNumVertices(); i++){
+    for (int i=0; i < _polygon->getNumVertices(); i++){
         
-        Point aux = dt.getVertexAt(i).getPoint();
+        Point aux = _polygon->getVertexAt(i).getPoint();
     
-        _vertices.push_back(glm::vec3 (aux.getX(), aux.getY(), 0));
-     
-        _normals.push_back ( glm::vec3 ( 0, 0, 1 ) );
-     
+        _vertices.emplace_back(aux.getX(), aux.getY(), 0);
+        _normals.emplace_back(0, 0, 1);
         _indices.push_back ( i );
     }
 
     buildVAO ();
-    
 }
 
 

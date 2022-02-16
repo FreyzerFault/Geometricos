@@ -18,13 +18,13 @@ namespace GEO
 {
     class DrawTriangle : public Draw {
 
-        Triangle dt;
+        Triangle _triangle;
 
     public:
 
-        DrawTriangle(Triangle& t);
+        DrawTriangle(Triangle& triangle);
 
-        DrawTriangle(const DrawTriangle& ddt) : dt(ddt.dt), Draw() {}
+        DrawTriangle(const DrawTriangle& drawTriangle): Draw(), _triangle(drawTriangle._triangle) {}
 
         void drawIt();
         void drawIt(TypeColor c);

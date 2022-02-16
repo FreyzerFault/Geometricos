@@ -18,18 +18,18 @@ namespace GEO
 {
     class DrawPolygon : public Draw {
 
-        Polygon dt;
+        Polygon* _polygon;
 
     public:
 
-        DrawPolygon(Polygon& t);
+        DrawPolygon(Polygon& polygon);
 
-        DrawPolygon(const DrawPolygon& ddt) : dt(ddt.dt), Draw() {}
+        DrawPolygon(const DrawPolygon& drawPolygon): Draw(), _polygon(drawPolygon._polygon) {}
 
         void drawIt();
         void drawIt(TypeColor c);
 
-        virtual ~DrawPolygon() {};
+        virtual ~DrawPolygon() = default;
     };
 
 }

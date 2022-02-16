@@ -15,6 +15,8 @@
 #include <glm/glm.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 //#include <glm/gtx/transform.hpp>
+#include "Bezier.h"
+#include "DrawBezier.h"
 #include "Scene.h"
 
 #include "InclGeom2D.h"
@@ -195,6 +197,7 @@ int main(int argc, char** argv)
 	try
 	{
 		Scene::getInstance()->setScene(1024, 576);
+		Scene::getInstance()->setColorBack(0.1f,0.1f,0.1f,1.0f);
 
 
 		while (!glfwWindowShouldClose(miVentana))
@@ -228,16 +231,33 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 			glfwSetWindowShouldClose(ventana, GLFW_TRUE);
 		}
 		break;
-
-	case GLFW_KEY_E:
+		
+		// ================================ POLIGONO ================================
+	case GLFW_KEY_P:
 		if (accion == GLFW_PRESS)
 		{
 			try
 			{
-				Vec2D a(3.0, 2.0);
-				Vec2D b(0.0, 0.0);
-				Vec2D c(-2.0, 1.0);
+				Point a(0.0, 2.0);
+				Point b(2.0, 1.0);
+				Point c(2.0, -1.0);
+				Point d(0.0, -2.0);
+				Point e(-2.0, -1.0);
+				Point f(-2.0, 1.0);
 
+				GEO::Polygon polygon;
+				polygon.add(a);
+				polygon.add(b);
+				polygon.add(c);
+				polygon.add(d);
+				polygon.add(e);
+				polygon.add(f);
+
+				DrawPolygon* dp = new DrawPolygon(polygon);
+				dp->drawIt(cyan);
+				dp = nullptr;
+
+				polygon.save("Poligono1");
 			}
 			catch (std::exception& e)
 			{
@@ -251,7 +271,9 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 			refresWindow(ventana);
 		}
 		break;
-	case GLFW_KEY_M:
+		
+		// ================================ TRIANGULO ================================
+	case GLFW_KEY_T:
 		if (accion == GLFW_PRESS)
 		{
 			try
@@ -282,52 +304,34 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		}
 		break;
 
+		// ================================ SEGMENTO / LINEA / RAYO ================================
+
 	case GLFW_KEY_S:
 		if (accion == GLFW_PRESS)
 		{
 			try
 			{
-				Vec2D a(2.0, 1.0);
-				Vec2D b(0.0, 1.0);
-				Vec2D c(-2.0, -2.0);
-				Vec2D d(3.0, 0.0);
+				Vec2D a(0.8, -1.3);
+				Vec2D b(1.0, 1.0);
+				Vec2D c(-0.8, -1.6);
+				Vec2D d(-1.3, -1.0);
+				Vec2D e(-1.0, 1.0);
+				Vec2D f(1.0, -1.0);
 
-				SegmentLine s1 (a,b);
-				DrawSegment *ds1 = new DrawSegment (s1);
+				SegmentLine segment (a,b);
+				DrawSegment *ds1 = new DrawSegment (segment);
 				ds1->drawIt(blue);
 				ds1 = nullptr;
 
-				Line line (a,b);
+				Line line (c,d);
 				DrawLine *dl = new DrawLine (line);
-				dl->drawIt(yellow);
+				dl->drawIt(red);
 				dl = nullptr;
 
-				GEO::RayLine ray (a,b);
+				GEO::RayLine ray (e,f);
 				DrawRay *dr = new DrawRay (ray);
-				dr->drawIt(cyan);
+				dr->drawIt(yellow);
 				dr = nullptr;
-
-				GEO::Polygon s2;
-				s2.add(a); s2.add(b); s2.add(c); s2.add(d);
-				DrawPolygon *ds2 = new DrawPolygon (s2);
-				ds2->drawIt(green);
-				ds2 = nullptr;
-
-				s2.save("Poligono1");
-
-				PointCloud s3;
-				s3.addPoint(a);
-				s3.addPoint(b);
-				s3.addPoint(c);
-				s3.addPoint(d);
-				auto ds3 = new DrawPointCloud(s3);
-				ds3->drawIt(magenta);
-				ds3 = nullptr;
-
-				Vec2D s4(0.0, 0.0);
-				auto ds4 = new DrawPoint(s4);
-				ds4->drawIt(blue);
-				ds4 = nullptr;
 			}
 			catch (std::exception& e)
 			{
@@ -342,16 +346,64 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		}
 		break;
 
-
-	case GLFW_KEY_P:
+		// ================================ NUBE DE PUNTOS ================================
+	case GLFW_KEY_C:
 		if (accion == GLFW_PRESS)
 		{
 			try
 			{
-				Point a(0.0, 0.0);
-				auto da = new DrawPoint(a);
-				da->drawIt();
-				da = nullptr;
+				PointCloud pc(100, 5, 5);
+				auto dpc = new DrawPointCloud(pc);
+				dpc->drawIt();
+				dpc = nullptr;
+
+				pc.save("PointCloud");
+			}
+			catch (std::exception& e)
+			{
+				std::cout << "Exception captured on callbackKey"
+					<< std::endl
+					<< "===================================="
+					<< std::endl
+					<< e.what() << std::endl;
+			}
+
+			refresWindow(ventana);
+		}
+		break;
+		
+		// ================================ BEZIER ================================
+	case GLFW_KEY_B:
+		if (accion == GLFW_PRESS)
+		{
+			try
+			{
+				Point a(0.0, 2.0);
+				Point b(2.0, 1.0);
+				Point c(-2.0, -1.0);
+				Point d(0.0, -2.0);
+
+				PointCloud pc;
+				pc.addPoint(a);
+				pc.addPoint(b);
+				pc.addPoint(c);
+				pc.addPoint(d);
+
+				DrawPointCloud* dpc = new DrawPointCloud(pc);
+				dpc->drawIt(red);
+				dpc = nullptr;
+
+				Bezier bezier;
+				bezier.addPoint(a);
+				bezier.addPoint(b);
+				bezier.addPoint(c);
+				bezier.addPoint(d);
+
+				DrawBezier* db = new DrawBezier(bezier);
+				db->drawIt(yellow);
+				db = nullptr;
+
+				bezier.save("Bezier");
 			}
 			catch (std::exception& e)
 			{
