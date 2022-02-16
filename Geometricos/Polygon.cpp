@@ -130,9 +130,17 @@ GEO::Polygon& GEO::Polygon::operator=(const Polygon &polygon)
 	return *this;
 }
 
-bool GEO::Polygon::pointInConvexPolygonGeo(GEO::Point& point)
+bool GEO::Polygon::pointInConvexPolygon(GEO::Point& point)
 {
-	//XXXX
+	for (int i = 0; i < getNumVertices(); ++i)
+	{
+		Vertex* v0 = &_vertices[i % getNumVertices()];
+		Vertex* v1 = &_vertices[i+1 % getNumVertices()];
+
+		// Si el punto no esta a la izquierda y no esta en mitad de la arista no esta contenido en el poligono
+		if (!point.left(*v0,*v1) == Point::LEFT && !point.isBetween(*v0,*v1))
+			return false;
+	}
 	return true;
 }
 
