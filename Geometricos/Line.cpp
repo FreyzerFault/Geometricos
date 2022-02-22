@@ -2,9 +2,15 @@
 #include <iostream>
 #include "Line.h"
 #include "RayLine.h"
+#include "Vec2D.h"
 
 GEO::Line::Line(const GEO::Point & a, const GEO::Point & b)
 	: SegmentLine(a, b)
+{
+}
+
+GEO::Line::Line(const Point& p, const Vec2D& v)
+	: SegmentLine(p, p + v)
 {
 }
 
@@ -17,7 +23,7 @@ GEO::Line::~Line()
 {
 }
 
-bool GEO::Line::impSegmentIntersection(SegmentLine& segment) const
+bool GEO::Line::impSegmentIntersection(const SegmentLine& segment) const
 {
 	Point a = _orig;
 	Point b = _dest;
@@ -68,7 +74,7 @@ GEO::Point* GEO::Line::intersectionPoint(const RayLine& ray)
 GEO::Point* GEO::Line::intersectionPoint(const Line& line)
 {
 	double s, t;
-	Point* interseccion = SegmentLine::intersectionPoint(ray.getA(), ray.getB(), s, t);
+	Point* interseccion = SegmentLine::intersectionPoint(line.getA(), line.getB(), s, t);
 
 	// Sera nullptr si son paralelas
 	return interseccion;

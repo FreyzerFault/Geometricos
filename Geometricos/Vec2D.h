@@ -21,6 +21,7 @@ namespace GEO
 		double dot(Vec2D& v) const { return *this * v;}
 		Vec2D scalarMult(const double s) const { return *this * s;}
 
+		Vec2D getPerpendicular() { return {_y, -_x}; }
 		
 		Vec2D operator+(Vec2D& p) const { return { _x - p.getX(), _y - p.getY() }; }
 		Vec2D operator-(Vec2D& p) const { return { _x - p.getX(), _y - p.getY() }; }

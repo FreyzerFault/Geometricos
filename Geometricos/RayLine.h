@@ -42,7 +42,7 @@ namespace GEO
 		/**
 		*	@brief Checks if this rayline intersects with a segment in a non-proper way.
 		*/
-		bool impSegmentIntersection(SegmentLine& segment);
+		bool impSegmentIntersection(SegmentLine& segment) const;
 
 		
 		// Punto de intersseccion con un segmento, linea o rayo

@@ -15,10 +15,9 @@ GEO::RayLine::RayLine(const RayLine& ray)
 }
 
 GEO::RayLine::~RayLine()
-{
-}
+= default;
 
-bool GEO::RayLine::impSegmentIntersection(SegmentLine& segment)
+bool GEO::RayLine::impSegmentIntersection(SegmentLine& segment) const
 {
 	Point a = _orig;
 	Point b = _dest;
@@ -29,7 +28,7 @@ bool GEO::RayLine::impSegmentIntersection(SegmentLine& segment)
 	return c.isBetween(a,b) // El inicio del ray esta en el segmento
 	// El rayo pasa por a o por b, por lo que deben estar en medio o delante de c,d
 	|| a.isBetween(c,d) || b.isBetween(c,d)
-	|| a.forward(c,d) || c.forward(c,d));
+	|| a.forward(c,d) || c.forward(c,d);
 }
 
 GEO::Point* GEO::RayLine::intersectionPoint(const SegmentLine& segment)

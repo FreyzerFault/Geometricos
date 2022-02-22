@@ -6,9 +6,42 @@
 #include "Vec2D.h"
 
 
-GEO::SegmentLine::SegmentLine()
+double GEO::SegmentLine::getDistanceT0(Point& point)
 {
+	// Contenido => 0
+	if (point.isBetween(_orig, _dest))
+		return 0;
+
+	// Delante => Distancia respecto a b
+	if (point.forward(_orig, _dest))
+		return Vec2D((Point)point - _dest).getModule();
+
+	// Detras => Distancia respecto a a
+	if (point.backward(_orig, _dest))
+		return Vec2D((Point)point - _orig).getModule();
+
+	// Izquierda o Derecha => distancia por la normal
+	Vec2D v = _dest - _orig;
+	const Vec2D normal = v.getPerpendicular();
+
+	// Recta formada por el punto y la normal
+	const Line perpendicular(point, normal);
+
+	// Donde intersecta es el punto mas cercano
+	const Point* intersection = intersectionPoint(perpendicular);
+
+	// Si intersecta es la distancia con la interseccion
+	if (intersection)
+		return Vec2D(*intersection - point).getModule();
+
+	// Si no intersecta sera la distancia con el punto de orig o dest mas cercano
+	const double d1 = Vec2D(point, _dest).getModule();
+	const double d2 = Vec2D(point, _orig).getModule();
+	return BasicGeom::min2(d1, d2);
 }
+
+GEO::SegmentLine::SegmentLine()
+= default;
 
 GEO::SegmentLine::SegmentLine(const Point& a, const Point& b)
 	: _orig(a), _dest(b)
@@ -16,9 +49,7 @@ GEO::SegmentLine::SegmentLine(const Point& a, const Point& b)
 }
 
 GEO::SegmentLine::SegmentLine(const SegmentLine& segment)
-	: _orig(segment._orig), _dest(segment._dest)
-{
-}
+= default;
 
 GEO::SegmentLine::SegmentLine(double ax, double ay, double bx, double by)
 	: _orig(ax, ay), _dest(bx, by)
@@ -26,8 +57,7 @@ GEO::SegmentLine::SegmentLine(double ax, double ay, double bx, double by)
 }
 
 GEO::SegmentLine::~SegmentLine()
-{
-}
+= default;
 
 
 GEO::SegmentLine & GEO::SegmentLine::operator=(const SegmentLine & segment)
@@ -51,7 +81,7 @@ double GEO::SegmentLine::getEquC()
 	return _orig.getY() - (slope() * _orig.getX());
 }
 
-bool GEO::SegmentLine::distinct(SegmentLine & segment)
+bool GEO::SegmentLine::distinct(SegmentLine & segment) const
 {
 	return !equal(segment);
 }
@@ -148,7 +178,7 @@ GEO::Point* GEO::SegmentLine::intersectionPoint(Point c, Point d, double& s, dou
 	t = (ab.getX() * ac.getY() - ac.getX() * ab.getY()) / denominador;
 
 	Point abInters = getPoint(s);
-	Point cdInters = SegmentLine(c,d).getPoint(*t);
+	Point cdInters = SegmentLine(c,d).getPoint(t);
 
 	// Si son paralelos
 	if (!abInters.equal(cdInters))
@@ -163,7 +193,7 @@ GEO::Point* GEO::SegmentLine::intersectionPoint(Point c, Point d, double& s, dou
 GEO::Point* GEO::SegmentLine::intersectionPoint(const SegmentLine& segment)
 {
 	double s, t;
-	Point* interseccion = intersectionPoint(segment._orig, segment._dest, &s, &t);
+	Point* interseccion = intersectionPoint(segment._orig, segment._dest, s, t);
 
 	// Esta dentro de ambos segmentos
 	if (s >= BasicGeom::CERO && s <= 1 && t >= BasicGeom::CERO && t <= 1)
@@ -176,7 +206,7 @@ GEO::Point* GEO::SegmentLine::intersectionPoint(const SegmentLine& segment)
 GEO::Point* GEO::SegmentLine::intersectionPoint(const RayLine& ray)
 {
 	double s, t;
-	Point* interseccion = intersectionPoint(ray._orig, ray._dest, &s, &t);
+	Point* interseccion = intersectionPoint(ray._orig, ray._dest, s, t);
 
 	// Esta dentro del segmento (s) y del rayo (t)
 	if (s >= BasicGeom::CERO && s <= 1 && t >= BasicGeom::CERO)
@@ -189,7 +219,7 @@ GEO::Point* GEO::SegmentLine::intersectionPoint(const RayLine& ray)
 GEO::Point* GEO::SegmentLine::intersectionPoint(const Line& line)
 {
 	double s, t;
-	Point* interseccion = intersectionPoint(line._orig, line._dest, &s, &t);
+	Point* interseccion = intersectionPoint(line._orig, line._dest, s, t);
 
 	// Esta dentro del segmento (s)
 	if (s >= BasicGeom::CERO && s <= 1)

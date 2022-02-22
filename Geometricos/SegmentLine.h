@@ -27,7 +27,7 @@ namespace GEO
 		/**
 		*	@brief Returns the parametric value T0 to calculate the distance between a point and any geometric object like lines, segments or raylines.
 		*/
-		float getDistanceT0(Vec2D& point);
+		double getDistanceT0(Point& point);
 		
 	/**
 	 *	@brief Obstaints the parameters t and s where both lines intersects, if they do.
@@ -84,7 +84,7 @@ namespace GEO
 			/**
 		*	@brief Checks if a segment is different to this one.
 		*/
-		bool distinct(SegmentLine& segment);
+		bool distinct(SegmentLine& segment) const;
 
 			
 			
