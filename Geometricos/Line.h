@@ -39,7 +39,6 @@ namespace GEO
 		*	@brief Checks if a segment intersects with this line (proper intersection).
 		*/
 		bool segmentIntersection(SegmentLine& segment) const;
-
 		
 		// Punto de intersseccion con un segmento, linea o rayo
 		Point* intersectionPoint(const SegmentLine& segment) override;

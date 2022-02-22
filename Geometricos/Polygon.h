@@ -85,24 +85,12 @@ namespace GEO
 		*/
 		Vertex getVertexAt(int pos);
 
-		/**
-		*	@brief Checks if a line intersects with the PolygonGeo.
-		*	@param intersection If line and PolygonGeo intersect, then this point is the intersection. Otherwise this point is not valid.
-		*/
-		bool intersects(Line& line, Vec2D& interseccion);
-
-		/**
-		*	@brief Checks if a rayline intersects with the PolygonGeo.
-		*	@param intersection If rayline and PolygonGeo intersect, then this point is the intersection. Otherwise this point is not valid.
-		*/
-		bool intersects(RayLine& ray, Vec2D& interseccion);
-
-		/**
-		*	@brief Checks if a segment intersects with the PolygonGeo.
-		*	@param intersection If PolygonGeo and segment intersect, then this point is the intersection. Otherwise this point is not valid.
-		*/
-		bool intersects(SegmentLine& segment, Vec2D& interseccion);
-
+		
+		// Punto de intersseccion con un segmento, linea o rayo
+		Point* intersectionPoint(const SegmentLine& segment);
+		Point* intersectionPoint(const RayLine& ray);
+		Point* intersectionPoint(const Line& line);
+		
 		/**
 		*	@brief Returns the following vertex based on the specified index.
 		*/
