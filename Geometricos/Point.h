@@ -99,12 +99,12 @@ namespace GEO
 		/**
 		*	@brief Returns the coordinate X of the point.
 		*/
-		double getX() { return _x; }
+		double getX() const { return _x; }
 
 		/**
 		*	@brief Returns the coordinate Y of the point.
 		*/
-		double getY() { return _y; }
+		double getY() const { return _y; }
 
 		/**
 		*	@brief Angle of this point interpreted as a polar coordinate (radians).
@@ -145,6 +145,7 @@ namespace GEO
 		*	@brief Shows in the debug dialog some information about the point.
 		*/
 		void out() const;
+		std::string toString() const;
 
 		/**
 		*	@brief Checks the position of the point respect to other two points (a, b).
@@ -185,8 +186,9 @@ namespace GEO
 		*/
 		double triangleArea2(Point& a, Point& b) const;
 
-		Point operator+(Vec2D v) const;
-		Vec2D operator-(Point v) const;
-		Vec2D operator*(double s);
+		Point operator+(const Vec2D& v) const;
+		Point operator-(const Vec2D& v) const;
+		Vec2D operator-(const Point& v) const;
+		Vec2D operator*(double s) const;
 	};
 }

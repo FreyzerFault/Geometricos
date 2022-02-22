@@ -20,7 +20,15 @@ GEO::Line::Line(const Line & s)
 }
 
 GEO::Line::~Line()
+= default;
+
+double GEO::Line::distPoint(const Point& point) const
 {
+	const double t0 = getDistanceT0(point);
+	
+	const Vec2D d(_orig, _dest);
+	
+	return Vec2D(point - (_orig + (d * t0))).getModule();
 }
 
 bool GEO::Line::impSegmentIntersection(const SegmentLine& segment) const
@@ -34,7 +42,7 @@ bool GEO::Line::impSegmentIntersection(const SegmentLine& segment) const
 	return c.colinear(a,b) || d.colinear(a,b);
 }
 
-bool GEO::Line::segmentIntersection(SegmentLine& segment) const
+bool GEO::Line::segmentIntersection(const SegmentLine& segment) const
 {
 	Point a = _orig;
 	Point b = _dest;

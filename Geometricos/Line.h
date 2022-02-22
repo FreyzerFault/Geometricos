@@ -26,19 +26,19 @@ namespace GEO
 		virtual ~Line();
 
 		/**
-		*	@brief Distance from a point defined by 'vector' to this line.
+		*	@brief Distance from a point to this line.
 		*/
-		double distPointLine(Vec2D& v);
+		double distPoint(const Point& point) const override;
 
 		/**
 		*	@brief Checks if a segment line generates a non-proper intersection.
 		*/
-		bool impSegmentIntersection(const SegmentLine& segment) const;
+		bool impSegmentIntersection(const SegmentLine& segment) const override;
 		
 		/**
 		*	@brief Checks if a segment intersects with this line (proper intersection).
 		*/
-		bool segmentIntersection(SegmentLine& segment) const;
+		bool segmentIntersection(const SegmentLine& segment) const override;
 		
 		// Punto de intersseccion con un segmento, linea o rayo
 		Point* intersectionPoint(const SegmentLine& segment) override;
@@ -48,7 +48,7 @@ namespace GEO
 		/**
 		*	@brief Checks if the parameter t is valid to obtain a point for a line (it's always valid, we just need to override).
 		*/
-		virtual bool isTvalid(double t) { return true; }
+		bool isTvalid(double t) override { return true; }
 
 		/**
 		*	@brief Assignment operator.

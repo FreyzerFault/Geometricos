@@ -6,38 +6,12 @@
 #include "Vec2D.h"
 
 
-double GEO::SegmentLine::getDistanceT0(Point& point)
+double GEO::SegmentLine::getDistanceT0(const Point& point) const
 {
-	// Contenido => 0
-	if (point.isBetween(_orig, _dest))
-		return 0;
+	const Vec2D d = _dest - _orig;
 
-	// Delante => Distancia respecto a b
-	if (point.forward(_orig, _dest))
-		return Vec2D((Point)point - _dest).getModule();
-
-	// Detras => Distancia respecto a a
-	if (point.backward(_orig, _dest))
-		return Vec2D((Point)point - _orig).getModule();
-
-	// Izquierda o Derecha => distancia por la normal
-	Vec2D v = _dest - _orig;
-	const Vec2D normal = v.getPerpendicular();
-
-	// Recta formada por el punto y la normal
-	const Line perpendicular(point, normal);
-
-	// Donde intersecta es el punto mas cercano
-	const Point* intersection = intersectionPoint(perpendicular);
-
-	// Si intersecta es la distancia con la interseccion
-	if (intersection)
-		return Vec2D(*intersection - point).getModule();
-
-	// Si no intersecta sera la distancia con el punto de orig o dest mas cercano
-	const double d1 = Vec2D(point, _dest).getModule();
-	const double d2 = Vec2D(point, _orig).getModule();
-	return BasicGeom::min2(d1, d2);
+	// t0 es el % a la que esta el punto mas cerca a point
+	return (d * (point - _orig)) / (d*d);
 }
 
 GEO::SegmentLine::SegmentLine()
@@ -72,7 +46,7 @@ GEO::SegmentLine & GEO::SegmentLine::operator=(const SegmentLine & segment)
 }
 
 
-double GEO::SegmentLine::getEquC()
+double GEO::SegmentLine::getEquC() const
 {
 	// c = y-mx (Si m = INF --> y-INF)
 	if (isVertical())
@@ -86,6 +60,22 @@ bool GEO::SegmentLine::distinct(SegmentLine & segment) const
 	return !equal(segment);
 }
 
+double GEO::SegmentLine::distPoint(const Point& point) const
+{
+	const double t0 = getDistanceT0(point);
+	// Mas atras
+	if (t0 <= BasicGeom::CERO)
+		return Vec2D(point - _orig).getModule();
+
+	const Vec2D d(_orig, _dest);
+
+	// Mas adelante
+	if (t0 >= 1)
+		return  Vec2D(point -( _orig + d)).getModule();
+
+	// Entre orig y dest
+	return  Vec2D(point - (_orig + (d * t0))).getModule();
+}
 
 
 bool GEO::SegmentLine::equal(SegmentLine & segment) const
@@ -93,15 +83,17 @@ bool GEO::SegmentLine::equal(SegmentLine & segment) const
 	return (_orig.equal(segment._orig) && _dest.equal(segment._dest)) || (_orig.equal(segment._dest) && _dest.equal(segment._orig));
 }
 
-GEO::Point GEO::SegmentLine::getPoint(double t)
+GEO::Point GEO::SegmentLine::getPoint(double t) const
 {
 	// a + t(b-a)
-	return {_orig + Vec2D(_orig, _dest) * t};
+	const Vec2D a(_orig);
+	const Vec2D b(_dest);
+	return {a + ((b - a) * t)};
 }
 
 
 
-bool GEO::SegmentLine::isHorizontal()
+bool GEO::SegmentLine::isHorizontal() const
 {
 	// Puntos a la misma Y
 	return BasicGeom::equal(_orig.getY(), _dest.getY());
@@ -110,14 +102,14 @@ bool GEO::SegmentLine::isHorizontal()
 
 
 
-bool GEO::SegmentLine::isVertical()
+bool GEO::SegmentLine::isVertical() const
 {
 	// Puntos a la misma X
 	return BasicGeom::equal(_orig.getX(), _dest.getX());
 }
 
 
-double GEO::SegmentLine::slope()
+double GEO::SegmentLine::slope() const
 {
 	// (yb - ya) / (xb - xa)
 	double x = _dest.getX() - _orig.getX();

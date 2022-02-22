@@ -27,7 +27,7 @@ namespace GEO
 		/**
 		*	@brief Returns the parametric value T0 to calculate the distance between a point and any geometric object like lines, segments or raylines.
 		*/
-		double getDistanceT0(Point& point);
+		double getDistanceT0(const Point& point) const;
 		
 	/**
 	 *	@brief Obstaints the parameters t and s where both lines intersects, if they do.
@@ -79,7 +79,7 @@ namespace GEO
 		/**
 		*	@brief Returns the constant of the equation of the implied line: c = y-mx.
 		*/
-		double getEquC();
+		double getEquC() const;
 			
 			/**
 		*	@brief Checks if a segment is different to this one.
@@ -89,9 +89,9 @@ namespace GEO
 			
 			
 		/**
-		*	@brief Distance from a point defined by 'vector' to this segment.
+		*	@brief Distance from a point to this segment.
 		*/
-		float distPointSegment(Vec2D& vector);
+		virtual double distPoint(const Point& point) const;
 
 		/**
 		*	@brief Checks if a segment is equal to this one.
@@ -101,19 +101,19 @@ namespace GEO
 		/**
 		*	@brief It obtains the point belonging to the segment or colineal to it for a concrete t in the parametric equation: result = a + t (b-a).
 		*/
-		Point getPoint(double t);
+		Point getPoint(double t) const;
 
 		/**
 		*	@brief Determines whether a segment is horizontal or not (using EPSILON).
 		*/
-		bool isHorizontal();
+		bool isHorizontal() const;
 			
 			
 		
 		/**
 		*	@brief Determines whether or not a segment is vertical (using EPSILON).
 		*/
-		bool isVertical();
+		bool isVertical() const;
 
 		/**
 		*	@brief Check if the parameter t is valid to get a point of the segment.
@@ -138,17 +138,17 @@ namespace GEO
 		/**
 		*	@brief Returns the slope of the implied straight line equation: m = (yb-ya) / (xb-xa).
 		*/
-		double slope();
+		double slope() const;
 
 		/**
 		*	@brief Determines whether two segments intersect in their own way, that is, when they intersect completely. Use only arithmetic.
 		*/
-		bool segmentIntersection(const SegmentLine& segment) const;
+		virtual bool segmentIntersection(const SegmentLine& segment) const;
 		
 		/**
 		*	@brief Determines whether two segments intersect improperly, that is, when one end of a segment is contained in the other. Use integer arithmetic.
 		*/
-		bool impSegmentIntersection(const SegmentLine& segment) const;
+		virtual bool impSegmentIntersection(const SegmentLine& segment) const;
 
 		// Punto de interseccion con la linea que contiene c,d, asigna s y t
 		Point* intersectionPoint(Point c, Point d, double& s, double& t);
