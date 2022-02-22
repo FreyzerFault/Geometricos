@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 #include "SegmentLine.h"
+#include "Vec2D.h"
 
 GEO::DrawBezier::DrawBezier(Bezier& bezier)
 	: _bezier(&bezier)

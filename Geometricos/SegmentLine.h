@@ -10,13 +10,11 @@
 #define SEGMENTLINE_H
 
 #include "Point.h"
-#include "Vec2D.h"
-
-class RayLine;
-
 
 namespace GEO
 {
+	class Line;
+	class RayLine;
 
 	class SegmentLine {
 		
@@ -71,12 +69,12 @@ namespace GEO
 		/**
 		*	@brief Returns the origin of the segment.
 		*/
-		Point getA() { return _orig; }
+		Point getA() const { return _orig; }
 
 		/**
 		*	@brief Returns the end of the segment.
 		*/
-		Point getB() { return _dest; }
+		Point getB() const { return _dest; }
 
 		/**
 		*	@brief Returns the constant of the equation of the implied line: c = y-mx.
@@ -151,6 +149,14 @@ namespace GEO
 		*	@brief Determines whether two segments intersect improperly, that is, when one end of a segment is contained in the other. Use integer arithmetic.
 		*/
 		bool impSegmentIntersection(const SegmentLine& segment) const;
+
+		// Punto de interseccion con la linea que contiene c,d, asigna s y t
+		Point* intersectionPoint(Point c, Point d, double& s, double& t);
+
+		// Punto de intersseccion con un segmento, linea o rayo
+		virtual Point* intersectionPoint(const SegmentLine& segment);
+		virtual Point* intersectionPoint(const RayLine& ray);
+		virtual Point* intersectionPoint(const Line& line);
 		
 		void setA(Point& p) { _orig = p; }
 		void setB(Point& p) { _dest = p; }

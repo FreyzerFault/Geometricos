@@ -42,25 +42,13 @@ namespace GEO
 		/**
 		*	@brief Checks if this rayline intersects with a segment in a non-proper way.
 		*/
-		//bool impSegmentIntersection(SegmentLine& segment);
+		bool impSegmentIntersection(SegmentLine& segment);
 
-		/**
-		*	@brief Checks if a rayline intersects with a line.
-		*	@param intersection If rayline and line intersect, then this point is the intersection. Otherwise this point is not valid.
-		*/
-		//virtual bool intersects(Line& line, Vect2d& intersetion);
-
-		/**
-		*	@brief Checks if a rayline intersects with this one.
-		*	@param intersection If both raylines intersect, then this point is the intersection. Otherwise this point is not valid.
-		*/
-		//virtual bool intersects(RayLine& rayline, Vect2d& intersetion);
-
-		/**
-		*	@brief Checks if a segment intersects with a segment.
-		*	@param intersection If rayline and segment intersect, then this point is the intersection. Otherwise this point is not valid.
-		*/
-		//virtual bool intersects(SegmentLine& segment, Vect2d& intersetion);
+		
+		// Punto de intersseccion con un segmento, linea o rayo
+		Point* intersectionPoint(const SegmentLine& segment) override;
+		Point* intersectionPoint(const RayLine& ray) override;
+		Point* intersectionPoint(const Line& line) override;
 
 		/**
 		*	@brief Checks if the parameter t is valid to get a point of the rayline.

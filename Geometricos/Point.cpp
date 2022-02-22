@@ -148,14 +148,14 @@ double GEO::Point::triangleArea2(Point& a, Point& b) const
 	);
 }
 
-GEO::Point GEO::Point::operator+(Vec2D v)
+GEO::Point GEO::Point::operator+(Vec2D v) const
 {
 	return {_x + v.getX(), _y + v.getY()};
 }
 
-GEO::Vec2D GEO::Point::operator-(Point v)
+GEO::Vec2D GEO::Point::operator-(Point v) const
 {
-	return {v.getX() - _x, v.getY() - _y};
+	return {_x - v.getX(), _y - v.getY()};
 }
 
 GEO::Vec2D GEO::Point::operator*(double s)

@@ -39,6 +39,41 @@ bool GEO::Line::segmentIntersection(SegmentLine& segment) const
 	return ((c.right(a,b) && d.left(a,b)) || (c.right(b,a) && d.left(b,a)));
 }
 
+GEO::Point* GEO::Line::intersectionPoint(const SegmentLine& segment)
+{
+	double s, t;
+	Point* interseccion = SegmentLine::intersectionPoint(segment.getA(), segment.getB(), s, t);
+
+	// Esta dentro del segmento
+	if (t >= BasicGeom::CERO && t <= 1)
+		return interseccion;
+
+	// En caso de que este contenido
+	return nullptr;
+}
+
+GEO::Point* GEO::Line::intersectionPoint(const RayLine& ray)
+{
+	double s, t;
+	Point* interseccion = SegmentLine::intersectionPoint(ray.getA(), ray.getB(), s, t);
+
+	// Esta dentro del rayo
+	if (t >= BasicGeom::CERO)
+		return interseccion;
+
+	// En caso de que este contenido
+	return nullptr;
+}
+
+GEO::Point* GEO::Line::intersectionPoint(const Line& line)
+{
+	double s, t;
+	Point* interseccion = SegmentLine::intersectionPoint(ray.getA(), ray.getB(), s, t);
+
+	// Sera nullptr si son paralelas
+	return interseccion;
+}
+
 
 GEO::Line & GEO::Line::operator=(const Line & line)
 {

@@ -85,6 +85,39 @@ GEO::Vertex GEO::Polygon::getVertexAt(int pos)
 	}
 }
 
+GEO::Point* GEO::Polygon::intersectionPoint(const SegmentLine& segment)
+{
+	for (int i = 0; i < _vertices.size(); ++i)
+	{
+		SegmentLine edge = getEdge(i);
+		if (Point* p = edge.intersectionPoint(segment))
+			return p;
+	}
+	return nullptr;
+}
+
+GEO::Point* GEO::Polygon::intersectionPoint(const RayLine& ray)
+{
+	for (int i = 0; i < _vertices.size(); ++i)
+	{
+		SegmentLine edge = getEdge(i);
+		if (Point* p = edge.intersectionPoint(ray))
+			return p;
+	}
+	return nullptr;
+}
+
+GEO::Point* GEO::Polygon::intersectionPoint(const Line& line)
+{
+	for (int i = 0; i < _vertices.size(); ++i)
+	{
+		SegmentLine edge = getEdge(i);
+		if (Point* p = edge.intersectionPoint(line))
+			return p;
+	}
+	return nullptr;
+}
+
 bool GEO::Polygon::convex()
 {
 	// Si todos los vertices son Convexos (a la izquierda de sus vertices adyacentes)

@@ -2,6 +2,7 @@
 #include <iostream>
 #include "SegmentLine.h"
 #include "RayLine.h"
+#include "Line.h"
 #include "Vec2D.h"
 
 
@@ -125,9 +126,81 @@ bool GEO::SegmentLine::impSegmentIntersection(const SegmentLine& segment) const
 	return a.isBetween(c,d) || b.isBetween(c,d) || c.isBetween(a,b) || d.isBetween(a,b);
 }
 
+GEO::Point* GEO::SegmentLine::intersectionPoint(Point c, Point d, double& s, double& t)
+{
+	Vec2D a = _orig;
+	Vec2D b = _dest;
+
+	Vec2D ab = b - a;
+	Vec2D cd = d - c;
+	Vec2D ac = c - a;
+
+	const double denominador = cd.getX() * ab.getY() - ab.getX() * cd.getY();
+
+	if (BasicGeom::equal(denominador, 0))
+	{
+		std::cout << "Los segmentos son paralelos, no hay punto de interseccion" << std::endl;
+		return nullptr;
+	}
+
+	s = (cd.getX() * ac.getY() - ac.getX() * cd.getY()) / denominador;
+
+	t = (ab.getX() * ac.getY() - ac.getX() * ab.getY()) / denominador;
+
+	Point abInters = getPoint(s);
+	Point cdInters = SegmentLine(c,d).getPoint(*t);
+
+	// Si son paralelos
+	if (!abInters.equal(cdInters))
+	{
+		std::cout << "Los puntos en cada segmento NO CONCUERDAN WTF" << std::endl;
+		return nullptr;
+	}
+
+	return new Point(abInters);
+}
+
+GEO::Point* GEO::SegmentLine::intersectionPoint(const SegmentLine& segment)
+{
+	double s, t;
+	Point* interseccion = intersectionPoint(segment._orig, segment._dest, &s, &t);
+
+	// Esta dentro de ambos segmentos
+	if (s >= BasicGeom::CERO && s <= 1 && t >= BasicGeom::CERO && t <= 1)
+		return interseccion;
+
+	// En caso de que este contenido
+	return nullptr;
+}
+
+GEO::Point* GEO::SegmentLine::intersectionPoint(const RayLine& ray)
+{
+	double s, t;
+	Point* interseccion = intersectionPoint(ray._orig, ray._dest, &s, &t);
+
+	// Esta dentro del segmento (s) y del rayo (t)
+	if (s >= BasicGeom::CERO && s <= 1 && t >= BasicGeom::CERO)
+		return interseccion;
+
+	// En caso de que este contenido
+	return nullptr;
+}
+
+GEO::Point* GEO::SegmentLine::intersectionPoint(const Line& line)
+{
+	double s, t;
+	Point* interseccion = intersectionPoint(line._orig, line._dest, &s, &t);
+
+	// Esta dentro del segmento (s)
+	if (s >= BasicGeom::CERO && s <= 1)
+		return interseccion;
+
+	// En caso de que este contenido
+	return nullptr;
+}
 
 
- // PROTECTED METHODS
+// PROTECTED METHODS
 
 
 

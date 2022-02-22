@@ -417,7 +417,47 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 			refresWindow(ventana);
 		}
 		break;
+	case GLFW_KEY_I:
+		if (accion == GLFW_PRESS)
+		{
+			try
+			{
+				Point a(0.0, 2.0);
+				Point b(2.0, -2.0);
+				Point c(0.0, -2.0);
+				Point d(2.0, 2.0);
 
+				SegmentLine s1(a,b);
+				SegmentLine s2(c,d);
+
+				Point* intersection = s1.intersectionPoint(s2);
+
+				DrawSegment* dl1 = new DrawSegment(s1);
+				DrawSegment* dl2 = new DrawSegment(s2);
+				dl1->drawIt(yellow);
+				dl2->drawIt(red);
+				dl1 = nullptr;
+				dl2 = nullptr;
+
+				if (intersection)
+				{
+					DrawPoint* dp = new DrawPoint(*intersection);
+					dp->drawIt(magenta);
+					dp = nullptr;
+				}
+			}
+			catch (std::exception& e)
+			{
+				std::cout << "Exception captured on callbackKey"
+					<< std::endl
+					<< "===================================="
+					<< std::endl
+					<< e.what() << std::endl;
+			}
+
+			refresWindow(ventana);
+		}
+		break;
 
 	case GLFW_KEY_1:
 		if (accion == GLFW_PRESS)

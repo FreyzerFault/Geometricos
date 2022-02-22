@@ -185,8 +185,8 @@ namespace GEO
 		*/
 		double triangleArea2(Point& a, Point& b) const;
 
-		Point operator+(Vec2D v);
-		Vec2D operator-(Point v);
+		Point operator+(Vec2D v) const;
+		Vec2D operator-(Point v) const;
 		Vec2D operator*(double s);
 	};
 }
