@@ -118,7 +118,7 @@ GEO::Point* GEO::Polygon::intersectionPoint(const Line& line)
 	return nullptr;
 }
 
-bool GEO::Polygon::convex()
+bool GEO::Polygon::convex() const
 {
 	// Si todos los vertices son Convexos (a la izquierda de sus vertices adyacentes)
 	for (auto vertex : _vertices)
@@ -137,13 +137,14 @@ GEO::Vertex GEO::Polygon::next(int index)
 		return _vertices[(index + 1) % _vertices.size()];
 	}
 
-	return Vertex();
+	return {};
 }
 
 void GEO::Polygon::out()
 {
-	for (int i = 0; i < _vertices.size(); i++) {
-		_vertices[i].out();
+	for (auto& _vertice : _vertices)
+	{
+		_vertice.out();
 	}
 }
 
@@ -154,7 +155,7 @@ GEO::Vertex GEO::Polygon::previous(int index)
 		return _vertices[(index - 1 + _vertices.size()) % _vertices.size()];
 	}
 
-	return Vertex();
+	return {};
 }
 
 GEO::Polygon& GEO::Polygon::operator=(const Polygon &polygon)

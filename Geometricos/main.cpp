@@ -33,6 +33,8 @@ const TypeColor blue(0.0, 0.0, 1.0);
 const TypeColor red(1.0, 0.0, 0.0);
 const TypeColor cyan(0.0, 1.0, 1.0);
 const TypeColor yellow(1.0, 1.0, 0.0);
+const TypeColor white(1.0, 1.0, 1.0);
+const TypeColor black(0.0, 0.0, 0.0);
 
 
 
@@ -417,34 +419,84 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 			refresWindow(ventana);
 		}
 		break;
+		
+		// ================================ INTERSECCIONES & DISTANCIAS ================================
 	case GLFW_KEY_I:
 		if (accion == GLFW_PRESS)
 		{
 			try
 			{
-				Point a(0.0, 2.0);
-				Point b(2.0, -2.0);
-				Point c(0.0, -2.0);
-				Point d(2.0, 2.0);
+				Point p(0.0, 0.0);
+				Point a(-1.0, 1.0);
+				Point b(1.0, -1.0);
+				Point c(-1.0, -1.0);
+				Point d(1.0, 1.0);
 
-				SegmentLine s1(a,b);
-				SegmentLine s2(c,d);
+				SegmentLine s(a,b);
+				Line l(a,d);
+				RayLine r(c,d);
 
-				Point* intersection = s1.intersectionPoint(s2);
+				Point* segmLine = s.intersectionPoint(l);
+				Point* segmRay = s.intersectionPoint(r);
+				Point* lineRay = l.intersectionPoint(r);
 
-				DrawSegment* dl1 = new DrawSegment(s1);
-				DrawSegment* dl2 = new DrawSegment(s2);
-				dl1->drawIt(yellow);
-				dl2->drawIt(red);
-				dl1 = nullptr;
-				dl2 = nullptr;
+				DrawPoint* dp;
+				DrawSegment* ds;
+				DrawLine* dl;
+				DrawRay* dr;
 
-				if (intersection)
+				ds = new DrawSegment(s);
+				ds->drawIt(blue);
+
+				dr = new DrawRay(r);
+				dr->drawIt(red);
+
+				dl = new DrawLine(l);
+				dl->drawIt(green);
+
+				if (segmLine)
 				{
-					DrawPoint* dp = new DrawPoint(*intersection);
+					dp = new DrawPoint(*segmLine);
 					dp->drawIt(magenta);
-					dp = nullptr;
 				}
+				if (segmRay)
+				{
+					dp = new DrawPoint(*segmRay);
+					dp->drawIt(magenta);
+				}
+				if (lineRay)
+				{
+					dp = new DrawPoint(*lineRay);
+					dp->drawIt(magenta);
+				}
+				
+				// DISTANCIAS
+				double distS = s.distPoint(p);
+				double distL = l.distPoint(p);
+				double distR = r.distPoint(p);
+
+				std::cout << "Distancia entre P y Segmento (AZUL): " << distS << std::endl;
+				std::cout << "Distancia entre P y Recta (VERDE): " << distL << std::endl;
+				std::cout << "Distancia entre P y Rayo (ROJO): " << distR << std::endl;
+
+				dp = new DrawPoint(p);
+				dp->drawIt(white);
+
+				// INTERSECCIONES
+				Point* intersecSL = s.intersectionPoint(l);
+				Point* intersecSR = s.intersectionPoint(r);
+				Point* intersecLR = l.intersectionPoint(r);
+
+				std::cout << std::endl;
+				std::cout << "Interseccion entre Segmento (AZUL) y Line (VERDE): " << intersecSL->toString() << std::endl;
+				std::cout << "Interseccion entre Segmento (AZUL) y Ray (ROJO): " << intersecSR->toString() << std::endl;
+				std::cout << "Interseccion entre Line (VERDE) y Ray (ROJO): " << intersecLR->toString() << std::endl;
+
+
+				ds = nullptr;
+				dp = nullptr;
+				dr = nullptr;
+				dl = nullptr;
 			}
 			catch (std::exception& e)
 			{

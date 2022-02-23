@@ -148,23 +148,33 @@ double GEO::Point::triangleArea2(Point& a, Point& b) const
 	);
 }
 
-GEO::Point GEO::Point::operator+(Vec2D v) const
+GEO::Point GEO::Point::operator+(const Vec2D& v) const
 {
 	return {_x + v.getX(), _y + v.getY()};
 }
 
-GEO::Vec2D GEO::Point::operator-(Point v) const
+GEO::Point GEO::Point::operator-(const Vec2D& v) const
 {
 	return {_x - v.getX(), _y - v.getY()};
 }
 
-GEO::Vec2D GEO::Point::operator*(double s)
+GEO::Vec2D GEO::Point::operator-(const Point& v) const
+{
+	return {_x - v.getX(), _y - v.getY()};
+}
+
+
+GEO::Vec2D GEO::Point::operator*(double s) const
 {
 	return Vec2D(*this) * s;
 }
 
 void GEO::Point::out() const
 {
-	string outstring = "Coordinate x: " + std::to_string(_x) + ", coordinate y: " + std::to_string(_y);
-	cout << outstring << endl;
+	cout << toString() << endl;
+}
+
+string GEO::Point::toString() const
+{
+	return "( " + std::to_string(_x) + ", " + std::to_string(_y) + " )";
 }

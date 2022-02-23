@@ -37,12 +37,14 @@ namespace GEO
 		/**
 		*	@brief Distance from a point defined by 'vector' to this rayline.
 		*/
-		//float distPointRayline(Vec2D& vector);
+		double distPoint(const Point& point) const override;
 
 		/**
 		*	@brief Checks if this rayline intersects with a segment in a non-proper way.
 		*/
-		bool impSegmentIntersection(SegmentLine& segment) const;
+		bool impSegmentIntersection(const SegmentLine& segment) const override;
+
+		bool segmentIntersection(const SegmentLine& segment) const override;
 
 		
 		// Punto de intersseccion con un segmento, linea o rayo

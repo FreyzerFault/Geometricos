@@ -10,8 +10,8 @@ namespace GEO
 		Vec2D() : Point() {}
 
 		Vec2D(double x, double y, bool polar = false) : Point(x,y, polar) {}
-		Vec2D(Point& p0, Point& p1) : Vec2D(p1.getX() - p0.getX(), p1.getY() - p0.getY()) {}
-		Vec2D(Point& p) : Vec2D(p.getX(), p.getY()) {}
+		Vec2D(const Point& p0, const Point& p1) : Vec2D(p1.getX() - p0.getX(), p1.getY() - p0.getY()) {}
+		Vec2D(const Point& p) : Vec2D(p.getX(), p.getY()) {}
 
 		Vec2D(const Vec2D& orig) : Vec2D(orig._x, orig._y) {}
 
@@ -23,16 +23,16 @@ namespace GEO
 
 		Vec2D getPerpendicular() { return {_y, -_x}; }
 		
-		Vec2D operator+(Vec2D& p) const { return { _x - p.getX(), _y - p.getY() }; }
-		Vec2D operator-(Vec2D& p) const { return { _x - p.getX(), _y - p.getY() }; }
+		Vec2D operator+(const Vec2D& p) const { return { _x + p.getX(), _y + p.getY() }; }
+		Vec2D operator-(const Vec2D& p) const { return { _x - p.getX(), _y - p.getY() }; }
 		Vec2D operator*(const double s) const { return { _x * s, _y * s }; }
-		double operator*(Vec2D& v) const { return (_x * v.getX()) + (_y * v.getY()); }
+		double operator*(const Vec2D& v) const { return (_x * v.getX()) + (_y * v.getY()); }
 
 		// Compara Modulos
-		bool operator>(Point& p) const { return this->getModule() > p.getModule(); }
-		bool operator<(Point& p) const { return this->getModule() < p.getModule(); }
-		bool operator==(Point& p) const { return BasicGeom::equal(getModule(), p.getModule()); }
-		bool operator<=(Point& p) const { return BasicGeom::lequal(getModule(), p.getModule()); }
-		bool operator>=(Point& p) const { return BasicGeom::gequal(getModule(), p.getModule()); }
+		bool operator>(const Point& p) const { return this->getModule() > p.getModule(); }
+		bool operator<(const Point& p) const { return this->getModule() < p.getModule(); }
+		bool operator==(const Point& p) const { return BasicGeom::equal(getModule(), p.getModule()); }
+		bool operator<=(const Point& p) const { return BasicGeom::lequal(getModule(), p.getModule()); }
+		bool operator>=(const Point& p) const { return BasicGeom::gequal(getModule(), p.getModule()); }
 	};
 }

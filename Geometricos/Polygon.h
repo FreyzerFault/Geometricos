@@ -68,7 +68,7 @@ namespace GEO
 		/**
 		*	@brief Checks if the PolygonGeo is convex.
 		*/
-		bool convex();
+		bool convex() const;
 
 		/**
 		*	@brief Returns the edge i.
