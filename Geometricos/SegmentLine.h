@@ -118,7 +118,7 @@ namespace GEO
 		/**
 		*	@brief Check if the parameter t is valid to get a point of the segment.
 		*/
-		virtual bool isTvalid(double t) { return ((t >= 0) && (t <= 1)); }
+		virtual bool isTvalid(double t) const { return ((t >= BasicGeom::CERO) && (t <= 1)); }
 
 		/**
 		*	@brief Determines whether p is in the left of SegmentLine.

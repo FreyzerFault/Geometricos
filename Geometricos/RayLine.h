@@ -53,7 +53,7 @@ namespace GEO
 		/**
 		*	@brief Checks if the parameter t is valid to get a point of the rayline.
 		*/
-		virtual bool isTvalid(double t) { return t >= 0; }
+		bool isTvalid(double t) const override { return t >= BasicGeom::CERO; }
 
 		/**
 		*	@brief Assignment operator.

@@ -48,7 +48,7 @@ namespace GEO
 		/**
 		*	@brief Checks if the parameter t is valid to obtain a point for a line (it's always valid, we just need to override).
 		*/
-		virtual bool isTvalid(double t) { return true; }
+		bool isTvalid(double t) const override { return true; }
 
 		/**
 		*	@brief Assignment operator.
