@@ -118,4 +118,7 @@ Y luego para usarlos con cada tipo de recta usar ese método:
         return nullptr; 
     }
 
-Para las clases Line y RayLine he hecho lo mismo pero al irlos sobrecargando en estos subclases me he dado cuenta de que se puede dejar sin sobrecargar y el funcionamiento es el mismo, ya que el resultado depende de this.isTvalid(s) && segment.isTvalid(t)
+Para las clases Line y RayLine he hecho lo mismo pero al irlos sobrecargando en estos subclases me he dado cuenta de que se puede dejar sin sobrecargar y el funcionamiento es el mismo, ya que el resultado depende de:
+
+    (this.isTvalid(s) && segment.isTvalid(t))
+

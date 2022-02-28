@@ -34,7 +34,6 @@ const TypeColor white(1.0, 1.0, 1.0);
 const TypeColor black(0.0, 0.0, 0.0);
 
 
-
 Movements movimientoActivo = Movements::NONE;
 bool botonPulsado = false;
 double ratonX = 0;
@@ -46,16 +45,25 @@ void mostrarAyuda()
 {
 	std::cout << "Ayuda" << std::endl
 		<< "================" << std::endl
-		<< "m -> Añade mi triángulo a la escena" << std::endl
-		<< "p -> Añade un punto a la escena" << std::endl
-		<< "s -> Añade una nube de puntos a la escena" << std::endl
+		<< "p -> Añade un Poligono y lo guarda" << std::endl
+		<< "t -> Añade un triángulo y clasifica la posicion de a respecto a b,c" << std::endl
+		<< "s -> Añade segmento, linea y rayo" << std::endl
+		<< "c -> Añade una nube de puntos" << std::endl
+		<< "b -> Añade una curva de Bezier" << std::endl
+		<< "u -> Añade segmento, linea y rayo y calcula sus intersecciones" << std::endl
+		<< "================" << std::endl
+		<< "1 -> PLANTA" << std::endl
+		<< "2 -> ALZADO" << std::endl
+		<< "3 -> PERFIL" << std::endl
+		<< "4 -> ISOMETRICO" << std::endl
 		<< "Cursores y rueda ratón -> Rotación" << std::endl
+		<< "================" << std::endl
 		<< "h -> Muestra esta ayuda" << std::endl
 		<< "q -> Cierra la aplicación" << std::endl;
 }
 
 
-void refresWindow(GLFWwindow* ventana)
+void refreshWindow(GLFWwindow* ventana)
 {
 	try
 	{
@@ -124,7 +132,7 @@ void callbackMouseMovevent(GLFWwindow* ventana, double posX, double posY)
 
 			ratonX = posX;
 			ratonY = posY;
-			refresWindow(ventana);
+			refreshWindow(ventana);
 			ultimaEjecucion = clock();
 			movimientoActivo = Movements::NONE;
 		}
@@ -135,7 +143,7 @@ void callbackMouseWheel(GLFWwindow* ventana, double incX, double incY)
 {
 	movimientoActivo = Movements::ZOOM;
 	Scene::getInstance()->moveCamera(movimientoActivo, -incY);
-	refresWindow(ventana);
+	refreshWindow(ventana);
 	movimientoActivo = Movements::NONE;
 }
 
@@ -183,7 +191,7 @@ int main(int argc, char** argv)
 		<< glGetString(GL_VERSION) << std::endl
 		<< glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
 
-	glfwSetWindowRefreshCallback(miVentana, refresWindow);
+	glfwSetWindowRefreshCallback(miVentana, refreshWindow);
 	glfwSetFramebufferSizeCallback(miVentana, callbackTamFB);
 	glfwSetKeyCallback(miVentana, callbackKey);
 	glfwSetMouseButtonCallback(miVentana, callbackMouseButton);
@@ -266,7 +274,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 					<< e.what() << std::endl;
 			}
 
-			refresWindow(ventana);
+			refreshWindow(ventana);
 		}
 		break;
 		
@@ -298,7 +306,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 					<< e.what() << std::endl;
 			}
 
-			refresWindow(ventana);
+			refreshWindow(ventana);
 		}
 		break;
 
@@ -340,7 +348,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 					<< e.what() << std::endl;
 			}
 
-			refresWindow(ventana);
+			refreshWindow(ventana);
 		}
 		break;
 
@@ -366,7 +374,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 					<< e.what() << std::endl;
 			}
 
-			refresWindow(ventana);
+			refreshWindow(ventana);
 		}
 		break;
 		
@@ -412,7 +420,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 					<< e.what() << std::endl;
 			}
 
-			refresWindow(ventana);
+			refreshWindow(ventana);
 		}
 		break;
 		
@@ -503,7 +511,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 					<< e.what() << std::endl;
 			}
 
-			refresWindow(ventana);
+			refreshWindow(ventana);
 		}
 		break;
 
@@ -512,7 +520,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		{
 			Scene::getInstance()->setView(TypeView::PLANT);
 
-			refresWindow(ventana);
+			refreshWindow(ventana);
 		}
 		break;
 	case GLFW_KEY_2:
@@ -520,7 +528,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		{
 			Scene::getInstance()->setView(TypeView::ELEVATION);
 
-			refresWindow(ventana);
+			refreshWindow(ventana);
 		}
 		break;
 	case GLFW_KEY_3:
@@ -528,7 +536,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		{
 			Scene::getInstance()->setView(TypeView::PROFILE);
 
-			refresWindow(ventana);
+			refreshWindow(ventana);
 		}
 		break;
 	case GLFW_KEY_4:
@@ -536,7 +544,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		{
 			Scene::getInstance()->setView(TypeView::ISOMETRIC);
 
-			refresWindow(ventana);
+			refreshWindow(ventana);
 		}
 		break;
 	case GLFW_KEY_H:
@@ -570,7 +578,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 			}
 		}
 
-		refresWindow(ventana);
+		refreshWindow(ventana);
 		break;
 	case GLFW_KEY_UP:
 		factor = 1;
@@ -598,7 +606,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 				break;
 			}
 		}
-		refresWindow(ventana);
+		refreshWindow(ventana);
 		break;
 	default: ;
 	}
