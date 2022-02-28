@@ -1,15 +1,14 @@
 
 #include "Point.h"
 #include "DrawRay.h"
-
-#include "Vec2D.h"
+#include "Scene.h"
 
 
 GEO::DrawRay::DrawRay (RayLine &t): Draw(), ray (&t){
 
 	// Usando la Parametrica
-	Point inicio = ray->getA();
-	Point fin = ray->getPoint(1000);
+	const Point inicio = ray->getA();
+	const Point fin = ray->getPoint(1000);
 
 	_vertices.emplace_back(inicio.getX(), inicio.getY(), 0.0);
 	_vertices.emplace_back(fin.getX(), fin.getY(), 0.0);

@@ -12,9 +12,6 @@
 
 #include <vector>
 #include <iostream>
-#include "Line.h"
-#include "RayLine.h"
-#include "Vec2D.h"
 #include "Vertex.h"
 
 namespace GEO
@@ -24,107 +21,57 @@ namespace GEO
 	protected:
 		std::vector<Vertex> _vertices;
 		
-		/**
-		*	@brief Checks if a vertex (not included in the PolygonGeo) creates a segment with the last vertex that collides with any other segment.
-		*/
-		bool intersectsWithAnySegment(Vertex& vertex);
+		// Comprueba si el vertice una vez añadido intersectaria su arista creada con cualquier segmento
+		bool intersectsWithAnySegment(const Vertex& vertex) const;
 
 	public:
-		/**
-		*	@brief Default empty constructor.
-		*/
-		Polygon();
+		Polygon() = default;
 
-		/**
-		*	@brief Constructor.
-		*/
-		Polygon(std::vector<Vertex>& vertices);
+		Polygon(std::vector<Vertex> vertices);
 
-		/**
-		*	@brief Copy constructor.
-		*/
-		Polygon(const Polygon& PolygonGeo);
-
-		/**
-		*	@brief Constructor of a PolygonGeo from a file.
-		*/
+		// Importa el Poligono de un Archivo
 		Polygon(const std::string& filename);
-
-		/**
-		*	@brief Destructor.
-		*/
-		~Polygon();
-
-		/**
-		*	@brief Adds the vertex in the last position (if it doesn't intersect with any other segment).
-		*/
-		bool add(Vertex& vertex);
-
-		/**
-		*	@brief Adds the point in the last position (if it doesn't intersect with any other segment).
-		*/
-		bool add(Point& point);
-
-		/**
-		*	@brief Checks if the PolygonGeo is convex.
-		*/
-		bool convex() const;
-
-		/**
-		*	@brief Returns the edge i.
-		*/
-		SegmentLine getEdge(int i);
-
-		/**
-		*	@brief Returns the number of vertices of the PolygonGeo.
-		*/
-		int getNumVertices() { return _vertices.size(); }
-
-		/**
-		*	@brief Returns the vertex at an index.
-		*/
-		Vertex getVertexAt(int pos);
-
 		
-		// Punto de intersseccion con un segmento, linea o rayo
-		Point* intersectionPoint(const SegmentLine& segment);
-		Point* intersectionPoint(const RayLine& ray);
-		Point* intersectionPoint(const Line& line);
+		Polygon(const Polygon& orig);
 		
-		/**
-		*	@brief Returns the following vertex based on the specified index.
-		*/
+		Polygon& operator=(const Polygon& PolygonGeo);
+		
+		~Polygon() = default;
+		
+		// Añade un Vértice al final siempre que la arista creada no intersecte con las demás
+		bool add(const Vertex& vertex);
+		bool add(const Point& point);
+		
+		// Inserta un vertice en una posicion
+		void set(Vertex& vertex, int pos);
+
+		// Vertice en la posicion
+		Vertex getVertexAt(int pos) const;
+		SegmentLine getEdge(int pos) const; // Arista del Vertice
+		
+		// Siguiente vertice del que hay en index
 		Vertex next(int index);
-
-		/**
-		*	@brief Shows some information about the PolygonGeo.
-		*/
-		void out();
-
-		/**
-		*	@brief Returns the vertex previous to the one in the position index.
-		*/
 		Vertex previous(int index);
 
-		/**
-		*	@brief Assignment operator.
-		*/
-		Polygon& operator=(const Polygon& PolygonGeo);
+		int getNumVertices() const { return _vertices.size(); }
 
-		/**
-		*	@brief Assuming that this is a convex Polygon, this method indicates if the point p is inside the Polygon.
-		*/
-		bool pointInConvexPolygon(Point& point);
-
-		/**
-		*	@brief Saves the coordinates of the PolygonGeo in file with the same format as the constructor.
-		*/
+		
+		// INTERSECCION con un segmento, linea o rayo
+		Point* intersectionPoint(const SegmentLine& segment) const;
+		Point* intersectionPoint(const RayLine& ray) const;
+		Point* intersectionPoint(const Line& line) const;
+		
+		// Comprueba que todos sus vértices sean convexos
+		bool convex() const;
+		bool concave() const;
+		
+		// Si el Poligono es CONVEXO comprueba si point esta DENTRO del poligono
+		bool pointInConvexPolygon(const Point& point) const;
+		
+		// Guarda el Poligono en un Archivo (Coordenadas de cada vertice en orden)
 		void save(const std::string& filename) const;
 
-		/**
-		*	@brief Modifies the vertex in a position.
-		*/
-		void set(Vertex& vertex, int pos);
+		void out() const;
 	};
 }
 

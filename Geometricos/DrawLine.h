@@ -6,11 +6,8 @@
  * Created on 20 de enero de 2021, 12:06
  */
 
-#ifndef DRAWLINE_H
-#define DRAWLINE_H
+#pragma once
 
-
-#include "Scene.h"
 #include "Line.h"
 #include "Draw.h"
 
@@ -28,11 +25,8 @@ namespace GEO
 	    
 	    void drawIt ();
 	    void drawIt (TypeColor c);
-	    
-	    virtual ~DrawLine() = default;
+
+	    ~DrawLine() override = default;
 	};
 }
-
-
-#endif /* DRAWLINE_H */
 

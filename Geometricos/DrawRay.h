@@ -1,4 +1,3 @@
-
 /* 
  * File:   DrawRay.h
  * Author: lidia
@@ -6,11 +5,8 @@
  * Created on 19 de enero de 2021, 20:00
  */
 
-#ifndef DRAWRAY_H
-#define DRAWRAY_H
+#pragma once
 
-
-#include "Scene.h"
 #include "RayLine.h"
 #include "Draw.h"
 
@@ -30,11 +26,8 @@ namespace GEO
         void drawIt();
         void drawIt(TypeColor c);
 
-        virtual ~DrawRay() = default;
+        ~DrawRay() override = default;
     };
 
 }
-
-
-#endif /* DRAWRAY_H */
 

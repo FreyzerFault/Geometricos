@@ -9,8 +9,8 @@ GEO::DrawBezier::DrawBezier(Bezier& bezier)
 {
 	// GRADO 3 ==> p(t)= [ (1−t)^3 * p1 ] + [ 3t(1−t)^2 * p2 ] + [ 3t^2(1−t) * p3 ] + [ t^3 * p4 ]
 
-	Point* inicio = &_bezier->getPoint(0);
-	Point* final = &_bezier->getPoint(_bezier->getPoints().size() - 1);
+	const Point* inicio = &_bezier->getPoint(0);
+	const Point* final = &_bezier->getPoint(_bezier->getPoints().size() - 1);
 
 	// Primer Vertice
 	_vertices.emplace_back(inicio->getX(), inicio->getY(), 0.0);
@@ -33,10 +33,10 @@ GEO::DrawBezier::DrawBezier(Bezier& bezier)
 		{
 			const double comb = BasicGeom::combinatoria(n, i);
 
-			Point* pi = &_bezier->getPoint(i);
+			const Point* pi = &_bezier->getPoint(i);
 
 			// Suma acumulada
-			p = p + (*pi * (comb * pow(1 - t, n - i) * pow(t, i)));
+			p = p + Vec2D(*pi) * (comb * pow(1 - t, n - i) * pow(t, i));
 		}
 
 		_vertices.emplace_back(p.getX(), p.getY(), 0.0);

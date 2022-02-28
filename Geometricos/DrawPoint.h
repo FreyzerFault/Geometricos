@@ -1,4 +1,3 @@
-
 /* 
  * File:   DrawPoint.h
  * Author: lidia
@@ -6,11 +5,9 @@
  * Created on 14 de enero de 2021, 15:02
  */
 
-#ifndef DRAWPOINT_H
-#define DRAWPOINT_H
+#pragma once
 
 
-#include "Scene.h"
 #include "Point.h"
 #include "Draw.h"
 
@@ -21,13 +18,11 @@ namespace GEO
 	    Point dp;
 	public:
 	    
-	    DrawPoint(Point &p);
-	    DrawPoint (const DrawPoint &ddp): dp (ddp.dp) , Draw() {}
+	    DrawPoint(const Point &p);
+	    DrawPoint (const DrawPoint &ddp): Draw() , dp (ddp.dp) {}
 	    void drawIt ();
 	    void drawIt (TypeColor c);
-	    virtual ~DrawPoint() = default;
+	    ~DrawPoint() override = default;
 	};
 }
-
-#endif /* DRAWPOINT_H */
 

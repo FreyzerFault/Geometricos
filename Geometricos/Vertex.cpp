@@ -26,35 +26,6 @@ GEO::Vertex::Vertex(const Point& point)
 	_polygon = nullptr;
 }
 
-GEO::Vertex::~Vertex()
-= default;
-
-bool GEO::Vertex::convex()
-{
-	// El vertice debe estar a la izquierda de i+1 -> i-1
-	Vertex nextVertex(next());
-	Vertex previousVertex(previous());
-
-	return left(nextVertex,previousVertex);
-}
-
-bool GEO::Vertex::concave()
-{
-	return !convex();
-}
-
-
-GEO::Vertex GEO::Vertex::next() const
-{
-	return _polygon->next(_position);
-}
-
-GEO::SegmentLine GEO::Vertex::nextEdge()
-{
-	// A partir de dos Point de el this y el next()
-	return {getPoint(), next().getPoint()};
-}
-
 GEO::Vertex& GEO::Vertex::operator=(const Vertex & vertex)
 {
 	if (this != &vertex)
@@ -68,22 +39,47 @@ GEO::Vertex& GEO::Vertex::operator=(const Vertex & vertex)
 }
 
 
-GEO::SegmentLine GEO::Vertex::previousEdge()
+bool GEO::Vertex::convex() const
 {
-	//XXXX
-	return SegmentLine();
+	// El vertice debe estar a la izquierda de i+1 -> i-1
+	const Vertex nextVertex(next());
+	const Vertex previousVertex(previous());
+
+	return left(nextVertex,previousVertex);
+}
+
+bool GEO::Vertex::concave() const
+{
+	return !convex();
 }
 
 
-void GEO::Vertex::out()
+GEO::Vertex GEO::Vertex::next() const
 {
-	Point::out();
-	std::cout << "Position: " <<  std::to_string(_position);
+	return _polygon->next(_position);
 }
 
 GEO::Vertex GEO::Vertex::previous() const
 {
 	return _polygon->previous(_position);
 }
+
+GEO::SegmentLine GEO::Vertex::nextEdge() const
+{
+	// A partir de dos Point de el this y el next()
+	return {getPoint(), next().getPoint()};
+}
+
+GEO::SegmentLine GEO::Vertex::previousEdge() const
+{
+	return {previous().getPoint(), getPoint()};
+}
+
+void GEO::Vertex::out() const
+{
+	Point::out();
+	std::cout << "Position: " <<  std::to_string(_position);
+}
+
 
 

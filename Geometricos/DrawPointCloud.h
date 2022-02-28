@@ -22,14 +22,14 @@ namespace GEO
 	    
 	    public:
 	        
-	    DrawPointCloud (PointCloud &t); 
+	    DrawPointCloud (const PointCloud &t); 
 	    
 	    DrawPointCloud (const DrawPointCloud &ddt): dt (ddt.dt) , Draw() {}
 	    
 	    void drawIt ();
 	    void drawIt (TypeColor c);
-	    
-	    virtual ~DrawPointCloud(){};
+
+	    ~DrawPointCloud() override = default;
 	};
 }
 

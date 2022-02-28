@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿// ReSharper disable CppHidingFunction
+#pragma once
 #include "BasicGeom.h"
 #include "Point.h"
 
@@ -15,10 +16,10 @@ namespace GEO
 
 		Vec2D(const Vec2D& orig) : Vec2D(orig._x, orig._y) {}
 
-		Vec2D add(Vec2D& v) const { return *this + v;}
-		Vec2D sub(Vec2D& v) const { return *this - v;}
+		Vec2D add(const Vec2D& v) const { return *this + v;}
+		Vec2D sub(const Vec2D& v) const { return *this - v;}
 
-		double dot(Vec2D& v) const { return *this * v;}
+		double dot(const Vec2D& v) const { return *this * v;}
 		Vec2D scalarMult(const double s) const { return *this * s;}
 
 		Vec2D getPerpendicular() { return {_y, -_x}; }

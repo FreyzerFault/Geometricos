@@ -49,21 +49,13 @@ GEO::Point::Point(double x, double y, bool polar)
 	}
 }
 
-GEO::Point::Point(Vec2D v)
+GEO::Point::Point(const Vec2D& v)
 	: _x(v.getX()), _y(v.getY())
 {
 }
 
-GEO::Point::Point(const Point& point)
-{
-	_x = point._x;
-	_y = point._y;
-}
 
-GEO::Point::~Point()
-= default;
-
-GEO::Point::PointClassification GEO::Point::classify(Point& p0, Point& p1)
+GEO::Point::PointClassification GEO::Point::classify(const Point& p0, const Point& p1) const
 {
 	if (equal(p0))
 		return PointClassification::ORIGIN;
@@ -79,8 +71,8 @@ GEO::Point::PointClassification GEO::Point::classify(Point& p0, Point& p1)
 
 	// Si Area = 0 Esta contenido en la recta
 	// Para que este detras, el vector p0->this debe ser inverso al vector p0->p1
-	Vec2D a(p0, *this);
-	Vec2D b(p0, p1);
+	const Vec2D a(p0, *this);
+	const Vec2D b(p0, p1);
 
 	if ((a.getX() * b.getX() < 0.0) || (a.getY() * b.getY() < 0.0))
 		return PointClassification::BACKWARD;
@@ -90,15 +82,37 @@ GEO::Point::PointClassification GEO::Point::classify(Point& p0, Point& p1)
 	return PointClassification::BETWEEN;
 }
 
-bool GEO::Point::colinear(Point& a, Point& b)
+bool GEO::Point::leftAbove(const Point& a, const Point& b) const
+{
+	const PointClassification result = classify(a, b);
+	return (result == PointClassification::LEFT) || (result != PointClassification::RIGHT);
+}
+
+bool GEO::Point::rightAbove(const Point& a, const Point& b) const
+{
+	const PointClassification result = classify(a, b);
+	return (result == PointClassification::RIGHT) || (result != PointClassification::LEFT);
+}
+
+bool GEO::Point::colinear(const Point& a, const Point& b) const
 {
 	const PointClassification result = classify(a, b);
 	return (result != PointClassification::LEFT) && (result != PointClassification::RIGHT);
 }
 
-double GEO::Point::distPoint(Point& p) const
+double GEO::Point::distPoint(const Point& p) const
 {
 	return std::sqrt(std::pow(p._x - _x, 2) + std::pow(p._y - _y, 2));
+}
+
+bool GEO::Point::distinct(const Point& p) const
+{
+	return (abs(_x - p._x) > BasicGeom::EPSILON || std::abs(_y - p._y) > BasicGeom::EPSILON);
+}
+
+bool GEO::Point::equal(const Point& pt) const
+{
+	return (BasicGeom::equal(_x, pt._x) && BasicGeom::equal(_y, pt._y));
 }
 
 double GEO::Point::getAlpha() const
@@ -112,39 +126,27 @@ double GEO::Point::getModule() const
 	return std::sqrt(std::pow(_x, 2) + std::pow(_y, 2));
 }
 
-bool GEO::Point::leftAbove(Point& a, Point& b)
+
+double GEO::Point::slope(const Point& p) const
 {
-	PointClassification result = classify(a, b);
-	return (result == PointClassification::LEFT) || (result != PointClassification::RIGHT);
+	// Si es vertical
+	if (BasicGeom::equal(BasicGeom::CERO, p.getX() - _x))
+	{
+		if (_y < p.getY())
+			return BasicGeom::INFINITO;
+
+		return BasicGeom::menosINFINITO; // Arriba-Abajo
+	}
+
+	return (p.getY() - _y) / (p.getX() - _x);
 }
 
-GEO::Point& GEO::Point::operator=(const Point& point)
-{
-	_x = point._x;
-	_y = point._y;
-
-	return *this;
-}
-
-bool GEO::Point::rightAbove(Point& a, Point& b)
-{
-	PointClassification result = classify(a, b);
-	return (result == PointClassification::RIGHT) || (result != PointClassification::LEFT);
-}
-
-double GEO::Point::slope(Point& p)
-{
-	//XXXXX
-
-	return 0;
-}
-
-double GEO::Point::triangleArea2(Point& a, Point& b) const
+double GEO::Point::triangleArea2(const Point& a, const Point& b) const
 {
 	return BasicGeom::determinant3x3(
 		a.getX(), a.getY(), 1,
 		b.getX(), b.getY(), 1,
-		_x,			_y,	1
+		_x, _y, 1
 	);
 }
 
@@ -163,11 +165,6 @@ GEO::Vec2D GEO::Point::operator-(const Point& v) const
 	return {_x - v.getX(), _y - v.getY()};
 }
 
-
-GEO::Vec2D GEO::Point::operator*(double s) const
-{
-	return Vec2D(*this) * s;
-}
 
 void GEO::Point::out() const
 {

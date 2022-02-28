@@ -17,48 +17,29 @@ namespace GEO
 	{
 	public:
 		
-		Line(const Point& a, const Point& b);
-
-		Line(const Point& p, const Vec2D& v);
+		Line(const Point& a, const Point& b); // Punto --------> Punto
+		Line(const Point& p, const Vec2D& v); // Punto -Vector-> ·
 		
-		Line(const Line& s);
+		Line(const Line& s) = default;
 
-		virtual ~Line();
-
-		/**
-		*	@brief Distance from a point to this line.
-		*/
+		~Line() override = default;
+		
+		// Distancia (mas corta) desde un Punto a la Linea
 		double distPoint(const Point& point) const override;
-
-		/**
-		*	@brief Checks if a segment line generates a non-proper intersection.
-		*/
-		bool impSegmentIntersection(const SegmentLine& segment) const override;
 		
-		/**
-		*	@brief Checks if a segment intersects with this line (proper intersection).
-		*/
-		bool segmentIntersection(const SegmentLine& segment) const override;
-		
-		// Punto de intersseccion con un segmento, linea o rayo
-		Point* intersectionPoint(const SegmentLine& segment) override;
-		Point* intersectionPoint(const RayLine& ray) override;
-		Point* intersectionPoint(const Line& line) override;
-
-		/**
-		*	@brief Checks if the parameter t is valid to obtain a point for a line (it's always valid, we just need to override).
-		*/
+		// Comprueba que el parámetro t sea válida en la paramétrica (da un punto contenido en el Segmento)
 		bool isTvalid(double t) const override { return true; }
 
-		/**
-		*	@brief Assignment operator.
-		*/
-		virtual Line& operator=(const Line& line);
+		// Interseccion propia con otro segmento
+		bool segmentIntersection(const SegmentLine& segment) const override;
+		
+		// Intersección impropia con otro segmento (uno de los puntos esta contenido en el otro segmento)
+		bool impSegmentIntersection(const SegmentLine& segment) const override;
 
-		/**
-		*	@brief Shows some information about the line.
-		*/
-		virtual void out();
+		
+		Line& operator=(const Line& line);
+
+		void out() override;
 
 	};
 

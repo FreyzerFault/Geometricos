@@ -1,7 +1,6 @@
-
-
 #include "DrawPolygon.h"
 #include "Polygon.h"
+#include "Scene.h"
 
 
 GEO::DrawPolygon::DrawPolygon (Polygon &polygon): Draw(), _polygon(&polygon){

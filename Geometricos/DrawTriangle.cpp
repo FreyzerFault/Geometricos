@@ -3,7 +3,7 @@
 #include "DrawTriangle.h"
 
 
-GEO::DrawTriangle::DrawTriangle (Triangle& triangle): Draw(), _triangle (triangle){
+GEO::DrawTriangle::DrawTriangle (const Triangle& triangle): Draw(), _triangle (triangle){
     
     _vertices.emplace_back(_triangle.a.getX(), _triangle.a.getY() , 0.0);
     _vertices.emplace_back(_triangle.b.getX(), _triangle.b.getY() , 0.0);
@@ -21,7 +21,7 @@ GEO::DrawTriangle::DrawTriangle (Triangle& triangle): Draw(), _triangle (triangl
 }
 
 
-void GEO::DrawTriangle::drawIt (TypeColor c){
+void GEO::DrawTriangle::drawIt (const TypeColor c){
     setColorActivo (c);
     drawIt();
 }

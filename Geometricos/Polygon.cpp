@@ -1,28 +1,49 @@
-
+// ReSharper disable CppClangTidyReadabilityUseAnyofallof
+// ReSharper disable CppClangTidyClangDiagnosticSignCompare
 #include <iostream>
 #include <sstream>
-#include <cstring>
 #include <fstream>
 #include "Polygon.h"
 
 
-GEO::Polygon::Polygon()
+bool GEO::Polygon::intersectsWithAnySegment(const Vertex& vertex) const
+{
+	// Ultima linea
+	const SegmentLine newEdge(getVertexAt(getNumVertices() - 1), vertex);
+
+	// Todas las arista menos la ultima
+	for (int i = 0; i < getNumVertices() - 1; ++i)
+	{
+		if (newEdge.segmentIntersection(_vertices[i].nextEdge()))
+			return true;
+	}
+
+	return false;
+}
+
+GEO::Polygon::Polygon(std::vector<Vertex> vertices): _vertices(std::move(vertices))
 {
 }
 
-GEO::Polygon::Polygon(const Polygon& PolygonGeo)
+GEO::Polygon::Polygon(const Polygon& orig)
 {
-	_vertices = std::vector<Vertex>(PolygonGeo._vertices);
+	for (const Vertex& vertex : orig._vertices)
+	{
+		add(vertex);
+	}
 }
 
-GEO::Polygon::Polygon(std::vector<Vertex>& vertices)
+GEO::Vertex GEO::Polygon::getVertexAt(const int pos) const
 {
-	_vertices = std::vector<Vertex>(vertices);
+	if (pos >= 0 && pos < _vertices.size()) 
+		return _vertices[pos];
+
+	return {};
 }
 
-GEO::SegmentLine GEO::Polygon::getEdge(int i)
+GEO::SegmentLine GEO::Polygon::getEdge(const int pos) const
 {
-	return SegmentLine(getVertexAt(i), getVertexAt((i + 1) % _vertices.size()));
+	return {getVertexAt(pos), getVertexAt((pos + 1) % _vertices.size())};
 }
 
 GEO::Polygon::Polygon(const std::string & filename)
@@ -50,14 +71,11 @@ GEO::Polygon::Polygon(const std::string & filename)
 	is.close();
 }
 
-GEO::Polygon::~Polygon()
-= default;
-
-bool GEO::Polygon::add(Vertex & vertex)
+bool GEO::Polygon::add(const Vertex & vertex)
 {
-	int index = _vertices.size();
+	const int index = _vertices.size();
 
-	//if (intersectsWithAnySegment(vertex)) return false;
+	if (intersectsWithAnySegment(vertex)) return false;
 
 	_vertices.push_back(vertex);
 	_vertices[index].setPolygon(this);
@@ -66,26 +84,13 @@ bool GEO::Polygon::add(Vertex & vertex)
 	return true;
 }
 
-bool GEO::Polygon::add(GEO::Point & point)
+bool GEO::Polygon::add(const GEO::Point & point)
 {
-	Vertex vertex(point);
-
-	return this->add(vertex);
+	return this->add(Vertex(point));
 }
 
-GEO::Vertex GEO::Polygon::getVertexAt(int pos)
-{
-	if (pos >= 0 && pos < _vertices.size()) 
-	{
-		return _vertices[pos];
-	}
-	else 
-	{
-		return {};
-	}
-}
 
-GEO::Point* GEO::Polygon::intersectionPoint(const SegmentLine& segment)
+GEO::Point* GEO::Polygon::intersectionPoint(const SegmentLine& segment) const
 {
 	for (int i = 0; i < _vertices.size(); ++i)
 	{
@@ -96,7 +101,7 @@ GEO::Point* GEO::Polygon::intersectionPoint(const SegmentLine& segment)
 	return nullptr;
 }
 
-GEO::Point* GEO::Polygon::intersectionPoint(const RayLine& ray)
+GEO::Point* GEO::Polygon::intersectionPoint(const RayLine& ray) const
 {
 	for (int i = 0; i < _vertices.size(); ++i)
 	{
@@ -107,7 +112,7 @@ GEO::Point* GEO::Polygon::intersectionPoint(const RayLine& ray)
 	return nullptr;
 }
 
-GEO::Point* GEO::Polygon::intersectionPoint(const Line& line)
+GEO::Point* GEO::Polygon::intersectionPoint(const Line& line) const
 {
 	for (int i = 0; i < _vertices.size(); ++i)
 	{
@@ -121,12 +126,17 @@ GEO::Point* GEO::Polygon::intersectionPoint(const Line& line)
 bool GEO::Polygon::convex() const
 {
 	// Si todos los vertices son Convexos (a la izquierda de sus vertices adyacentes)
-	for (auto vertex : _vertices)
+	for (const auto& vertex : _vertices)
 	{
 		if (!vertex.convex())
 			return false;
 	}
 	return true;
+}
+
+bool GEO::Polygon::concave() const
+{
+	return !convex();
 }
 
 
@@ -140,7 +150,7 @@ GEO::Vertex GEO::Polygon::next(int index)
 	return {};
 }
 
-void GEO::Polygon::out()
+void GEO::Polygon::out() const
 {
 	for (auto& _vertice : _vertices)
 	{
@@ -168,12 +178,12 @@ GEO::Polygon& GEO::Polygon::operator=(const Polygon &polygon)
 	return *this;
 }
 
-bool GEO::Polygon::pointInConvexPolygon(GEO::Point& point)
+bool GEO::Polygon::pointInConvexPolygon(const GEO::Point& point) const
 {
 	for (int i = 0; i < getNumVertices(); ++i)
 	{
-		Vertex* v0 = &_vertices[i % getNumVertices()];
-		Vertex* v1 = &_vertices[i+1 % getNumVertices()];
+		const Vertex* v0 = &_vertices[i % getNumVertices()];
+		const Vertex* v1 = &_vertices[i+1 % getNumVertices()];
 
 		// Si el punto no esta a la izquierda y no esta en mitad de la arista no esta contenido en el poligono
 		if (!point.left(*v0,*v1))
@@ -189,7 +199,7 @@ void GEO::Polygon::save(const std::string& filename) const
 	if (!os.good())
 		std::cout << "Archivo " + folderName + filename + " no se pudo abrir para guardar el Poligono" << std::endl;
 
-	for (auto vertex : _vertices)
+	for (const auto& vertex : _vertices)
 	{
 		os << std::to_string(vertex.getX()) + ';' + std::to_string(vertex.getY()) << std::endl;
 	}
@@ -197,7 +207,7 @@ void GEO::Polygon::save(const std::string& filename) const
 	os.close();
 }
 
-void GEO::Polygon::set(GEO::Vertex& vertex, int pos)
+void GEO::Polygon::set(GEO::Vertex& vertex, const int pos)
 {
 	if (pos >= 0 && pos < _vertices.size()) {
 		_vertices[pos] = vertex;

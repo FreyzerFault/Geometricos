@@ -1,16 +1,5 @@
+#pragma once
 
-/* 
- * File:   DrawSegment.h
- * Author: lidia
- *
- * Created on 19 de enero de 2021, 13:10
- */
-
-#ifndef DRAWSEGMENT_H
-#define DRAWSEGMENT_H
-
-
-#include "Scene.h"
 #include "SegmentLine.h"
 #include "Draw.h"
 
@@ -23,18 +12,15 @@ namespace GEO
 
     public:
 
-        DrawSegment(SegmentLine& t);
+        DrawSegment(const SegmentLine& t);
 
-        DrawSegment(const DrawSegment& ddt) : dt(ddt.dt), Draw() {}
+        DrawSegment(const DrawSegment& ddt): Draw(), dt(ddt.dt) {}
 
         void drawIt();
         void drawIt(TypeColor c);
 
-        virtual ~DrawSegment() {};
+        ~DrawSegment() override = default;
     };
 
 }
-
-
-#endif /* DRAWSEGMENT_H */
 

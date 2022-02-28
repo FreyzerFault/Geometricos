@@ -14,24 +14,15 @@ double GEO::SegmentLine::getDistanceT0(const Point& point) const
 	return (d * (point - _orig)) / (d*d);
 }
 
-GEO::SegmentLine::SegmentLine()
-= default;
-
 GEO::SegmentLine::SegmentLine(const Point& a, const Point& b)
 	: _orig(a), _dest(b)
 {
 }
 
-GEO::SegmentLine::SegmentLine(const SegmentLine& segment)
-= default;
-
 GEO::SegmentLine::SegmentLine(double ax, double ay, double bx, double by)
 	: _orig(ax, ay), _dest(bx, by)
 {
 }
-
-GEO::SegmentLine::~SegmentLine()
-= default;
 
 
 GEO::SegmentLine & GEO::SegmentLine::operator=(const SegmentLine & segment)
@@ -43,21 +34,6 @@ GEO::SegmentLine & GEO::SegmentLine::operator=(const SegmentLine & segment)
 	}
 
 	return *this;
-}
-
-
-double GEO::SegmentLine::getEquC() const
-{
-	// c = y-mx (Si m = INF --> y-INF)
-	if (isVertical())
-		return BasicGeom::menosINFINITO;
-
-	return _orig.getY() - (slope() * _orig.getX());
-}
-
-bool GEO::SegmentLine::distinct(SegmentLine & segment) const
-{
-	return !equal(segment);
 }
 
 double GEO::SegmentLine::distPoint(const Point& point) const
@@ -77,12 +53,6 @@ double GEO::SegmentLine::distPoint(const Point& point) const
 	return  Vec2D(point - (_orig + (d * t0))).getModule();
 }
 
-
-bool GEO::SegmentLine::equal(SegmentLine & segment) const
-{
-	return (_orig.equal(segment._orig) && _dest.equal(segment._dest)) || (_orig.equal(segment._dest) && _dest.equal(segment._orig));
-}
-
 GEO::Point GEO::SegmentLine::getPoint(double t) const
 {
 	// a + t(b-a)
@@ -91,29 +61,26 @@ GEO::Point GEO::SegmentLine::getPoint(double t) const
 	return {a + ((b - a) * t)};
 }
 
-
-
-bool GEO::SegmentLine::isHorizontal() const
+bool GEO::SegmentLine::isTvalid(double t) const
 {
-	// Puntos a la misma Y
-	return BasicGeom::equal(_orig.getY(), _dest.getY());
+	return (t >= BasicGeom::CERO) && (t <= 1);
 }
 
 
-
-
-bool GEO::SegmentLine::isVertical() const
+double GEO::SegmentLine::getEquC() const
 {
-	// Puntos a la misma X
-	return BasicGeom::equal(_orig.getX(), _dest.getX());
-}
+	// c = y-mx (Si m = INF --> y-INF)
+	if (isVertical())
+		return BasicGeom::menosINFINITO;
 
+	return _orig.getY() - (slope() * _orig.getX());
+}
 
 double GEO::SegmentLine::slope() const
 {
 	// (yb - ya) / (xb - xa)
-	double x = _dest.getX() - _orig.getX();
-	double y = _dest.getX() - _orig.getX();
+	const double x = _dest.getX() - _orig.getX();
+	const double y = _dest.getX() - _orig.getX();
 
 	if (BasicGeom::equal(x, BasicGeom::CERO))
 		return BasicGeom::INFINITO;
@@ -121,13 +88,12 @@ double GEO::SegmentLine::slope() const
 	return x / y;
 }
 
-
 bool GEO::SegmentLine::segmentIntersection(const SegmentLine& segment) const
 {
-	Point a = _orig;
-	Point b = _dest;
-	Point c = segment._orig;
-	Point d = segment._dest;
+	const Point a = _orig;
+	const Point b = _dest;
+	const Point c = segment._orig;
+	const Point d = segment._dest;
 
 	// Siempre que no sea colineal para evitar falsos V / F
 	if (a.colinear(c,d) || b.colinear(c,d) || c.colinear(a,b) || d.colinear(a,b))
@@ -139,23 +105,23 @@ bool GEO::SegmentLine::segmentIntersection(const SegmentLine& segment) const
 
 bool GEO::SegmentLine::impSegmentIntersection(const SegmentLine& segment) const
 {
-	Point a = _orig;
-	Point b = _dest;
-	Point c = segment._orig;
-	Point d = segment._dest;
+	const Point a = _orig;
+	const Point b = _dest;
+	const Point c = segment._orig;
+	const Point d = segment._dest;
 
 	// Si algun punto esta entre los puntos del otro segmento
 	return a.isBetween(c,d) || b.isBetween(c,d) || c.isBetween(a,b) || d.isBetween(a,b);
 }
 
-GEO::Point* GEO::SegmentLine::intersectionPoint(Point c, Point d, double& s, double& t)
+GEO::Point* GEO::SegmentLine::intersectionPoint(const Point& c, const Point& d, double& s, double& t) const
 {
-	Vec2D a = _orig;
-	Vec2D b = _dest;
+	const Vec2D a = _orig;
+	const Vec2D b = _dest;
 
-	Vec2D ab = b - a;
-	Vec2D cd = d - c;
-	Vec2D ac = c - a;
+	const Vec2D ab = b - a;
+	const Vec2D cd = d - c;
+	const Vec2D ac = c - a;
 
 	const double denominador = cd.getX() * ab.getY() - ab.getX() * cd.getY();
 
@@ -169,8 +135,8 @@ GEO::Point* GEO::SegmentLine::intersectionPoint(Point c, Point d, double& s, dou
 
 	t = (ab.getX() * ac.getY() - ac.getX() * ab.getY()) / denominador;
 
-	Point abInters = getPoint(s);
-	Point cdInters = SegmentLine(c,d).getPoint(t);
+	const Point abInters = getPoint(s);
+	const Point cdInters = SegmentLine(c,d).getPoint(t);
 
 	// Si son paralelos
 	if (!abInters.equal(cdInters))
@@ -219,6 +185,30 @@ GEO::Point* GEO::SegmentLine::intersectionPoint(const Line& line)
 
 	// En caso de que este contenido
 	return nullptr;
+}
+
+
+bool GEO::SegmentLine::isHorizontal() const
+{
+	// Puntos a la misma Y
+	return BasicGeom::equal(_orig.getY(), _dest.getY());
+}
+
+bool GEO::SegmentLine::isVertical() const
+{
+	// Puntos a la misma X
+	return BasicGeom::equal(_orig.getX(), _dest.getX());
+}
+
+
+bool GEO::SegmentLine::distinct(const SegmentLine& segment) const
+{
+	return !equal(segment);
+}
+
+bool GEO::SegmentLine::equal(const SegmentLine& segment) const
+{
+	return (_orig.equal(segment._orig) && _dest.equal(segment._dest)) || (_orig.equal(segment._dest) && _dest.equal(segment._orig));
 }
 
 

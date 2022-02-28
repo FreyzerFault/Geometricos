@@ -1,12 +1,13 @@
 #include "Vec2D.h"
 #include "DrawLine.h"
+#include "Scene.h"
 
 
 GEO::DrawLine::DrawLine (Line &line): Draw(), _line (&line){
 	// Usando la Parametrica
 	const Vec2D v(_line->getB() - _line->getA());
-	Point inicio = _line->getPoint(-1000);
-	Point fin = _line->getPoint(1000);
+	const Point inicio = _line->getPoint(-1000);
+	const Point fin = _line->getPoint(1000);
 
 	_vertices.emplace_back(inicio.getX(), inicio.getY(), 0.0);
 	_vertices.emplace_back(fin.getX(), fin.getY(), 0.0);

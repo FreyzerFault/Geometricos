@@ -23,154 +23,91 @@ namespace GEO
 	protected:
 		
 		Point _orig, _dest; 
-
-		/**
-		*	@brief Returns the parametric value T0 to calculate the distance between a point and any geometric object like lines, segments or raylines.
-		*/
+		
+		// Calcula t0 = Parametro de la recta donde esta el Punto de la recta más cercano a point
 		double getDistanceT0(const Point& point) const;
 		
-	/**
-	 *	@brief Obstaints the parameters t and s where both lines intersects, if they do.
-		*/
-		//virtual bool intersects(Vect2d& p1, Vect2d& p2, float& t, float& s);
-			
-		
+		// Punto de interseccion con la linea que contiene c,d, asigna s y t
+		Point* intersectionPoint(const Point& c, const Point& d, double& s, double& t) const;
 
 		
-	public:    
-			/**
-			@brief Default constructor.
-		*/
-		SegmentLine();
+	public:
 
-		/**
-		*	@brief Constructor.
-		*/
+		SegmentLine() = default;
+
+		// A partir de 2 puntos
 		SegmentLine(const Point& a, const Point& b);
-		  
-			
-			/**
-		*	@brief Copy constructor.
-		*/
-		SegmentLine(const SegmentLine& segment);
-			
-			
-		/**
-		*	@brief Constructor.
-		*/
 		SegmentLine(double ax, double ay, double bx, double by);
 
-		/**
-		*	@brief Destructor.
-		*/
-		virtual ~SegmentLine();
+		SegmentLine(const SegmentLine& segment) = default;
+		
+		SegmentLine& operator=(const SegmentLine& segment);
+		
+		virtual ~SegmentLine() = default;
 
-	  
-		/**
-		*	@brief Returns the origin of the segment.
-		*/
-		Point getA() const { return _orig; }
-
-		/**
-		*	@brief Returns the end of the segment.
-		*/
-		Point getB() const { return _dest; }
-
-		/**
-		*	@brief Returns the constant of the equation of the implied line: c = y-mx.
-		*/
-		double getEquC() const;
-			
-			/**
-		*	@brief Checks if a segment is different to this one.
-		*/
-		bool distinct(SegmentLine& segment) const;
-
-			
-			
-		/**
-		*	@brief Distance from a point to this segment.
-		*/
+		// Distancia (mas corta) desde un Punto al Segmento
 		virtual double distPoint(const Point& point) const;
 
-		/**
-		*	@brief Checks if a segment is equal to this one.
-		*/
-		bool equal(SegmentLine& segment) const;
-
-		/**
-		*	@brief It obtains the point belonging to the segment or colineal to it for a concrete t in the parametric equation: result = a + t (b-a).
-		*/
+		// Punto del segmento perteneciente al Parámetro t en la Ecuación Paramétrica
 		Point getPoint(double t) const;
 
-		/**
-		*	@brief Determines whether a segment is horizontal or not (using EPSILON).
-		*/
-		bool isHorizontal() const;
-			
-			
+		// Comprueba que el parámetro t sea válida en la paramétrica (da un punto contenido en el Segmento)
+		virtual bool isTvalid(double t) const;
 		
-		/**
-		*	@brief Determines whether or not a segment is vertical (using EPSILON).
-		*/
-		bool isVertical() const;
+		// Constante de la Ecuación Implícita
+		// c = y-mx
+		double getEquC() const;
 
-		/**
-		*	@brief Check if the parameter t is valid to get a point of the segment.
-		*/
-		virtual bool isTvalid(double t) const { return ((t >= BasicGeom::CERO) && (t <= 1)); }
+		// LONGITUD del Segmento
+		double length() const { return _orig.distPoint(_dest); }
 
-		/**
-		*	@brief Determines whether p is in the left of SegmentLine.
-		*/
-		bool left(Point& p) { return p.left(_orig, _dest); }
-
-		/**
-		*	@brief Returns the length of the segment.
-		*/
-		double length() { return _orig.distPoint(_dest); }
-
-		/**
-		*	@brief Assignment operator.
-		*/
-		virtual SegmentLine& operator=(const SegmentLine& segment);
-
-		/**
-		*	@brief Returns the slope of the implied straight line equation: m = (yb-ya) / (xb-xa).
-		*/
+		// PENDIENTE de la recta
 		double slope() const;
+		
+		// Area del Triangulo formado por el segmento y otro punto * 2 (La del cuadrado)
+		double triangleArea2(const Point& p) const { return p.triangleArea2(_orig, _dest); }
+		
 
-		/**
-		*	@brief Determines whether two segments intersect in their own way, that is, when they intersect completely. Use only arithmetic.
-		*/
+		// ============================= INTERSECCIONES =============================
+
+		// Interseccion propia con otro segmento
 		virtual bool segmentIntersection(const SegmentLine& segment) const;
 		
-		/**
-		*	@brief Determines whether two segments intersect improperly, that is, when one end of a segment is contained in the other. Use integer arithmetic.
-		*/
+		// Intersección impropia con otro segmento (uno de los puntos esta contenido en el otro segmento)
 		virtual bool impSegmentIntersection(const SegmentLine& segment) const;
-
-		// Punto de interseccion con la linea que contiene c,d, asigna s y t
-		Point* intersectionPoint(Point c, Point d, double& s, double& t);
 
 		// Punto de intersseccion con un segmento, linea o rayo
 		virtual Point* intersectionPoint(const SegmentLine& segment);
 		virtual Point* intersectionPoint(const RayLine& ray);
 		virtual Point* intersectionPoint(const Line& line);
 		
-		void setA(Point& p) { _orig = p; }
-		void setB(Point& p) { _dest = p; }
+		// ===========================================================================
 
-
-		/**
-		*	@brief Returns the area formed by the triangle composed of the current SegmentLine and the union of its bounds with p.
-		*/
-		double triangleArea2(Point& p) { return p.triangleArea2(_orig, _dest); }
+		Point getA() const { return _orig; }
+		Point getB() const { return _dest; }
 		
+		void setA(const Point& p) { _orig = p; }
+		void setB(const Point& p) { _dest = p; }
+
+		// Comprueba si son distintos o iguales
+		bool equal(const SegmentLine& segment) const;
+		bool distinct(const SegmentLine& segment) const;
+
+		// Comprobar si es Horizontal o Vertical
+		bool isHorizontal() const;
+		bool isVertical() const;
+
+		// Comprueba si p esta a la izquierda o a la derecha del Segmento
+		bool left(const Point& p) const { return p.left(_orig, _dest); }
+		bool right(const Point& p) const { return p.right(_orig, _dest); }
+
+
+
+		bool operator==(const SegmentLine& segment) const { return equal(segment); }
+		bool operator!=(const SegmentLine& segment) const { return distinct(segment); }
+
 	protected:
-		/**
-		*	@brief Shows some information of the segment in the debug dialog.
-		*/
+
 		virtual void out();
 	};
 

@@ -6,10 +6,9 @@
  * Created on 20 de enero de 2021, 12:18
  */
 
-#ifndef DRAWPolygon_H
-#define DRAWPolygon_H
+#pragma once
 
-#include "Scene.h"
+
 #include "Polygon.h"
 #include "Draw.h"
 
@@ -29,11 +28,8 @@ namespace GEO
         void drawIt();
         void drawIt(TypeColor c);
 
-        virtual ~DrawPolygon() = default;
+        ~DrawPolygon() override = default;
     };
 
 }
-
-
-#endif /* DRAWPolygonGeo_H */
 

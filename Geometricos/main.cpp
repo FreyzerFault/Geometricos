@@ -6,22 +6,19 @@
  * @brief Función main y callbacks
  */
 
-#include <iostream>
-#include <cstdlib>
+// ReSharper disable CppClangTidyClangDiagnosticImplicitFloatConversion
+// ReSharper disable CppClangTidyConcurrencyMtUnsafe
+// ReSharper disable CppTooWideScope
+// ReSharper disable CppClangTidyClangDiagnosticImplicitFallthrough
 #include <ctime>
-#include "windows.h"
-#include <GL/glew.h>
+#include <iostream>
+#include <Windows.h>
+#include <gl/glew.h>
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#define GLM_ENABLE_EXPERIMENTAL
-//#include <glm/gtx/transform.hpp>
-#include "Bezier.h"
-#include "DrawBezier.h"
-#include "Scene.h"
 
-#include "InclGeom2D.h"
 #include "InclDraw2D.h"
-#include "RayLine.h"
+#include "InclGeom2D.h"
+#include "Scene.h"
 
 using namespace GEO;
 
@@ -161,8 +158,7 @@ int main(int argc, char** argv)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
-	GLFWwindow* miVentana;
-	miVentana = glfwCreateWindow(1024, 576, "Algoritmos Geometricos", nullptr, nullptr);
+	GLFWwindow* miVentana = glfwCreateWindow(1024, 576, "Algoritmos Geometricos", nullptr, nullptr);
 
 	if (miVentana == nullptr)
 	{
@@ -223,7 +219,7 @@ int main(int argc, char** argv)
 void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 				 int modificadores)
 {
-	GLfloat f = 0;
+	GLfloat factor = 0;
 
 	switch (tecla)
 	{
@@ -551,58 +547,59 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		break;
 
 	case GLFW_KEY_LEFT:
-		f = -1;
+		factor = -1;
 	case GLFW_KEY_RIGHT:
-		f = (f != -1) ? 1 : f;
+		factor = (factor != -1) ? 1 : factor;
 		if (accion == GLFW_PRESS)
 		{
 			switch (movimientoActivo)
 			{
 			case Movements::DOLLY:
-				Scene::getInstance()->moveCamera(movimientoActivo, f, 0);
+				Scene::getInstance()->moveCamera(movimientoActivo, factor, 0);
 				break;
 			case Movements::ORBIT:
-				Scene::getInstance()->moveCamera(movimientoActivo, 0, 10 * f);
+				Scene::getInstance()->moveCamera(movimientoActivo, 0, 10 * factor);
 				break;
 			case Movements::PAN:
-				Scene::getInstance()->moveCamera(movimientoActivo, f);
+				Scene::getInstance()->moveCamera(movimientoActivo, factor);
 				break;
 			case Movements::ZOOM:
 			case Movements::CRANE:
 			case Movements::TILT:
-			default:
-				break;
+			case Movements::NONE: break;
 			}
 		}
 
 		refresWindow(ventana);
 		break;
 	case GLFW_KEY_UP:
-		f = 1;
+		factor = 1;
 	case GLFW_KEY_DOWN:
-		f = (f != 1) ? -1 : f;
+		factor = (factor != 1) ? -1 : factor;
 		if (accion == GLFW_PRESS)
 		{
 			switch (movimientoActivo)
 			{
 			case Movements::TILT:
 			case Movements::ZOOM:
-				Scene::getInstance()->moveCamera(movimientoActivo, -f);
+				Scene::getInstance()->moveCamera(movimientoActivo, -factor);
 				break;
 			case Movements::CRANE:
-				Scene::getInstance()->moveCamera(movimientoActivo, f);
+				Scene::getInstance()->moveCamera(movimientoActivo, factor);
 				break;
 			case Movements::DOLLY:
-				Scene::getInstance()->moveCamera(movimientoActivo, 0, -f);
+				Scene::getInstance()->moveCamera(movimientoActivo, 0, -factor);
 				break;
 			case Movements::ORBIT:
-				Scene::getInstance()->moveCamera(movimientoActivo, -10 * f, 0);
+				Scene::getInstance()->moveCamera(movimientoActivo, -10 * factor, 0);
 				break;
-			default:
+			case Movements::NONE:
+			case Movements::PAN:
 				break;
 			}
 		}
 		refresWindow(ventana);
 		break;
+	default: ;
 	}
 }

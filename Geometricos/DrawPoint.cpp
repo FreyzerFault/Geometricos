@@ -1,4 +1,3 @@
-
 /* 
  * File:   DrawPoint.cpp
  * Author: lidia
@@ -7,9 +6,10 @@
  */
 
 #include "DrawPoint.h"
+#include "Scene.h"
 
 
-GEO::DrawPoint::DrawPoint (Point &p): dp (p), Draw(){
+GEO::DrawPoint::DrawPoint (const Point &p): Draw(), dp (p){
     
 
     _vertices.emplace_back(p.getX(), p.getY(), 0.0);

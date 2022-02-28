@@ -1,13 +1,15 @@
+﻿// ReSharper disable CppHiddenFunction
 #pragma once
 
 #include <climits>
 #include <string>
-#include <cmath>
+
 #include "BasicGeom.h"
 
 namespace GEO
 {
 	class Vec2D;
+
 	/**
 	*	@brief This class represents a 2D structure. This will be also the skeleton for other 2D structures such as Vertex or Vector.
 	*	@author Lidia
@@ -15,7 +17,7 @@ namespace GEO
 	class Point
 	{
 	protected:
-		const static int DEFAULT_VALUE = INT_MAX; // Value of X and Y coordinates for an incomplete Point.
+		constexpr static double DEFAULT_VALUE = INT_MAX; // Value of X and Y coordinates for an incomplete Point.
 
 	public:
 		enum class PointClassification
@@ -28,167 +30,84 @@ namespace GEO
 			DEST
 		};
 
-		// Para sacar por consola la posicion
+		// Para sacar por consola la posicion relativa
 		static std::string classifyToString(PointClassification c);
 
 	protected:
 		double _x, _y;
 
 	public:
-		/**
-		*	@brief Default constructor. Coordinates are initialized with an invalid value.
-		*/
+		// Iniciado a DEFAULT_VALUE (INT_MAX)
 		Point();
 
-		/**
-		*	@brief Constructor. Depending on the value of polar, x may be an angle (radians) and y the vector module.
-		*/
+		// Constructor con Coordenadas POLARES si polar == true
 		Point(double x, double y, bool polar = false);
-		Point(Vec2D v);
 
-		/**
-		*	@brief Copy constructor.
-		*/
-		Point(const Point& point);
+		Point(const Vec2D& v);
 
-		/**
-		*	@brief Destructor.
-		*/
-		virtual ~Point();
+		Point(const Point& point) = default;
 
+		virtual ~Point() = default;
 
-		/**
-		*	@brief Determines the relative position of a point (this) with respect to other two given as _a parameter (which can form a segment).
-		*/
-		PointClassification classify(Point& p0, Point& p1);
+		// Clasifica la posicion del Punto respecto al Segmento p0,p1
+		PointClassification classify(const Point& p0, const Point& p1) const;
 
-		/**
-		*	@brief Checks if this point lies on the same line where a and b belong.
-		*/
-		bool colinear(Point& a, Point& b);
+		// CLASIFICACI�N
+		bool forward(const Point& a, const Point& b) const { return classify(a, b) == PointClassification::FORWARD; }
+		bool backward(const Point& a, const Point& b) const { return classify(a, b) == PointClassification::BACKWARD; }
+		bool isBetween(const Point& a, const Point& b) const { return classify(a, b) == PointClassification::BETWEEN; }
+		bool left(const Point& a, const Point& b) const { return classify(a, b) == PointClassification::LEFT; }
+		bool right(const Point& a, const Point& b) const { return classify(a, b) == PointClassification::RIGHT; }
+		bool leftAbove(const Point& a, const Point& b) const;
+		bool rightAbove(const Point& a, const Point& b) const;
 
-		/**
-		*	@brief Distance between this point and another one.
-		*/
-		double distPoint(Point& p) const;
+		// Colinear con a y b
+		bool colinear(const Point& a, const Point& b) const;
 
-		/**
-		*	@brief Checks if the coordinates of this point are different from the coordinates of a point p.
-		*/
-		bool distinct(Point& p) const
-		{
-			return (abs(_x - p._x) > BasicGeom::EPSILON || std::abs(_y - p._y) > BasicGeom::EPSILON);
-		}
+		// Distancia entre Puntos
+		double distPoint(const Point& p) const;
 
+		bool distinct(const Point& p) const;
+		bool equal(const Point& pt) const;		
 
-		/**
-		*	@brief Checks if the coordinates of this point are equal from the coordinates of a point p.
-		*/
-		bool equal(Point& pt) const { return (BasicGeom::equal(_x, pt._x) && BasicGeom::equal(_y, pt._y)); }
-
-		/**
-		*	@brief Checks the position of the point respect to other two points (a, b).
-		*/
-		bool forward(Point& a, Point& b) { return classify(a, b) == PointClassification::FORWARD; }
-
-		/**
-		*	@brief Checks the position of the point respect to other two points (a, b).
-		*/
-		bool backward(Point& a, Point& b) { return classify(a, b) == PointClassification::BACKWARD; }
-
-		/**
-		*	@brief Returns the coordinate X of the point.
-		*/
-		double getX() const { return _x; }
-
-		/**
-		*	@brief Returns the coordinate Y of the point.
-		*/
-		double getY() const { return _y; }
-
-		/**
-		*	@brief Angle of this point interpreted as a polar coordinate (radians).
-		*/
+		// �NGULO del punto como Coordenada POLAR
 		double getAlpha() const;
 
-		/**
-		*	@brief Module of _a 2D structure. This method is useful for child classes.
-		*/
+		// M�DULO
 		double getModule() const;
+		
+		// PENDIENTE de la recta this -> p
+		double slope(const Point& p) const;
 
-		/**
-		*	@brief Checks the position of the point respect to other two points (a, b).
-		*/
-		bool isBetween(Point& a, Point& b) { return classify(a, b) == PointClassification::BETWEEN; }
+		// Area del Triangulo formado por [this,a,b] * 2 (Area del Cuadrado)
+		double triangleArea2(const Point& a, const Point& b) const;
 
-		/**
-		*	@brief Checks the value of the coordinates. If the values are the DEFAULT, then the point is not valid.
-		*/
-		bool isValid() const { return (_x != DEFAULT_VALUE) && (_y != DEFAULT_VALUE); }
+		Point& operator=(const Point& point) = default;
+		
+		// Vector entre 2 puntos
+		Vec2D operator-(const Point& v) const;
 
-		/**
-		*	@brief Checks the position of the point respect to other two points (a, b).
-		*/
-		bool left(Point& a, Point& b) { return classify(a, b) == PointClassification::LEFT; }
+		// Punto resultante de sumar o restar un vector
+		Point operator+(const Vec2D& v) const;
+		Point operator-(const Vec2D& v) const;
 
-		/**
-		*	@brief Checks the position of the point respect to other two points (a, b).
-		*/
-		bool leftAbove(Point& a, Point& b);
-
-		/**
-		*	@brief Assignment operator (override).
-		*/
-		virtual Point& operator=(const Point& point);
-
-		/**
-		*	@brief Shows in the debug dialog some information about the point.
-		*/
-		void out() const;
+		virtual void out() const;
 		std::string toString() const;
+		
+		
+		double getX() const { return _x; }
+		double getY() const { return _y; }
+		
+		void setX(const double x) { _x = x; }
+		void setY(const double y) { _y = y; }
 
-		/**
-		*	@brief Checks the position of the point respect to other two points (a, b).
-		*/
-		bool rightAbove(Point& a, Point& b);
-
-		/**
-		*	@brief Checks the position of the point respect to other two points (a, b).
-		*/
-		bool right(Point& a, Point& b) { return classify(a, b) == PointClassification::RIGHT; }
-
-		/**
-		*	@brief Modifies the coordinate values.
-		*/
-		void set(double x, double y)
+		void set(const double x, const double y)
 		{
 			this->_x = x;
 			this->_y = y;
 		}
+		
+		bool isValid() const { return BasicGeom::equal(_x, DEFAULT_VALUE) && BasicGeom::equal(_y, DEFAULT_VALUE); }
 
-		/**
-		*	@brief Modifies the X coordinate.
-		*/
-		void setX(double x) { _x = x; }
-
-		/**
-		*	@brief Modifies the Y coordinate.
-		*/
-		void setY(double y) { _y = y; }
-
-		/**
-		*	@brief Returns the slope between this point and p.
-		*/
-		double slope(Point& p);
-
-		/**
-		*	@brief Calculates the double area of the triangle formed by (this, a, b).
-		*/
-		double triangleArea2(Point& a, Point& b) const;
-
-		Point operator+(const Vec2D& v) const;
-		Point operator-(const Vec2D& v) const;
-		Vec2D operator-(const Point& v) const;
-		Vec2D operator*(double s) const;
 	};
 }

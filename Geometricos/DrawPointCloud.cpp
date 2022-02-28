@@ -2,9 +2,8 @@
 #include "DrawPointCloud.h"
 
 
-GEO::DrawPointCloud::DrawPointCloud (PointCloud &t): Draw(), dt (t){
-
-	auto points = dt.getPoints();
+GEO::DrawPointCloud::DrawPointCloud (const PointCloud &t): Draw(), dt (t){
+	const auto& points = dt.getPoints();
 	for (int i = 0; i < points.size(); ++i)
 	{
 		_vertices.emplace_back(points[i].getX(), points[i].getY(), 0.0);
