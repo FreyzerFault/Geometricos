@@ -19,58 +19,58 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BasicGeom.h" />
-    <ClInclude Include="Bezier.h" />
-    <ClInclude Include="Circle.h" />
-    <ClInclude Include="Draw.h" />
-    <ClInclude Include="DrawBezier.h" />
-    <ClInclude Include="DrawLine.h" />
-    <ClInclude Include="DrawPoint.h" />
-    <ClInclude Include="DrawPointCloud.h" />
-    <ClInclude Include="DrawPolygon.h" />
-    <ClInclude Include="DrawRay.h" />
-    <ClInclude Include="DrawSegment.h" />
-    <ClInclude Include="DrawTriangle.h" />
+    <ClInclude Include="2D\Bezier.h" />
+    <ClInclude Include="2D\Circle.h" />
+    <ClInclude Include="2D\Line.h" />
+    <ClInclude Include="2D\Point.h" />
+    <ClInclude Include="2D\PointCloud.h" />
+    <ClInclude Include="2D\Polygon.h" />
+    <ClInclude Include="2D\RayLine.h" />
+    <ClInclude Include="2D\SegmentLine.h" />
+    <ClInclude Include="2D\Triangle.h" />
+    <ClInclude Include="2D\Vec2D.h" />
+    <ClInclude Include="2D\Vertex.h" />
+    <ClInclude Include="draw2D\DrawBezier.h" />
+    <ClInclude Include="draw2D\DrawLine.h" />
+    <ClInclude Include="draw2D\DrawPoint.h" />
+    <ClInclude Include="draw2D\DrawPointCloud.h" />
+    <ClInclude Include="draw2D\DrawPolygon.h" />
+    <ClInclude Include="draw2D\DrawRay.h" />
+    <ClInclude Include="draw2D\DrawSegment.h" />
+    <ClInclude Include="draw2D\DrawTriangle.h" />
     <ClInclude Include="InclDraw2D.h" />
     <ClInclude Include="InclGeom2D.h" />
-    <ClInclude Include="Line.h" />
-    <ClInclude Include="Point.h" />
-    <ClInclude Include="PointCloud.h" />
-    <ClInclude Include="Polygon.h" />
-    <ClInclude Include="RayLine.h" />
-    <ClInclude Include="RenderSettings.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="SegmentLine.h" />
-    <ClInclude Include="ShaderProgram.h" />
-    <ClInclude Include="Triangle.h" />
-    <ClInclude Include="Vec2D.h" />
-    <ClInclude Include="Vertex.h" />
+    <ClInclude Include="utils\BasicGeom.h" />
+    <ClInclude Include="utils\Draw.h" />
+    <ClInclude Include="utils\RenderSettings.h" />
+    <ClInclude Include="utils\Scene.h" />
+    <ClInclude Include="utils\ShaderProgram.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Bezier.cpp" />
-    <ClCompile Include="Circle.cpp" />
-    <ClCompile Include="Draw.cpp" />
-    <ClCompile Include="DrawBezier.cpp" />
-    <ClCompile Include="DrawLine.cpp" />
-    <ClCompile Include="DrawPoint.cpp" />
-    <ClCompile Include="DrawPointCloud.cpp" />
-    <ClCompile Include="DrawPolygon.cpp" />
-    <ClCompile Include="DrawRay.cpp" />
-    <ClCompile Include="DrawSegment.cpp" />
-    <ClCompile Include="DrawTriangle.cpp" />
-    <ClCompile Include="Line.cpp" />
+    <ClCompile Include="2D\Bezier.cpp" />
+    <ClCompile Include="2D\Circle.cpp" />
+    <ClCompile Include="2D\Line.cpp" />
+    <ClCompile Include="2D\Point.cpp" />
+    <ClCompile Include="2D\PointCloud.cpp" />
+    <ClCompile Include="2D\Polygon.cpp" />
+    <ClCompile Include="2D\RayLine.cpp" />
+    <ClCompile Include="2D\SegmentLine.cpp" />
+    <ClCompile Include="2D\Triangle.cpp" />
+    <ClCompile Include="2D\Vec2D.cpp" />
+    <ClCompile Include="2D\Vertex.cpp" />
+    <ClCompile Include="draw2D\DrawBezier.cpp" />
+    <ClCompile Include="draw2D\DrawLine.cpp" />
+    <ClCompile Include="draw2D\DrawPoint.cpp" />
+    <ClCompile Include="draw2D\DrawPointCloud.cpp" />
+    <ClCompile Include="draw2D\DrawPolygon.cpp" />
+    <ClCompile Include="draw2D\DrawRay.cpp" />
+    <ClCompile Include="draw2D\DrawSegment.cpp" />
+    <ClCompile Include="draw2D\DrawTriangle.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Point.cpp" />
-    <ClCompile Include="PointCloud.cpp" />
-    <ClCompile Include="Polygon.cpp" />
-    <ClCompile Include="RayLine.cpp" />
-    <ClCompile Include="RenderSettings.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SegmentLine.cpp" />
-    <ClCompile Include="ShaderProgram.cpp" />
-    <ClCompile Include="Triangle.cpp" />
-    <ClCompile Include="Vec2D.cpp" />
-    <ClCompile Include="Vertex.cpp" />
+    <ClCompile Include="utils\Draw.cpp" />
+    <ClCompile Include="utils\RenderSettings.cpp" />
+    <ClCompile Include="utils\Scene.cpp" />
+    <ClCompile Include="utils\ShaderProgram.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -178,8 +178,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)2D;$(ProjectDir)3D;$(ProjectDir)draw2D;$(ProjectDir)draw3D;$(ProjectDir)utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -187,7 +186,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
