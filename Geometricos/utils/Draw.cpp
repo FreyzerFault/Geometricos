@@ -242,7 +242,7 @@ void GEO::Draw::render ( glm::mat4 matrizV, glm::mat4 matrizVP, Light& l )
             glDrawElements ( GL_LINE_STRIP, _indices.size (), GL_UNSIGNED_INT, nullptr );
             break;
           
-        case TypeDraw::PolygonGeo:
+        case TypeDraw::POLYGON:
              color  =  colorAct.getVec4();
             _program->setUniform ( "micolor", color );
             _program->selectRoutine ( GL_FRAGMENT_SHADER, "colorElegido",
@@ -388,7 +388,7 @@ GEO::Draw& GEO::Draw::setDrawMode ( TypeDraw m )
       case TypeDraw::WIREFRAME:
       case TypeDraw::PLAIN:
       case TypeDraw::LINE:
-      case TypeDraw::PolygonGeo:
+      case TypeDraw::POLYGON:
           
          _mode = m;
    }
@@ -546,7 +546,7 @@ GEO::Draw& GEO::Draw::loadFile ( std::string pathfile )
                                                  | aiProcess_GenSmoothNormals);
 //                                                 | aiProcess_GenNormals);
 
-   // Carga todo lo que haya en el archivo como un único modelo
+   // Carga to lo que haya en el archivo como un único modelo
    if ( !scene || !scene->mRootNode
         || ( scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE ) )
    {

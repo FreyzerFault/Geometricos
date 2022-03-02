@@ -130,7 +130,7 @@ double GEO::Point::getModule() const
 double GEO::Point::slope(const Point& p) const
 {
 	// Si es vertical
-	if (BasicGeom::equal(BasicGeom::CERO, p.getX() - _x))
+	if (BasicGeom::equal(BasicGeom::EPSILON, p.getX() - _x))
 	{
 		if (_y < p.getY())
 			return BasicGeom::INFINITO;

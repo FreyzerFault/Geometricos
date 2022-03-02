@@ -26,7 +26,7 @@ void GEO::DrawPolygon::drawIt (TypeColor c){
 
 void GEO::DrawPolygon::drawIt (){
     setShaderProgram ( "algeom" );
-    setDrawMode(TypeDraw::PolygonGeo );
+    setDrawMode(TypeDraw::POLYGON );
     Scene::getInstance ()->addModel ( this );
     
 }

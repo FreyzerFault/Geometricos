@@ -40,7 +40,7 @@ double GEO::SegmentLine::distPoint(const Point& point) const
 {
 	const double t0 = getDistanceT0(point);
 	// Mas atras
-	if (t0 <= BasicGeom::CERO)
+	if (t0 <= BasicGeom::EPSILON)
 		return Vec2D(point - _orig).getModule();
 
 	const Vec2D d(_orig, _dest);
@@ -63,7 +63,7 @@ GEO::Point GEO::SegmentLine::getPoint(double t) const
 
 bool GEO::SegmentLine::isTvalid(double t) const
 {
-	return (t >= BasicGeom::CERO) && (t <= 1);
+	return (t >= BasicGeom::EPSILON) && (t <= 1);
 }
 
 
@@ -82,7 +82,7 @@ double GEO::SegmentLine::slope() const
 	const double x = _dest.getX() - _orig.getX();
 	const double y = _dest.getX() - _orig.getX();
 
-	if (BasicGeom::equal(x, BasicGeom::CERO))
+	if (BasicGeom::equal(x, BasicGeom::EPSILON))
 		return BasicGeom::INFINITO;
 
 	return x / y;

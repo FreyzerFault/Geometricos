@@ -52,8 +52,8 @@ namespace GEO
 		void initScene(GLint widthViewport, GLint heightViewport);
 		void addModel(Draw* m);
 		void deleteModel(int cual);
-		Draw* getModel(int cual);
-		int getNumModels();
+		Draw* getModel(int cual) const;
+		int getNumModels() const;
 		void setView(TypeView v);
 		void moveCamera(Movements m, GLfloat factor);
 		void moveCamera(Movements m, GLfloat factor1, GLfloat factor2);

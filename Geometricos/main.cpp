@@ -17,7 +17,9 @@
 #include <GLFW/glfw3.h>
 
 #include "InclDraw2D.h"
+#include "InclDraw3D.h"
 #include "InclGeom2D.h"
+#include "InclGeom3D.h"
 #include "Scene.h"
 
 using namespace GEO;
@@ -511,6 +513,72 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 					<< e.what() << std::endl;
 			}
 
+			refreshWindow(ventana);
+		}
+		break;
+	case GLFW_KEY_V:
+		if (accion == GLFW_PRESS)
+		{
+			try
+			{
+
+				TriangleModel tm("obj/vaca.obj");
+				DrawTriangleModel* dtm = new DrawTriangleModel(tm);
+				//dtm->drawItPlain();
+				dtm->drawIt(white);
+
+				//Descomentar para ver como se pintan las 100 primeras caras del modelo de amarillo           
+
+
+		   //                std::cout << "hay un total de " << tm.numTriangulos() << " triángulos" << std::endl;
+		   //                TypeColor amarillo (1.0, 1.0, 0.0);  
+		   //                
+		   //                std::vector<Triangle3D> triangulos = tm.getFaces();
+		   //                Triangle3D tri; 
+		   //                DrawTriangle3d *dtri;  
+		   //                for (int i=0; i<100; i++){
+		   //                    tri = triangulos[i];
+		   //                    dtri = new DrawTriangle3d (tri);
+		   //                    dtri -> drawIt(amarillo);
+		   //                }
+
+						   // descomentar para observar la nube de puntos asociada al modelo; 
+						   //comentar antes la visualización completa del modelo
+
+		   //                PointCloud3d pc = tm.getCloud();
+		   //                DrawCloud3d *dpc = new DrawCloud3d (pc);
+		   //                dpc->drawIt();
+		   //                
+
+						   // descomentar para observar los triángulos de forma individual. Es mucho más lento 
+		   //                TypeColor verde (0.0, 1.0, 0.0); 
+		   //                Triangle3D tri; 
+		   //                DrawTriangle3d *dtri;  
+		   //                for (unsigned i = 0; i<tm.numTriangulos()/2; i++){
+		   //                    tri = tm.getFace(i);
+		   //                    dtri = new DrawTriangle3d (tri);
+		   //                    dtri->drawIt(verde);
+		   //                }
+		   //                TypeColor magenta (1.0, 0.0, 1.0);  
+		   //                
+		   //                for (unsigned i = tm.numTriangulos()/2+1; i<tm.numTriangulos(); i++){
+		   //                    tri = tm.getFace(i);
+		   //                    dtri = new DrawTriangle3d (tri);
+		   //                    dtri->drawIt(magenta);
+		   //                }
+
+
+
+
+			}
+			catch (std::exception& e)
+			{
+				std::cout << "Capturada excepción en callbackTecla"
+					<< std::endl
+					<< "===================================="
+					<< std::endl
+					<< e.what() << std::endl;
+			}
 			refreshWindow(ventana);
 		}
 		break;

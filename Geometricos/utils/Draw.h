@@ -6,9 +6,7 @@
  * 
  * @brief 
  */
-
-#ifndef DRAW_H
-#define DRAW_H
+#pragma once
 
 #include <GL/glew.h>
 #include <vector>
@@ -51,7 +49,7 @@ namespace GEO
 	  PLAIN = 2,   ///< El modelo se dibuja en modo sólido y con sombreado plano
 	  POINT = 3,
 	  LINE = 4,
-	  PolygonGeo = 5,
+	  POLYGON = 5,
    };
 
    /**
@@ -108,6 +106,4 @@ namespace GEO
 		 Draw& setColorActivo (TypeColor col);
    };
 }
-   
-#endif /* DRAW_H */
 

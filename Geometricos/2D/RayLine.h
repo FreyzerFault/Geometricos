@@ -29,7 +29,7 @@ namespace GEO
 		double distPoint(const Point& point) const override;
 		
 		// Comprueba que el parámetro t sea válida en la paramétrica (da un punto contenido en el Segmento)
-		bool isTvalid(double t) const override { return t >= BasicGeom::CERO; }
+		bool isTvalid(double t) const override { return t >= BasicGeom::EPSILON; }
 
 		// Interseccion propia con otro segmento
 		bool segmentIntersection(const SegmentLine& segment) const override;

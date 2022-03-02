@@ -271,7 +271,7 @@ void GEO::Scene::deleteModel ( int cual )
  * @throw std::invalid_argument Si el valor del índice no se corresponde con
  *        ningún modelo de la escena
  */
-GEO::Draw* GEO::Scene::getModel ( int cual )
+GEO::Draw* GEO::Scene::getModel ( int cual ) const
 {
    if ( _models.empty () )
    {
@@ -291,7 +291,7 @@ GEO::Draw* GEO::Scene::getModel ( int cual )
  * Método para consultar el número de modelos en la escena actualmente
  * @return El número de modelos en la escena
  */
-int GEO::Scene::getNumModels ()
+int GEO::Scene::getNumModels () const
 {
    return _models.size ();
 }
