@@ -58,7 +58,9 @@
     <ClInclude Include="draw3D\DrawTriangleModel.h" />
     <ClInclude Include="draw3D\DrawVect3d.h" />
     <ClInclude Include="InclDraw2D.h" />
+    <ClInclude Include="InclDraw3D.h" />
     <ClInclude Include="InclGeom2D.h" />
+    <ClInclude Include="InclGeom3D.h" />
     <ClInclude Include="utils\BasicGeom.h" />
     <ClInclude Include="utils\Draw.h" />
     <ClInclude Include="utils\RenderSettings.h" />
