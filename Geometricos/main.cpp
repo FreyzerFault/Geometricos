@@ -61,7 +61,7 @@ void mostrarAyuda()
 		<< "Cursores y rueda ratón -> Rotación" << std::endl
 		<< "================" << std::endl
 		<< "h -> Muestra esta ayuda" << std::endl
-		<< "q -> Cierra la aplicación" << std::endl;
+		<< "Esc -> Cierra la aplicación" << std::endl;
 }
 
 
@@ -86,6 +86,8 @@ void refreshWindow(GLFWwindow* ventana)
 
 void callbackTamFB(GLFWwindow* ventana, int ancho, int alto)
 {
+	if (ancho == 0 || alto == 0)
+		return;
 	Scene::getInstance()->changeTamViewport(ancho, alto);
 }
 
@@ -233,7 +235,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 
 	switch (tecla)
 	{
-	case GLFW_KEY_Q:
+	case GLFW_KEY_ESCAPE:
 		if (accion == GLFW_PRESS)
 		{
 			glfwSetWindowShouldClose(ventana, GLFW_TRUE);
@@ -494,9 +496,12 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 				Point* intersecLR = l.intersectionPoint(r);
 
 				std::cout << std::endl;
-				std::cout << "Interseccion entre Segmento (AZUL) y Line (VERDE): " << intersecSL->toString() << std::endl;
-				std::cout << "Interseccion entre Segmento (AZUL) y Ray (ROJO): " << intersecSR->toString() << std::endl;
-				std::cout << "Interseccion entre Line (VERDE) y Ray (ROJO): " << intersecLR->toString() << std::endl;
+				std::cout << "Interseccion entre Segmento (AZUL) y Line (VERDE): "
+				<< (intersecSL ? intersecSL->toString() : "[No hay Interseccion]") << std::endl;
+				std::cout << "Interseccion entre Segmento (AZUL) y Ray (ROJO): "
+				<< (intersecSR ? intersecSR->toString() : "[No hay Interseccion]") << std::endl;
+				std::cout << "Interseccion entre Line (VERDE) y Ray (ROJO): "
+				<< (intersecLR ? intersecLR->toString() : "[No hay Interseccion]") << std::endl;
 
 
 				ds = nullptr;
