@@ -122,7 +122,7 @@ GEO::Vec3D GEO::Vec3D::sub(Vec3D & b)
 	return Vec3D(getX() - b.getX(), getY() - b.getY(), getZ() - b.getZ());
 }
 
-GEO::Vec3D GEO::Vec3D::xProduct(Vec3D & b)
+GEO::Vec3D GEO::Vec3D::cross(Vec3D & b)
 {
 	return Vec3D(getY() * b.getZ() - getZ() * b.getY(), getZ() * b.getX() - getX() * b.getZ(), getX() * b.getY() - getY() * b.getX());
 }

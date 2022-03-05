@@ -49,7 +49,7 @@ GEO::Vec3D GEO::Triangle3D::normal()
 {
 	Vec3D v1 (_b.sub(_a));
 	Vec3D v2 (_c.sub(_a));
-	Vec3D n (v1.xProduct(v2));
+	Vec3D n (v1.cross(v2));
 	double module = n.module();
 
 	return (n.scalarMul(1.0f / module));
