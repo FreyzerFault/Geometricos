@@ -29,18 +29,20 @@ namespace GEO
 		
 
 		// Es colinear a la recta formada por a,b
-		bool collinear(Vec3D& a, Vec3D& b);
+		bool collinear(const Vec3D& a, const Vec3D& b) const;
 
 		// Distancia entre 2 puntos
-		double distance(Vec3D& p);
+		double distance(const Vec3D& p) const;
 
-		double module();
+		double module() const;
 
-		Vec3D add(Vec3D& b);
-		Vec3D sub(Vec3D& b);
-		Vec3D scalarMul(double value);
-		double dot(Vec3D& v);
-		Vec3D cross(Vec3D& b);
+		Vec3D normalize() const;
+
+		Vec3D add(const Vec3D& b) const;
+		Vec3D sub(const Vec3D& b) const;
+		Vec3D scalarMul(double value) const;
+		double dot(const Vec3D& v) const;
+		Vec3D cross(const Vec3D& b) const;
 
 
 		void set(unsigned int index, double value) { _value[index] = value; }
@@ -50,21 +52,24 @@ namespace GEO
 		void setZ(double z);
 		
 		// Devuelve las coordenadas en un vector<double>
-		std::vector<double> getVector();
+		std::vector<double> getVector() const;
 
 		double get(unsigned int index) const { return _value[index]; }		
-		double getX();
-		double getY();
-		double getZ();
+		double getX() const;
+		double getY() const;
+		double getZ() const;
 		
 		
 		Vec3D& operator=(const Vec3D& vector);
 
 
-		bool operator==(const Vec3D& vector);
-		bool operator!=(const Vec3D& vector);
+		bool operator==(const Vec3D& vector) const;
+		bool operator!=(const Vec3D& vector) const;
 
-
+		Vec3D operator+(const Vec3D& v) const;
+		Vec3D operator-(const Vec3D& v) const;
+		Vec3D operator*(double s) const;
+		Vec3D operator/(double s) const;
 
 		
 		virtual void out();

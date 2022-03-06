@@ -1,53 +1,25 @@
-
-/* 
- * File:   Ray3d.h
- * Author: lidia
- *
- * Created on 26 de enero de 2021, 17:22
- */
 #pragma once
 
-#include "Edge3d.h"
+#include "Edge3D.h"
 
 namespace GEO
 {
-	/**
-*	@brief This class represents a ray that goes from an origin to the infinite.
-*	@author Lidia Mª Ortega Alvarado.
-*/
-	class Ray3d : public Edge3d
+	class Ray3D : public Edge3D
 	{
 	protected:
-		/**
-		*	@brief Checks if the parametric value t is valid. It is only invalid if t is smaller than 0.
-		*/
-		virtual bool isTvalid(double t) { return (t >= 0); }
+		// t >= 0
+		bool isTvalid(const double t) const override { return t >= 0; }
 
 	public:
-		/**
-		*	@brief Constructor.
-		*/
-		Ray3d(Vec3D& orig, Vec3D& dest);
+		Ray3D(const Vec3D& orig, const Vec3D& dest);
+		
+		Ray3D(const Ray3D& ray) = default;
 
-		/**
-		*	@brief Copy constructor.
-		*/
-		Ray3d(const Ray3d& ray);
+		~Ray3D() override = default;
+		
+		Ray3D& operator=(const Ray3D& ray);
 
-		/**
-		*	@brief Destructor.
-		*/
-		virtual ~Ray3d();
-
-		/**
-		*	@brief Assignment operator.
-		*/
-		virtual Ray3d& operator=(const Ray3d& ray);
-
-		/**
-		*	@brief Shows some information about the ray at the debug window.
-		*/
-		virtual void out();
+		void out() override;
 	};
 }
 

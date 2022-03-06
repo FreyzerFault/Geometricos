@@ -2,34 +2,37 @@
 #include "DrawSegment3d.h"
 
 
-GEO::DrawSegment3d::DrawSegment3d (Segment3d &t): dt (t), Draw(){
-    
-    _vertices.push_back ( glm::vec3 (dt.getOrigin().getX(), dt.getOrigin().getY() , dt.getOrigin().getZ() ) );
-    _vertices.push_back ( glm::vec3 (dt.getDestination().getX(), dt.getDestination().getY() , dt.getDestination().getZ() ) );
-    
-    
-    _normals.push_back ( glm::vec3 ( 0, 0, 1 ) );
-    _normals.push_back ( glm::vec3 ( 0, 0, 1 ) );
-    
+GEO::DrawSegment3d::DrawSegment3d (const Segment3d& segment): dt (segment), Draw(){
+	
+	const Vec3D inicio = segment.getOrig();
+	const Vec3D fin = segment.getDest();
 
-    _indices.push_back ( 0 );
-    _indices.push_back ( 1 );
-    
+	_vertices.emplace_back(inicio.getX(), inicio.getY(), inicio.getZ());
+	_vertices.emplace_back(fin.getX(), fin.getY(), fin.getZ());
+	
+	const Vec3D normal = segment.normal();
 
-    buildVAO ();
-    
+	_normals.emplace_back(normal.getX(), normal.getY(), normal.getZ());
+	_normals.emplace_back(normal.getX(), normal.getY(), normal.getZ());
+	
+
+	_indices.push_back ( 0 );
+	_indices.push_back ( 1 );
+	
+
+	buildVAO ();
 }
 
 
 void GEO::DrawSegment3d::drawIt (TypeColor c){
-    setColorActivo (c);
-    drawIt();
+	setColorActivo (c);
+	drawIt();
 }
 
 
 void GEO::DrawSegment3d::drawIt (){
-    setShaderProgram ( "algeom" );
-    setDrawMode(TypeDraw::LINE );
-    Scene::getInstance ()->addModel ( this );
+	setShaderProgram ( "algeom" );
+	setDrawMode(TypeDraw::LINE );
+	Scene::getInstance ()->addModel ( this );
 }
 

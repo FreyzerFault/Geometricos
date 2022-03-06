@@ -1,31 +1,24 @@
-/* 
- * File:   DrawLine3d3d.h
- * Author: lidia
- *
- * Created on 27 de enero de 2021, 17:41
- */
 #pragma once
 
-#include "Scene.h"
-#include "Line3d.h"
+#include "Line3D.h"
 #include "Draw.h"
 
 namespace GEO
 {
     class DrawLine3d : public Draw {
 
-        Line3d dt;
+        Line3D dt;
 
     public:
 
-        DrawLine3d(Line3d& t);
+        DrawLine3d(const Line3D& line);
 
-        DrawLine3d(DrawLine3d& ddt) : dt(ddt.dt), Draw() {}
+        DrawLine3d(const DrawLine3d& ddt) : Draw(), dt(ddt.dt) {}
 
         void drawIt();
         void drawIt(TypeColor c);
 
-        virtual ~DrawLine3d() {};
+        ~DrawLine3d() override = default;
     };
 }
 

@@ -3,7 +3,7 @@
 #include <cmath>
 #include "BasicGeom.h"
 #include "Triangle3D.h"
-#include "Edge3d.h"
+#include "Edge3D.h"
 
 
 GEO::Triangle3D::Triangle3D()
@@ -20,7 +20,7 @@ GEO::Triangle3D::Triangle3D(const Triangle3D & triangle)
 {
 }
 
-GEO::Triangle3D::Triangle3D(Vec3D & va, Vec3D & vb, Vec3D & vc)
+GEO::Triangle3D::Triangle3D(const Vec3D& va, const Vec3D& vb, const Vec3D& vc)
 	: _a(va), _b(vb), _c(vc)
 {
 }
@@ -29,7 +29,7 @@ GEO::Triangle3D::~Triangle3D()
 {
 }
 
-double GEO::Triangle3D::area()
+double GEO::Triangle3D::area() const
 {
 	//XXXX
 	

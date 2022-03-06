@@ -1,65 +1,73 @@
 
 #include <iostream>
-#include "Edge3d.h"
+#include "Edge3D.h"
+
+#include "Line3D.h"
 
 
-GEO::Edge3d::Edge3d()
+bool GEO::Edge3D::isTvalid(double t) const
 {
+	return t >= 0 && t <= 1;
 }
 
-GEO::Edge3d::Edge3d(Vec3D & orig, Vec3D & dest)
+double GEO::Edge3D::getNearestT(const Vec3D& p) const
+{
+	const Vec3D v = _dest - _orig;
+	const double t = v.dot(p - _orig) / v.dot(v);
+
+	if (this->isTvalid(t))
+		return t;
+
+	// Al ser un segmento, su t mas cercana sera 0 o 1
+	if (t < 0)
+		return 0;
+
+	return 1;
+}
+
+GEO::Vec3D GEO::Edge3D::getNearestPoint(const Vec3D& p) const
+{
+	return getPoint(getNearestT(p));
+}
+
+GEO::Edge3D::Edge3D(const Vec3D& orig, const Vec3D& dest)
 	: _orig(orig), _dest(dest)
 {
 }
 
-GEO::Edge3d::Edge3d(const Edge3d & edge)
+GEO::Vec3D GEO::Edge3D::getPoint(double t) const
 {
-	_orig = edge._orig;
-	_dest = edge._dest;
+	// Invalido si t < 0 o t > 1
+	if (!isTvalid(t)) return {};
+	
+	return {_orig + (_dest - _orig) * t};
 }
 
-GEO::Edge3d::~Edge3d()
+double GEO::Edge3D::distance(const Vec3D& p) const
 {
+	return (getNearestPoint(p) - p).module();
 }
 
-GEO::Vec3D GEO::Edge3d::getDestination()
+GEO::Vec3D GEO::Edge3D::normal(const Vec3D& p) const
 {
-	return _dest;
+	const Vec3D v = _dest - _orig;
+	const double t = v.dot(p - _orig) / v.dot(v);
+	
+	return (p - (_orig + v * t)).normalize();
 }
 
-GEO::Vec3D GEO::Edge3d::getOrigin()
-{
-	return _orig;
-}
 
-GEO::Vec3D GEO::Edge3d::getPoint(double t)
-{
-	if (!isTvalid(t)) return Vec3D();
-		Vec3D aux1 = _dest.sub(_orig);
-		Vec3D aux2 = aux1.scalarMul(t);
-
-	return Vec3D(_orig.add(aux2));
-}
-
-std::vector<double> GEO::Edge3d::getVertices()
+std::vector<double> GEO::Edge3D::getVertices() const
 {
 	std::vector<double> vertices;
-	std::vector<double> origVertices = _orig.getVector(), destVertices = _dest.getVector();
+	std::vector<double> origVertices(_orig.getVector()), destVertices(_dest.getVector());
 	vertices.insert(vertices.end(), origVertices.begin(), origVertices.end());
 	vertices.insert(vertices.end(), destVertices.begin(), destVertices.end());
 
 	return vertices;
 }
 
-GEO::Edge3d & GEO::Edge3d::operator=(const Edge3d & edge)
-{
-	_orig = edge._orig;
-	_dest = edge._dest;
-
-	return *this;
-}
-
-void GEO::Edge3d::out()
+void GEO::Edge3D::out()
 {
 	std:: cout << "Edge->Origin: ";
 	_orig.out();

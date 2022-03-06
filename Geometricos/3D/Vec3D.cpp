@@ -22,53 +22,57 @@ GEO::Vec3D::Vec3D(const Vec3D & vector)
 	_value[Z] = vector._value[Z];
 }
 
-GEO::Vec3D GEO::Vec3D::add(Vec3D & b)
+GEO::Vec3D GEO::Vec3D::add(const Vec3D& b) const
 {
 	return {getX() + b.getX(), getY() + b.getY(), getZ() + b.getZ()};
 }
 
-bool GEO::Vec3D::collinear(Vec3D & a, Vec3D & b)
+bool GEO::Vec3D::collinear(const Vec3D& a, const Vec3D& b) const
 {
 	// Area del Triangulo es 0
-	Triangle3D tr (a, b, *this);
+	const Triangle3D tr (a, b, *this);
 
-	return GEO::BasicGeom::equal(tr.area(), GEO::BasicGeom::EPSILON);
+	return BasicGeom::equal(tr.area(), BasicGeom::EPSILON);
 }
 
-double GEO::Vec3D::distance(Vec3D & p)
+double GEO::Vec3D::distance(const Vec3D & p) const
 {
-	//XXXX
-	return 0; 
+	return (*this - p).module();
 }
 
-double GEO::Vec3D::dot(Vec3D & v)
+double GEO::Vec3D::dot(const Vec3D & v) const
 {
 	return getX() * v.getX() + getY() * v.getY() + getZ() * v.getZ();
 }
 
-std::vector<double> GEO::Vec3D::getVector()
+std::vector<double> GEO::Vec3D::getVector() const
 {
-	return std::vector<double> {getX(), getY(), getZ()};
+	return std::vector {getX(), getY(), getZ()};
 }
 
-double GEO::Vec3D::getX()
+double GEO::Vec3D::getX() const
 {
 	return _value[X];
 }
 
-double GEO::Vec3D::getY()
+double GEO::Vec3D::getY() const
 {
 	return _value[Y];
 }
 
-double GEO::Vec3D::getZ()
+double GEO::Vec3D::getZ() const
 {
 	return _value[Z];
 }
 
-double GEO::Vec3D::module()
+double GEO::Vec3D::module() const
 {
 	return sqrt(getX() * getX() + getY() * getY() + getZ() * getZ());
+}
+
+GEO::Vec3D GEO::Vec3D::normalize() const
+{
+	return *this / module();
 }
 
 GEO::Vec3D& GEO::Vec3D::operator=(const Vec3D& vector)
@@ -80,19 +84,39 @@ GEO::Vec3D& GEO::Vec3D::operator=(const Vec3D& vector)
 	return *this;
 }
 
-bool GEO::Vec3D::operator==(const Vec3D & vector)
+bool GEO::Vec3D::operator==(const Vec3D & vector) const
 {
 	return BasicGeom::equal(getX(), vector._value[X]) && BasicGeom::equal(getY(), vector._value[Y]) && BasicGeom::equal(getZ(), vector._value[Z]);
 }
 
-bool GEO::Vec3D::operator!=(const Vec3D & vector)
+bool GEO::Vec3D::operator!=(const Vec3D & vector) const
 {
 	return !(this->operator==(vector));
 }
 
-GEO::Vec3D GEO::Vec3D::scalarMul(double value)
+GEO::Vec3D GEO::Vec3D::operator+(const Vec3D& v) const
 {
-	return Vec3D(getX() * value, getY() * value, getZ() * value);
+	return this->add(v);
+}
+
+GEO::Vec3D GEO::Vec3D::operator-(const Vec3D& v) const
+{
+	return this->sub(v);
+}
+
+GEO::Vec3D GEO::Vec3D::operator*(const double s) const
+{
+	return this->scalarMul(s);
+}
+
+GEO::Vec3D GEO::Vec3D::operator/(double s) const
+{
+	return *this * (1 / s);
+}
+
+GEO::Vec3D GEO::Vec3D::scalarMul(double value) const
+{
+	return {getX() * value, getY() * value, getZ() * value};
 }
 
 void GEO::Vec3D::setX(double x)
@@ -117,14 +141,18 @@ void GEO::Vec3D::setVert(double x, double y, double z)
 	this->_value[Z] = z;
 }
 
-GEO::Vec3D GEO::Vec3D::sub(Vec3D & b)
+GEO::Vec3D GEO::Vec3D::sub(const Vec3D & b) const
 {
-	return Vec3D(getX() - b.getX(), getY() - b.getY(), getZ() - b.getZ());
+	return {getX() - b.getX(), getY() - b.getY(), getZ() - b.getZ()};
 }
 
-GEO::Vec3D GEO::Vec3D::cross(Vec3D & b)
+GEO::Vec3D GEO::Vec3D::cross(const Vec3D & b) const
 {
-	return Vec3D(getY() * b.getZ() - getZ() * b.getY(), getZ() * b.getX() - getX() * b.getZ(), getX() * b.getY() - getY() * b.getX());
+	return {
+		getY() * b.getZ() - getZ() * b.getY(),
+		getZ() * b.getX() - getX() * b.getZ(),
+		getX() * b.getY() - getY() * b.getX()
+	};
 }
 
 void GEO::Vec3D::out()

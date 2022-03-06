@@ -3,17 +3,8 @@
 #include "Segment3d.h"
 
 
-GEO::Segment3d::Segment3d(Vec3D & orig, Vec3D & dest)
-	: Edge3d(orig, dest)
-{
-}
-
-GEO::Segment3d::Segment3d(const Segment3d & segment)
-	: Edge3d(segment)
-{
-}
-
-GEO::Segment3d::~Segment3d()
+GEO::Segment3d::Segment3d(const Vec3D& orig, const Vec3D& dest)
+	: Edge3D(orig, dest)
 {
 }
 
@@ -21,7 +12,7 @@ GEO::Segment3d & GEO::Segment3d::operator=(const Segment3d & segment)
 {
 	if (this != &segment)
 	{
-		GEO::Edge3d::operator=(segment);
+		GEO::Edge3D::operator=(segment);
 	}
 
 	return *this;

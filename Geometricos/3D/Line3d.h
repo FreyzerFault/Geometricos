@@ -7,69 +7,38 @@
  */
 #pragma once
 
-#include "Edge3d.h"
-#include "Line3d.h"
+#include "Edge3D.h"
+#include "Line3D.h"
 
 namespace GEO
 {
 
-	class Line3d : public Edge3d
+	class Line3D : public Edge3D
 	{
 	public:
 		enum classifyLines { NON_INTERSECT, PARALLEL, INTERSECT, THESAME };
 
-	protected:
-		/**
-		*	@brief Checks if the parametric value t is valid. Any value is valid for a line.
-		*/
-		virtual bool isTvalid(double t) { return true; }
+	private:
+		// La linea es infinita, cualquier valor de t es valido
+		bool isTvalid(double t) const override { return true; }
 
 	public:
-		/**
-		*	@brief Default constructor.
-		*/
-		Line3d();
-
-		/**
-		*	@brief Constructor.
-		*/
-		Line3d(Vec3D& orig, Vec3D& dest);
-
-		/**
-		*	@brief Copy constructor.
-		*/
-		Line3d(const Line3d& line);
-
-		/**
-		*	@brief Destructor.
-		*/
-		virtual ~Line3d();
-
-		/**
-		*	@brief Distance between two lines.
-		*/
-		double distance(Line3d& line);
+		Line3D(const Vec3D& orig, const Vec3D& dest);
+		
+		Line3D(const Line3D& line) = default;
+		
+		~Line3D() override = default;
+		
+		double distance(const Line3D& line) const;
 
 
-		/**
-		*    @brief Distance between point p and this.
-		*/
-		double distance(Vec3D& p);
+		// Vector normal por un punto p
+		Line3D normalLine(Vec3D& p) const;
 
-		/**
-		*	@brief Returns the normal to this line that passes through p.
-		*/
-		Line3d normalLine(Vec3D& p);
+		
+		Line3D& operator=(const Line3D& line);
 
-		/**
-		*	@brief Assignment operator.
-		*/
-		virtual Line3d& operator=(const Line3d& line);
-
-		/**
-		*	@brief Shows line data at the debug window.
-		*/
-		virtual void out();
+		void out() override;
 
 
 	};

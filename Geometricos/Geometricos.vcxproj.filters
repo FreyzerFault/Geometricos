@@ -123,10 +123,10 @@
     <ClInclude Include="3D\AABB.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="3D\Edge3d.h">
+    <ClInclude Include="3D\Edge3D.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="3D\Line3d.h">
+    <ClInclude Include="3D\Line3D.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="3D\Plane.h">
@@ -135,7 +135,7 @@
     <ClInclude Include="3D\PointCloud3d.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="3D\Ray3d.h">
+    <ClInclude Include="3D\Ray3D.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="3D\Segment3d.h">
@@ -260,10 +260,10 @@
     <ClCompile Include="3D\AABB.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="3D\Edge3d.cpp">
+    <ClCompile Include="3D\Edge3D.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="3D\Line3d.cpp">
+    <ClCompile Include="3D\Line3D.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="3D\Plane.cpp">
@@ -272,7 +272,7 @@
     <ClCompile Include="3D\PointCloud3d.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="3D\Ray3d.cpp">
+    <ClCompile Include="3D\Ray3D.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="3D\Segment3d.cpp">

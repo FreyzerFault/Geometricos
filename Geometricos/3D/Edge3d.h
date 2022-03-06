@@ -1,80 +1,46 @@
-
-/* 
- * File:   Edge3d.h
- * Author: lidia
- *
- * Created on 25 de enero de 2021, 19:55
- */
 #pragma once
 
 #include "Vec3D.h"
 
 namespace GEO
 {
-	/**
-*	@brief Represents any line of the geometry module.
-*
-*/
-	class Edge3d
+	class Edge3D
 	{
 	protected:
 		Vec3D _orig, _dest;
 
 	protected:
-		/**
-		*	@brief Checks if the parametric t values is valid for our subclass.
-		*/
-		virtual bool isTvalid(double t) = 0;
+		// t entre [0,1]
+		virtual bool isTvalid(double t) const;
+		
+		// parametro t que coincide con el punto mas cercano de la recta a un punto
+		virtual double getNearestT(const Vec3D& p) const;
+		virtual Vec3D getNearestPoint(const Vec3D& p) const;
 
 	public:
-		/**
-		*	@brief Default constructor.
-		*/
-		Edge3d();
+		Edge3D(const Vec3D& orig, const Vec3D& dest);
+		
+		Edge3D(const Edge3D& edge) = default;
 
-		/**
-		*	@brief Constructor.
-		*/
-		Edge3d(Vec3D& orig, Vec3D& dest);
+		virtual ~Edge3D() = default;
 
-		/**
-		*	@brief Copy constructor.
-		*/
-		Edge3d(const Edge3d& edge);
+		// Punto en la Parametrica por t
+		virtual Vec3D getPoint(double t) const;
+		
+		double distance(const Vec3D& p) const;
 
-		/**
-		*	@brief Destructor.
-		*/
-		virtual ~Edge3d();
 
-		/**
-		*	@brief Returns the destination point.
-		*/
-		Vec3D getDestination();
+		// Vector normal por un punto p
+		virtual Vec3D normal(const Vec3D& p = Vec3D(0,0,0)) const;
+		
+		Vec3D getDest() const { return _dest; }
+		Vec3D getOrig() const { return _orig; }
 
-		/**
-		*	@brief Returns the initial point.
-		*/
-		Vec3D getOrigin();
-
-		/**
-		*	@brief Returns a point given the parametric value. It may be wrong if the t value is not valid for the specific subclass.
-		*/
-		virtual Vec3D getPoint(double t);
-
-		/**
-		*	@brief Returns a vector with all the coordinate values of the segment (origin and dest).
-		*/
-		std::vector<double> getVertices();
-
-		/**
-		*	@brief Assignment operator.
-		*/
-		virtual Edge3d& operator=(const Edge3d& edge);
-
-		/**
-		*	@brief Shows the values of the edge at the debug window.
-		*/
+		// Devuelve un vector con las Coordenadas {ax, ay, az, bx, by, bz}
+		std::vector<double> getVertices() const;
+		
+		Edge3D& operator=(const Edge3D& edge) = default;
+		
 		virtual void out();
 	};
 

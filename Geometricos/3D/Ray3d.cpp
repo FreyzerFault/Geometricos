@@ -1,34 +1,25 @@
 
 #include <iostream>
-#include "Edge3d.h"
-#include "Ray3d.h"
+#include "Edge3D.h"
+#include "Ray3D.h"
 
 
-GEO::Ray3d::Ray3d(Vec3D & orig, Vec3D & dest)
-	: Edge3d(orig, dest)
+GEO::Ray3D::Ray3D(const Vec3D& orig, const Vec3D& dest)
+	: Edge3D(orig, dest)
 {
 }
 
-GEO::Ray3d::Ray3d(const Ray3d & ray)
-	: Edge3d(ray)
-{
-}
-
-GEO::Ray3d::~Ray3d()
-{
-}
-
-GEO::Ray3d & GEO::Ray3d::operator=(const Ray3d & ray)
+GEO::Ray3D & GEO::Ray3D::operator=(const Ray3D & ray)
 {
 	if (this != &ray)
 	{
-		Edge3d::operator=(ray);
+		Edge3D::operator=(ray);
 	}
 
 	return *this;
 }
 
-void GEO::Ray3d::out()
+void GEO::Ray3D::out()
 {
 	std::cout << "Ray->Origin: ";
 	_orig.out();

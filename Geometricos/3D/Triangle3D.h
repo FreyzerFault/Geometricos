@@ -10,7 +10,7 @@
 
 #include "AABB.h"
 #include "Plane.h"
-#include "Ray3d.h"
+#include "Ray3D.h"
 #include "Segment3d.h"
 #include "Vec3D.h"
 
@@ -69,7 +69,7 @@ namespace GEO
 		/**
 		*	@brief Constructor.
 		*/
-		Triangle3D(Vec3D& va, Vec3D& vb, Vec3D& vc);
+		Triangle3D(const Vec3D& va, const Vec3D& vb, const Vec3D& vc);
 
 		/**
 		*	@brief Destructor.
@@ -79,7 +79,7 @@ namespace GEO
 		/**
 		*	@brief Returns the are of the triangle.
 		*/
-		double area();
+		double area() const;
 
 		/**
 		*	@brief Returns the position of the point respect to the triangle plane.
