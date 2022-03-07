@@ -8,7 +8,7 @@
 
 GEO::Vec3D::Vec3D()
 {
-	this->setVert(DEFAULT_VALUE, DEFAULT_VALUE, DEFAULT_VALUE);
+	this->setVec(DEFAULT_VALUE, DEFAULT_VALUE, DEFAULT_VALUE);
 }
 
 GEO::Vec3D::Vec3D(double x, double y, double z) : _value{x, y, z}
@@ -134,7 +134,7 @@ void GEO::Vec3D::setZ(double z)
 	this->_value[Z] = z;
 }
 
-void GEO::Vec3D::setVert(double x, double y, double z)
+void GEO::Vec3D::setVec(double x, double y, double z)
 {
 	this->_value[X] = x;
 	this->_value[Y] = y;

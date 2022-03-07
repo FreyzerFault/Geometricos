@@ -46,7 +46,7 @@ namespace GEO
 
 
 		void set(unsigned int index, double value) { _value[index] = value; }
-		void setVert(double x, double y, double z);
+		void setVec(double x, double y, double z);
 		void setY(double y);
 		void setX(double x);
 		void setZ(double z);
@@ -71,6 +71,8 @@ namespace GEO
 		Vec3D operator*(double s) const;
 		Vec3D operator/(double s) const;
 
+		// Inverso
+		Vec3D operator-() const { return {-_value[X], -_value[Y], -_value[Z]}; }
 		
 		virtual void out();
 	};

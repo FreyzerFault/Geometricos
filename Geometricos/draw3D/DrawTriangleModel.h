@@ -1,9 +1,3 @@
-/* 
- * File:   DrawTriangleModel.h
- * Author: lidia
- *
- * Created on 21 de febrero de 2021, 11:35
- */
 #pragma once
 
 #include "Scene.h"
@@ -12,23 +6,21 @@
 
 namespace GEO
 {
-    class DrawTriangleModel : public Draw {
+	class DrawTriangleModel : public Draw {
 
-        TriangleModel dt;
+		TriangleModel dt;
 
-    public:
+	public:
+		DrawTriangleModel(const TriangleModel& triModel);
 
-
-        DrawTriangleModel(const TriangleModel& t);
-
-        DrawTriangleModel(const DrawTriangleModel& ddt) : dt(ddt.dt), Draw() {}
+		DrawTriangleModel(const DrawTriangleModel& ddt) : Draw(), dt(ddt.dt) {}
 
 
-        void drawItPlain();
-        void drawIt();
-        void drawIt(TypeColor c);
+		void drawItPlain();
+		void drawIt();
+		void drawIt(TypeColor c);
 
-        virtual ~DrawTriangleModel() {};
-    };
+		~DrawTriangleModel() override = default;;
+	};
 }
 

@@ -6,7 +6,7 @@ namespace GEO
 {
 	namespace BasicGeom
 	{
-		constexpr double EPSILON = 0.00001;			// Avoids problems with the resolution.
+		constexpr double EPSILON = DBL_EPSILON;			// Avoids problems with the resolution.
 
 		constexpr double INFINITO = DBL_MAX;
 		constexpr double menosINFINITO = DBL_MIN;

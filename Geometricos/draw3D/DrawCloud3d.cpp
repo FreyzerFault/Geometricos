@@ -1,35 +1,27 @@
-
-/* 
- * File:   DrawCloud3d.cpp
- * Author: lidia
- * 
- * Created on 28 de enero de 2021, 12:27
- */
-
-#include "DrawCloud3d.h"
+#include "DrawCloud3D.h"
 
 
-GEO::DrawCloud3d::DrawCloud3d (PointCloud3d &t): dt (t), Draw(){
-    
-    //XXXX
-    
+GEO::DrawCloud3D::DrawCloud3D (const PointCloud3D &t): Draw(), dt (t){
 
-    buildVAO ();
-    
+	//TODO
+	
+
+	buildVAO ();
+	
 }
 
 
 
-void GEO::DrawCloud3d::drawIt (TypeColor c){
-    setColorActivo (c);
-    drawIt();
+void GEO::DrawCloud3D::drawIt (TypeColor c){
+	setColorActivo (c);
+	drawIt();
 }
 
 
-void GEO::DrawCloud3d::drawIt (){
-    setShaderProgram ( "algeom" );
-    setDrawMode(TypeDraw::POINT );
-    Scene::getInstance ()->addModel ( this );
-    
+void GEO::DrawCloud3D::drawIt (){
+	setShaderProgram ( "algeom" );
+	setDrawMode(TypeDraw::POINT );
+	Scene::getInstance ()->addModel ( this );
+	
 }
 

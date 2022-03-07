@@ -1,5 +1,6 @@
-
 #include "DrawSegment3d.h"
+
+#include "Scene.h"
 
 
 GEO::DrawSegment3d::DrawSegment3d (const Segment3d& segment): dt (segment), Draw(){

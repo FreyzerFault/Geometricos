@@ -96,7 +96,7 @@
     <ClInclude Include="draw3D\DrawAABB.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="draw3D\DrawCloud3d.h">
+    <ClInclude Include="draw3D\DrawCloud3D.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="draw3D\DrawLine3d.h">
@@ -111,7 +111,7 @@
     <ClInclude Include="draw3D\DrawSegment3d.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="draw3D\DrawTriangle3d.h">
+    <ClInclude Include="draw3D\DrawTriangle3D.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="draw3D\DrawTriangleModel.h">
@@ -132,7 +132,7 @@
     <ClInclude Include="3D\Plane.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="3D\PointCloud3d.h">
+    <ClInclude Include="3D\PointCloud3D.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="3D\Ray3D.h">
@@ -154,6 +154,12 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="InclDraw3D.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawTests.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugLogging.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
@@ -233,7 +239,7 @@
     <ClCompile Include="draw3D\DrawAABB.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="draw3D\DrawCloud3d.cpp">
+    <ClCompile Include="draw3D\DrawCloud3D.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="draw3D\DrawLine3d.cpp">
@@ -248,7 +254,7 @@
     <ClCompile Include="draw3D\DrawSegment3d.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="draw3D\DrawTriangle3d.cpp">
+    <ClCompile Include="draw3D\DrawTriangle3D.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="draw3D\DrawTriangleModel.cpp">
@@ -269,7 +275,7 @@
     <ClCompile Include="3D\Plane.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="3D\PointCloud3d.cpp">
+    <ClCompile Include="3D\PointCloud3D.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="3D\Ray3D.cpp">
@@ -285,6 +291,9 @@
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="3D\Vec3D.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawTests.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>

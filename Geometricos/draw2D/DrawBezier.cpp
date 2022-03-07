@@ -4,16 +4,16 @@
 #include "SegmentLine.h"
 #include "Vec2D.h"
 
-GEO::DrawBezier::DrawBezier(Bezier& bezier)
+GEO::DrawBezier::DrawBezier(const Bezier& bezier)
 	: _bezier(&bezier)
 {
 	// GRADO 3 ==> p(t)= [ (1−t)^3 * p1 ] + [ 3t(1−t)^2 * p2 ] + [ 3t^2(1−t) * p3 ] + [ t^3 * p4 ]
 
-	const Point* inicio = &_bezier->getPoint(0);
-	const Point* final = &_bezier->getPoint(_bezier->getPoints().size() - 1);
+	const Point inicio = _bezier->getPoint(0);
+	const Point final = _bezier->getPoint(_bezier->getPoints().size() - 1);
 
 	// Primer Vertice
-	_vertices.emplace_back(inicio->getX(), inicio->getY(), 0.0);
+	_vertices.emplace_back(inicio.getX(), inicio.getY(), 0.0);
 	_normals.emplace_back(0, 0, 1);
 	_indices.push_back ( 0 );
 
@@ -21,7 +21,6 @@ GEO::DrawBezier::DrawBezier(Bezier& bezier)
 	const int n = _bezier->getPoints().size() - 1;
 
 	// Aumentamos un incremento de t a partir del primer punto
-	Point puntoIncrementado(*inicio);
 	double t = 0;
 	while(t <= 1)
 	{
@@ -33,10 +32,10 @@ GEO::DrawBezier::DrawBezier(Bezier& bezier)
 		{
 			const double comb = BasicGeom::combinatoria(n, i);
 
-			const Point* pi = &_bezier->getPoint(i);
+			Point pi = _bezier->getPoint(i);
 
 			// Suma acumulada
-			p = p + Vec2D(*pi) * (comb * pow(1 - t, n - i) * pow(t, i));
+			p = p + Vec2D(pi) * (comb * pow(1 - t, n - i) * pow(t, i));
 		}
 
 		_vertices.emplace_back(p.getX(), p.getY(), 0.0);
@@ -47,7 +46,7 @@ GEO::DrawBezier::DrawBezier(Bezier& bezier)
 		t += incrementoT;
 	}
 	// Final vertex
-	_vertices.emplace_back(final->getX(), final->getY(), 0.0);
+	_vertices.emplace_back(final.getX(), final.getY(), 0.0);
 	_normals.emplace_back(0, 0, 1);
 	_indices.push_back (++index);
 

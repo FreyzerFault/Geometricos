@@ -2,6 +2,7 @@
 #include "DrawRay3d.h"
 
 #include "BasicGeom.h"
+#include "Scene.h"
 
 
 GEO::DrawRay3d::DrawRay3d (const Ray3D &ray): Draw(), dt (ray){

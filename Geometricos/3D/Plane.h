@@ -31,17 +31,20 @@ namespace GEO
 		*	@param arePoints
 		*	@param If arePoints is false, then params are p + u * lambda + v * mu, otherwise are points (R, S, T).
 		*/
-		Plane(Vec3D& p, Vec3D& u, Vec3D& v, bool arePoints);
+		Plane(const Vec3D& p, const Vec3D& u, const Vec3D& v, bool arePoints);
+
+		// Plano definido por un punto y su normal
+		Plane(const Vec3D& p, const Vec3D& normal);
 		
 		Plane(const Plane& plane) = default;
 		
 		virtual ~Plane() = default;
 
 		// p esta en el Plano
-		bool coplanar(Vec3D& p);
+		bool coplanar(const Vec3D& p) const;
 
 		// Distancia al punto p
-		double distance(Vec3D& p);
+		double distance(const Vec3D& p) const;
 
 		// AX + BY + CZ + D = 0.
 		double getA() const;
@@ -49,8 +52,15 @@ namespace GEO
 		double getC() const;
 		double getD() const;
 
+		// Vectores cualquiera del Plano normalizados
+		Vec3D getV() const { return (_b - _a).normalize(); }
+		Vec3D getU() const { return (_c - _a).normalize(); }
+
+		// Punto cualquiera del plano
+		Vec3D getP() const { return _a; }
+
 		// Vector Normal
-		Vec3D getNormal();
+		Vec3D getNormal() const;
 
 		// Punto de Interseccion de la linea con el Plano
 		bool intersect(Line3D& line, Vec3D& point);

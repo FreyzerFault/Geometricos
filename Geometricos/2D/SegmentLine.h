@@ -77,9 +77,9 @@ namespace GEO
 		virtual bool impSegmentIntersection(const SegmentLine& segment) const;
 
 		// Punto de intersseccion con un segmento, linea o rayo
-		virtual Point* intersectionPoint(const SegmentLine& segment);
-		virtual Point* intersectionPoint(const RayLine& ray);
-		virtual Point* intersectionPoint(const Line& line);
+		virtual Point* intersectionPoint(const SegmentLine& segment) const;
+		virtual Point* intersectionPoint(const RayLine& ray) const;
+		virtual Point* intersectionPoint(const Line& line) const;
 		
 		// ===========================================================================
 

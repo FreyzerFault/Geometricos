@@ -1,14 +1,9 @@
-
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <iostream>
 #include <random>
 #include "PointCloud.h"
-
-
-GEO::PointCloud::PointCloud()
-= default;
 
 GEO::PointCloud::PointCloud(int size, double max_x, double max_y)
 {
@@ -55,9 +50,6 @@ GEO::PointCloud::PointCloud(const std::string& filename)
 	is.close();
 }
 
-GEO::PointCloud::~PointCloud()
-= default;
-
 void GEO::PointCloud::addPoint(Point& p)
 {
 	_points.push_back(p);
@@ -76,7 +68,7 @@ GEO::Point GEO::PointCloud::centralPoint() const
 	{
 		// Acumula las distancias con cada otra punto de la nube
 		double acumDistances = 0;
-		for (auto p1 : _points)
+		for (const auto& p1 : _points)
 		{
 			acumDistances += p0.distPoint(p1);
 		}
@@ -91,6 +83,28 @@ GEO::Point GEO::PointCloud::centralPoint() const
 		return *central;
 	
 	return {};
+}
+
+void GEO::PointCloud::getEdges(Point& minPoint_x, Point& minPoint_y, Point& maxPoint_x, Point& maxPoint_y) const
+{
+	if (_points.empty())
+		return;
+
+	// Empezamos con todos al primero
+	minPoint_x = minPoint_y = maxPoint_x = maxPoint_y = _points[0];
+
+	// Por cada punto comprobamos si mejora algunos de los 4
+	for (const Point& p : _points)
+	{
+		if (p.getX() < minPoint_x.getX())
+			minPoint_x = p;
+		if (p.getX() > maxPoint_x.getX())
+			maxPoint_x = p;
+		if (p.getY() < minPoint_y.getY())
+			minPoint_y = p;
+		if (p.getY() > maxPoint_y.getY())
+			maxPoint_y = p;
+	}
 }
 
 void GEO::PointCloud::deletePoint(int index)

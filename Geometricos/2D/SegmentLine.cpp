@@ -148,7 +148,7 @@ GEO::Point* GEO::SegmentLine::intersectionPoint(const Point& c, const Point& d, 
 	return new Point(abInters);
 }
 
-GEO::Point* GEO::SegmentLine::intersectionPoint(const SegmentLine& segment)
+GEO::Point* GEO::SegmentLine::intersectionPoint(const SegmentLine& segment) const
 {
 	double s, t;
 	Point* interseccion = intersectionPoint(segment._orig, segment._dest, s, t);
@@ -161,7 +161,7 @@ GEO::Point* GEO::SegmentLine::intersectionPoint(const SegmentLine& segment)
 	return nullptr;
 }
 
-GEO::Point* GEO::SegmentLine::intersectionPoint(const RayLine& ray)
+GEO::Point* GEO::SegmentLine::intersectionPoint(const RayLine& ray) const
 {
 	double s, t;
 	Point* interseccion = intersectionPoint(ray._orig, ray._dest, s, t);
@@ -174,7 +174,7 @@ GEO::Point* GEO::SegmentLine::intersectionPoint(const RayLine& ray)
 	return nullptr;
 }
 
-GEO::Point* GEO::SegmentLine::intersectionPoint(const Line& line)
+GEO::Point* GEO::SegmentLine::intersectionPoint(const Line& line) const
 {
 	double s, t;
 	Point* interseccion = intersectionPoint(line._orig, line._dest, s, t);

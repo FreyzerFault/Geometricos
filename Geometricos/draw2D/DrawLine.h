@@ -15,11 +15,11 @@ namespace GEO
 {
 	class DrawLine: public Draw {
 	    
-	    Line* _line;
+	    const Line* _line;
 	    
 	    public:
 	        
-	    DrawLine (Line &line); 
+	    DrawLine (const Line &line); 
 	    
 	    DrawLine (const DrawLine &drawLine) : Draw() , _line (drawLine._line) {}
 	    

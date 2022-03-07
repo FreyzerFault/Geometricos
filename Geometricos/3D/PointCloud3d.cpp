@@ -1,26 +1,29 @@
 #include <cmath>
-#include <inttypes.h>
+#include <cinttypes>
 #include <sstream>
 #include <fstream>
 #include <vector>
 #include "BasicGeom.h"
-#include "PointCloud3d.h"
+#include "PointCloud3D.h"
 
+#include <iostream>
 #include <glm/ext/scalar_constants.hpp>
 
+using namespace GEO::BasicGeom;
 
-GEO::PointCloud3d::PointCloud3d() 
-	: _maxPoint(INFINITY, -INFINITY, -INFINITY), _minPoint(INFINITY, INFINITY, INFINITY) 
+
+GEO::PointCloud3D::PointCloud3D() 
+	: _maxPoint(menosINFINITO, menosINFINITO, menosINFINITO), _minPoint(INFINITO, INFINITO, INFINITO) 
 {
 }
 
-GEO::PointCloud3d::PointCloud3d (std::vector<Vec3D>& pointCloud):_points(pointCloud),
-																  _maxPoint(INFINITY, -INFINITY, -INFINITY), _minPoint(INFINITY, INFINITY, INFINITY){}
+GEO::PointCloud3D::PointCloud3D (std::vector<Vec3D> pointCloud):_points(std::move(pointCloud)),
+																_maxPoint(menosINFINITO, menosINFINITO, menosINFINITO), _minPoint(INFINITO, INFINITO, INFINITO){}
 
-GEO::PointCloud3d::PointCloud3d(const std::string & filename)
-	: _maxPoint(-INFINITY, -INFINITY, -INFINITY), _minPoint(INFINITY, INFINITY, INFINITY)
+GEO::PointCloud3D::PointCloud3D(const std::string& filename)
+	: _maxPoint(menosINFINITO, menosINFINITO, menosINFINITO), _minPoint(INFINITO, INFINITO, INFINITO)
 {
-	auto splitByComma = [this](std::string& string) -> std::vector<std::string>
+	auto splitBySemicolon = [this](const std::string& string) -> std::vector<std::string>
 	{
 		std::stringstream ss(string);
 		std::vector<std::string> result;
@@ -28,7 +31,7 @@ GEO::PointCloud3d::PointCloud3d(const std::string & filename)
 		while (ss.good())
 		{
 			std::string substr;
-			getline(ss, substr, ',');
+			getline(ss, substr, ';');
 			result.push_back(substr);
 		}
 
@@ -39,15 +42,17 @@ GEO::PointCloud3d::PointCloud3d(const std::string & filename)
 	std::ifstream inputStream;				// Flujo de entrada.
 	inputStream.open(filename.c_str());
 
+	if (!inputStream.good())
+		std::cout << "No se ha podido cargar una Nube de Puntos porque no se abre el fichero " + filename << std::endl;
+
 	while (std::getline(inputStream, currentLine))
 	{
-		std::vector<std::string> coord = splitByComma(currentLine);
+		std::vector<std::string> coord = splitBySemicolon(currentLine);
 
-		if (coord.size() == 3)	
+		if (coord.size() == 3)
 		{
 			try {
-				Vec3D point(std::stof(coord[0].c_str(), nullptr), std::stof(coord[1].c_str(), nullptr), (std::stof(coord[2].c_str(), nullptr)));
-				this->addPoint(point);
+				this->addPoint(Vec3D(std::stod(coord[0]), std::stod(coord[1]), std::stod(coord[2])));
 			}
 			catch (const std::exception& excep)
 			{
@@ -57,78 +62,66 @@ GEO::PointCloud3d::PointCloud3d(const std::string & filename)
 			}
 		}
 	}
-	inputStream.close();					// Cerramos fichero.
+	inputStream.close();// Cerramos fichero.
 }
 
-GEO::PointCloud3d::PointCloud3d(int size, float max_x, float max_y, float max_z)
-	: _maxPoint(-INFINITY, -INFINITY, -INFINITY), _minPoint(INFINITY, INFINITY, INFINITY)
+GEO::PointCloud3D::PointCloud3D(int size, double max_x, double max_y, double max_z)
+	: _maxPoint(menosINFINITO, menosINFINITO, menosINFINITO), _minPoint(INFINITO, INFINITO, INFINITO)
 {
 	_points = std::vector<Vec3D>();
 
 	while (size > 0)
 	{
-		float x = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max_x * 2.0f))) - max_x;
-		float y = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max_y * 2.0f))) - max_y;
-		float z = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max_z * 2.0f))) - max_z;
-				Vec3D val (x,y,z);
-		this->addPoint(val);
+		const double x = static_cast <double> (rand()) / (RAND_MAX / (max_x * 2.0)) - max_x;
+		const double y = static_cast <double> (rand()) / (RAND_MAX / (max_y * 2.0)) - max_y;
+		const double z = static_cast <double> (rand()) / (RAND_MAX / (max_z * 2.0)) - max_z;
 
+		this->addPoint(Vec3D(x,y,z));
 		--size;
 	}
 }
 
-GEO::PointCloud3d::PointCloud3d(int size, float radius)
-	: _maxPoint(-INFINITY, -INFINITY, -INFINITY), _minPoint(INFINITY, INFINITY, INFINITY)
+GEO::PointCloud3D::PointCloud3D(int size, double radius)
+	: _maxPoint(menosINFINITO, menosINFINITO, menosINFINITO), _minPoint(INFINITO, INFINITO, INFINITO)
 {
 	_points = std::vector<Vec3D>();
 
 	while (size > 0)
 	{
-		float theta = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX)) * 2.0f * glm::pi<float>();
-		float phi = std::acos(1.0f - 2.0f * static_cast <float> (rand()) / (static_cast <float> (RAND_MAX)));
-		double x = std::sin(phi) * std::cos(theta);
-		double y = std::sin(phi) * std::sin(theta);
-		double z = std::cos(phi);
+		const double theta = static_cast <double> (rand()) / (static_cast <double> (RAND_MAX)) * 2.0 * glm::pi<double>();
+		const double phi = std::acos(1.0 - 2.0 * static_cast <double> (rand()) / (static_cast <double> (RAND_MAX)));
+		const double x = std::sin(phi) * std::cos(theta);
+		const double y = std::sin(phi) * std::sin(theta);
+		const double z = std::cos(phi);
 
-		float r = radius * std::sqrt(static_cast <float> (rand()) / (static_cast <float> (RAND_MAX)));
-		Vec3D point(r * x, r * y, r * z);
-		this->addPoint(point);
+		const double r = radius * std::sqrt(static_cast <double> (rand()) / (static_cast <double> (RAND_MAX)));
 
+		this->addPoint(Vec3D(r * x, r * y, r * z));
 		--size;
 	}
 }
 
-GEO::PointCloud3d::PointCloud3d(const PointCloud3d & pointCloud)
-	: _points(pointCloud._points), _maxPoint(pointCloud._maxPoint), _minPoint(pointCloud._minPoint)
-{
-}
-
-GEO::PointCloud3d::~PointCloud3d()
-{
-
-}
-
-void GEO::PointCloud3d::addPoint(Vec3D & p)
+void GEO::PointCloud3D::addPoint(const Vec3D& p)
 {
 	_points.push_back(p);
 	this->updateMaxMin(_points.size() - 1);
 }
 
-GEO::AABB GEO::PointCloud3d::getAABB()
+GEO::AABB GEO::PointCloud3D::getAABB()
 {
-	return AABB(_minPoint, _maxPoint);
+	return {_minPoint, _maxPoint};
 }
 
 
-GEO::Vec3D GEO::PointCloud3d::getPoint(int pos)
+GEO::Vec3D GEO::PointCloud3D::getPoint(int pos)
 {
-	if ((pos >= 0) && (pos < _points.size())) {
+	if (pos >= 0 && (pos < _points.size())) {
 		return _points[pos];
 	}
-	return Vec3D();
+	return {};
 }
 
-GEO::PointCloud3d& GEO::PointCloud3d::operator=(const PointCloud3d & pointCloud)
+GEO::PointCloud3D& GEO::PointCloud3D::operator=(const PointCloud3D & pointCloud)
 {
 	if (this != &pointCloud)
 	{
@@ -140,24 +133,24 @@ GEO::PointCloud3d& GEO::PointCloud3d::operator=(const PointCloud3d & pointCloud)
 	return *this;
 }
 
-void GEO::PointCloud3d::save(const std::string & filename)
+void GEO::PointCloud3D::save(const std::string & filename) const
 {
 	std::ofstream file(filename);
+	if (!file.good())
+		std::cout << "No se ha podido guardar una Nube de Puntos porque no se pudo abrir el archivo " + filename << std::endl;;
 
-	for (int i = 0; i < _points.size(); ++i)
+	for (const auto& p : _points)
 	{
-		file << _points[i].getX() << ", " << _points[i].getY() << ", " << _points[i].getZ() << std::endl;
+		file << p.getX() << ";" << p.getY() << ";" << p.getZ() << std::endl;
 	}
 
 	file.close();
 }
 
 
-/// PROTECTED METHODS
-
-void GEO::PointCloud3d::updateMaxMin(int index)
+void GEO::PointCloud3D::updateMaxMin(int index)
 {
-	Vec3D point = _points[index];
+	const Vec3D point = _points[index];
 
 	if (point.getX() < _minPoint.getX()) { _minPoint.setX(point.getX()); _minPointIndex.setX(index); }
 	if (point.getY() < _minPoint.getY()) { _minPoint.setY(point.getY()); _minPointIndex.setY(index); }
@@ -169,7 +162,7 @@ void GEO::PointCloud3d::updateMaxMin(int index)
 }
 
 
-void GEO::PointCloud3d::getMostDistanced (int &a, int &b){
-	//XXXX
+void GEO::PointCloud3D::getMostDistanced (int &a, int &b){
+	//TODO
 	a=0; b=0;
 }

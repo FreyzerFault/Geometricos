@@ -1,9 +1,3 @@
-/* 
- * File:   DrawVect3d.h
- * Author: lidia
- *
- * Created on 27 de enero de 2021, 14:45
- */
 #pragma once
 
 #include "Scene.h"
@@ -12,16 +6,15 @@
 
 namespace GEO
 {
-    class DrawVect3d : public Draw {
-        Vec3D dp;
-    public:
+	class DrawVect3d : public Draw {
+		Vec3D dp;
+	public:
 
-        DrawVect3d(Vec3D& p);
-        DrawVect3d(DrawVect3d& ddp) : dp(ddp.dp), Draw() {}
-        void drawIt();
-        void drawIt(TypeColor c);
-        virtual ~DrawVect3d() {};
-
-    };
+		DrawVect3d(const Vec3D& p);
+		DrawVect3d(const DrawVect3d& ddp) : Draw(), dp(ddp.dp) {}
+		void drawIt();
+		void drawIt(TypeColor c);
+		~DrawVect3d() override = default;;
+	};
 }
 

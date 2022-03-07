@@ -21,26 +21,19 @@
 #include "InclGeom2D.h"
 #include "InclGeom3D.h"
 #include "Scene.h"
+#include "DrawTests.h"
+#include "DebugLogging.h"
 
 using namespace GEO;
-
-
-// Colores
-const TypeColor magenta(1.0, 0.0, 1.0);
-const TypeColor green(0.0, 1.0, 0.0);
-const TypeColor blue(0.0, 0.0, 1.0);
-const TypeColor red(1.0, 0.0, 0.0);
-const TypeColor cyan(0.0, 1.0, 1.0);
-const TypeColor yellow(1.0, 1.0, 0.0);
-const TypeColor white(1.0, 1.0, 1.0);
-const TypeColor black(0.0, 0.0, 0.0);
-
 
 Movements movimientoActivo = Movements::NONE;
 bool botonPulsado = false;
 double ratonX = 0;
 double ratonY = 0;
 int modeloActivo = -1;
+
+DrawTests test2D;
+DrawTests test3D;
 
 
 void mostrarAyuda()
@@ -73,11 +66,7 @@ void refreshWindow(GLFWwindow* ventana)
 	}
 	catch (std::runtime_error& e)
 	{
-		std::cout << "Exception on refeshWindow"
-			<< std::endl
-			<< "=============================================="
-			<< std::endl
-			<< e.what() << std::endl;
+		outputException(e, "refreshWindow");
 	}
 
 	glfwSwapBuffers(ventana);
@@ -217,7 +206,7 @@ int main(int argc, char** argv)
 	}
 	catch (std::runtime_error& e)
 	{
-		std::cout << "Excepction captured: " << e.what() << std::endl;
+		outputException(e, "main(): renderLoop");
 		glfwWindowShouldClose(miVentana);
 	}
 
@@ -225,6 +214,12 @@ int main(int argc, char** argv)
 	glfwDestroyWindow(miVentana);
 	miVentana = nullptr;
 	glfwTerminate();
+}
+
+void resetScene()
+{
+	test2D.clear();
+	test3D.clear();
 }
 
 
@@ -241,42 +236,19 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 			glfwSetWindowShouldClose(ventana, GLFW_TRUE);
 		}
 		break;
+	case GLFW_KEY_DELETE:
+		if (accion == GLFW_PRESS)
+		{
+			resetScene();
+			refreshWindow(ventana);
+		}
+		break;
 		
 		// ================================ POLIGONO ================================
 	case GLFW_KEY_P:
 		if (accion == GLFW_PRESS)
 		{
-			try
-			{
-				Point a(0.0, 2.0);
-				Point b(2.0, 1.0);
-				Point c(2.0, -1.0);
-				Point d(0.0, -2.0);
-				Point e(-2.0, -1.0);
-				Point f(-2.0, 1.0);
-
-				GEO::Polygon polygon;
-				polygon.add(a);
-				polygon.add(b);
-				polygon.add(c);
-				polygon.add(d);
-				polygon.add(e);
-				polygon.add(f);
-
-				DrawPolygon* dp = new DrawPolygon(polygon);
-				dp->drawIt(cyan);
-				dp = nullptr;
-
-				polygon.save("Poligono1");
-			}
-			catch (std::exception& e)
-			{
-				std::cout << "Exception captured in callbackKey"
-					<< std::endl
-					<< "===================================="
-					<< std::endl
-					<< e.what() << std::endl;
-			}
+			test2D.drawPolygon2D();
 
 			refreshWindow(ventana);
 		}
@@ -286,29 +258,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 	case GLFW_KEY_T:
 		if (accion == GLFW_PRESS)
 		{
-			try
-			{
-				Vec2D a(3.0, 2.0);
-				Vec2D b(0.0, 0.0);
-				Vec2D c(-2.0, 1.0);
-
-				Triangle t1(a, b, c);
-				auto dt1 = new DrawTriangle(t1);
-				dt1->drawIt(magenta);
-				dt1 = nullptr;
-
-				// Posicion de a respecto a b y c
-				std::cout << "Posicion de a respecto a (b,c):" << std::endl;
-				std::cout << Point::classifyToString( a.classify(b,c) ) << std::endl;
-			}
-			catch (std::exception& e)
-			{
-				std::cout << "Exception captured in callbackKey"
-					<< std::endl
-					<< "===================================="
-					<< std::endl
-					<< e.what() << std::endl;
-			}
+			test2D.drawTriangle2D();
 
 			refreshWindow(ventana);
 		}
@@ -319,38 +269,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 	case GLFW_KEY_S:
 		if (accion == GLFW_PRESS)
 		{
-			try
-			{
-				Vec2D a(0.8, -1.3);
-				Vec2D b(1.0, 1.0);
-				Vec2D c(-0.8, -1.6);
-				Vec2D d(-1.3, -1.0);
-				Vec2D e(-1.0, 1.0);
-				Vec2D f(1.0, -1.0);
-
-				SegmentLine segment (a,b);
-				DrawSegment *ds1 = new DrawSegment (segment);
-				ds1->drawIt(blue);
-				ds1 = nullptr;
-
-				Line line (c,d);
-				DrawLine *dl = new DrawLine (line);
-				dl->drawIt(red);
-				dl = nullptr;
-
-				GEO::RayLine ray (e,f);
-				DrawRay *dr = new DrawRay (ray);
-				dr->drawIt(yellow);
-				dr = nullptr;
-			}
-			catch (std::exception& e)
-			{
-				std::cout << "Exception captured on callbackKey"
-					<< std::endl
-					<< "===================================="
-					<< std::endl
-					<< e.what() << std::endl;
-			}
+			test2D.drawLines2D();
 
 			refreshWindow(ventana);
 		}
@@ -360,23 +279,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 	case GLFW_KEY_C:
 		if (accion == GLFW_PRESS)
 		{
-			try
-			{
-				PointCloud pc(100, 5, 5);
-				auto dpc = new DrawPointCloud(pc);
-				dpc->drawIt();
-				dpc = nullptr;
-
-				pc.save("PointCloud");
-			}
-			catch (std::exception& e)
-			{
-				std::cout << "Exception captured on callbackKey"
-					<< std::endl
-					<< "===================================="
-					<< std::endl
-					<< e.what() << std::endl;
-			}
+			test2D.drawPointCloud2D();
 
 			refreshWindow(ventana);
 		}
@@ -386,43 +289,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 	case GLFW_KEY_B:
 		if (accion == GLFW_PRESS)
 		{
-			try
-			{
-				Point a(0.0, 2.0);
-				Point b(2.0, 1.0);
-				Point c(-2.0, -1.0);
-				Point d(0.0, -2.0);
-
-				PointCloud pc;
-				pc.addPoint(a);
-				pc.addPoint(b);
-				pc.addPoint(c);
-				pc.addPoint(d);
-
-				DrawPointCloud* dpc = new DrawPointCloud(pc);
-				dpc->drawIt(red);
-				dpc = nullptr;
-
-				Bezier bezier;
-				bezier.addPoint(a);
-				bezier.addPoint(b);
-				bezier.addPoint(c);
-				bezier.addPoint(d);
-
-				DrawBezier* db = new DrawBezier(bezier);
-				db->drawIt(yellow);
-				db = nullptr;
-
-				bezier.save("Bezier");
-			}
-			catch (std::exception& e)
-			{
-				std::cout << "Exception captured on callbackKey"
-					<< std::endl
-					<< "===================================="
-					<< std::endl
-					<< e.what() << std::endl;
-			}
+			test2D.drawBezier2D();
 
 			refreshWindow(ventana);
 		}
@@ -432,91 +299,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 	case GLFW_KEY_I:
 		if (accion == GLFW_PRESS)
 		{
-			try
-			{
-				Point p(0.0, 0.0);
-				Point a(-1.0, 1.0);
-				Point b(1.0, -1.0);
-				Point c(-1.0, -1.0);
-				Point d(1.0, 1.0);
-
-				SegmentLine s(a,b);
-				Line l(a,d);
-				RayLine r(c,d);
-
-				Point* segmLine = s.intersectionPoint(l);
-				Point* segmRay = s.intersectionPoint(r);
-				Point* lineRay = l.intersectionPoint(r);
-
-				DrawPoint* dp;
-				DrawSegment* ds;
-				DrawLine* dl;
-				DrawRay* dr;
-
-				ds = new DrawSegment(s);
-				ds->drawIt(blue);
-
-				dr = new DrawRay(r);
-				dr->drawIt(red);
-
-				dl = new DrawLine(l);
-				dl->drawIt(green);
-
-				if (segmLine)
-				{
-					dp = new DrawPoint(*segmLine);
-					dp->drawIt(magenta);
-				}
-				if (segmRay)
-				{
-					dp = new DrawPoint(*segmRay);
-					dp->drawIt(magenta);
-				}
-				if (lineRay)
-				{
-					dp = new DrawPoint(*lineRay);
-					dp->drawIt(magenta);
-				}
-				
-				// DISTANCIAS
-				double distS = s.distPoint(p);
-				double distL = l.distPoint(p);
-				double distR = r.distPoint(p);
-
-				std::cout << "Distancia entre P y Segmento (AZUL): " << distS << std::endl;
-				std::cout << "Distancia entre P y Recta (VERDE): " << distL << std::endl;
-				std::cout << "Distancia entre P y Rayo (ROJO): " << distR << std::endl;
-
-				dp = new DrawPoint(p);
-				dp->drawIt(white);
-
-				// INTERSECCIONES
-				Point* intersecSL = s.intersectionPoint(l);
-				Point* intersecSR = s.intersectionPoint(r);
-				Point* intersecLR = l.intersectionPoint(r);
-
-				std::cout << std::endl;
-				std::cout << "Interseccion entre Segmento (AZUL) y Line (VERDE): "
-				<< (intersecSL ? intersecSL->toString() : "[No hay Interseccion]") << std::endl;
-				std::cout << "Interseccion entre Segmento (AZUL) y Ray (ROJO): "
-				<< (intersecSR ? intersecSR->toString() : "[No hay Interseccion]") << std::endl;
-				std::cout << "Interseccion entre Line (VERDE) y Ray (ROJO): "
-				<< (intersecLR ? intersecLR->toString() : "[No hay Interseccion]") << std::endl;
-
-
-				ds = nullptr;
-				dp = nullptr;
-				dr = nullptr;
-				dl = nullptr;
-			}
-			catch (std::exception& e)
-			{
-				std::cout << "Exception captured on callbackKey"
-					<< std::endl
-					<< "===================================="
-					<< std::endl
-					<< e.what() << std::endl;
-			}
+			test2D.drawLineIntersections2D();
 
 			refreshWindow(ventana);
 		}
@@ -524,66 +307,8 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 	case GLFW_KEY_V:
 		if (accion == GLFW_PRESS)
 		{
-			try
-			{
-
-				TriangleModel tm("obj/vaca.obj");
-				DrawTriangleModel* dtm = new DrawTriangleModel(tm);
-				//dtm->drawItPlain();
-				dtm->drawIt(white);
-
-				//Descomentar para ver como se pintan las 100 primeras caras del modelo de amarillo           
-
-
-		   //                std::cout << "hay un total de " << tm.numTriangulos() << " triángulos" << std::endl;
-		   //                TypeColor amarillo (1.0, 1.0, 0.0);  
-		   //                
-		   //                std::vector<Triangle3D> triangulos = tm.getFaces();
-		   //                Triangle3D tri; 
-		   //                DrawTriangle3d *dtri;  
-		   //                for (int i=0; i<100; i++){
-		   //                    tri = triangulos[i];
-		   //                    dtri = new DrawTriangle3d (tri);
-		   //                    dtri -> drawIt(amarillo);
-		   //                }
-
-						   // descomentar para observar la nube de puntos asociada al modelo; 
-						   //comentar antes la visualización completa del modelo
-
-		   //                PointCloud3d pc = tm.getCloud();
-		   //                DrawCloud3d *dpc = new DrawCloud3d (pc);
-		   //                dpc->drawIt();
-		   //                
-
-						   // descomentar para observar los triángulos de forma individual. Es mucho más lento 
-		   //                TypeColor verde (0.0, 1.0, 0.0); 
-		   //                Triangle3D tri; 
-		   //                DrawTriangle3d *dtri;  
-		   //                for (unsigned i = 0; i<tm.numTriangulos()/2; i++){
-		   //                    tri = tm.getFace(i);
-		   //                    dtri = new DrawTriangle3d (tri);
-		   //                    dtri->drawIt(verde);
-		   //                }
-		   //                TypeColor magenta (1.0, 0.0, 1.0);  
-		   //                
-		   //                for (unsigned i = tm.numTriangulos()/2+1; i<tm.numTriangulos(); i++){
-		   //                    tri = tm.getFace(i);
-		   //                    dtri = new DrawTriangle3d (tri);
-		   //                    dtri->drawIt(magenta);
-		   //                }
-
-
-
-
-			}
-			catch (std::exception& e)
-			{
-				std::cout << "Capturada excepción en callbackTecla"
-					<< std::endl
-					<< "===================================="
-					<< std::endl
-					<< e.what() << std::endl;
-			}
+			test2D.drawVaca();
+			
 			refreshWindow(ventana);
 		}
 		break;

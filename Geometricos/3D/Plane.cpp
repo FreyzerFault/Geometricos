@@ -4,24 +4,50 @@
 #include "BasicGeom.h"
 
 
-GEO::Plane::Plane(Vec3D& p, Vec3D& u, Vec3D& v, bool arePoints)
-	: _a(p), _b(arePoints ? u : (u + p)), _c(arePoints ? v : (v + p))
+GEO::Plane::Plane(const Vec3D& p, const Vec3D& u, const Vec3D& v, bool arePoints)
+	: _a(p), _b(arePoints ? u : (p + u)), _c(arePoints ? v : (p + v))
 {
+	if (_a.collinear(_b,_c))
+	{
+		std::cout << "Se ha definido un plano INVALIDO con 3 puntos colineares:" << std::endl;
+		this->out();
+	}
+
 }
 
-bool GEO::Plane::coplanar(Vec3D & p)
+GEO::Plane::Plane(const Vec3D& p, const Vec3D& normal)
 {
-	
-	//XXXX
-	return false;
+	const Vec3D n = normal.normalize();
+	// Vector cualquiera que no sea paralelo a la normal
+	Vec3D arbitrario(1,0,0);
+	if (arbitrario == n || arbitrario == -n)
+		arbitrario.setVec(0, 1, 0);
+
+	// Cualquiera perpendicular a la normal es un vector del plano
+	const Vec3D v0 = arbitrario.cross(n);
+	const Vec3D v1 = v0.cross(n);
+
+	_a = p;
+	_b = _a + v0;
+	_c = _a + v1;
 }
 
-double GEO::Plane::distance(Vec3D & p)
+bool GEO::Plane::coplanar(const Vec3D& p) const
 {
-	//XXXX
-	
-	return 0; 
-}    
+	// La distancia a p es nula
+	return distance(p) <= BasicGeom::EPSILON; // n · v == 0
+}
+
+double GEO::Plane::distance(const Vec3D& p) const
+{
+	// Cualquier vector Plano -> p
+	const Vec3D v = p - _a;
+	const Vec3D n = getNormal();
+
+	// La distancia de la proyeccion de v sobre n
+	// d = v · n / |n| (n esta normalizado)
+	return v.dot(n);
+}
 
 double GEO::Plane::getA() const
 {
@@ -40,41 +66,38 @@ double GEO::Plane::getC() const
 
 double GEO::Plane::getD() const
 {
-	return (-1.0) * (getA() * _a.getX() + getB() * _a.getY() + getC() * _a.getZ());
+	return -(getA() * _a.getX() + getB() * _a.getY() + getC() * _a.getZ());
 }
 
-GEO::Vec3D GEO::Plane::getNormal()
+GEO::Vec3D GEO::Plane::getNormal() const
 {
-	//XXXX
-	
-	return Vec3D();
+	return getV().cross(getU()).normalize();
 }
 
 
 bool GEO::Plane::intersect(Plane & plane, Line3D & line)
 {
-	//XXXX
+	//TODO
 	return true;
 }
 
 bool GEO::Plane::intersect(Plane& pa, Plane& pb, Vec3D& pinter)
 {
-	//XXXX
+	//TODO
 	return true;
 }
 
 bool GEO::Plane::intersect(Line3D & line, Vec3D & point)
 {
 	
-	//XXXX
+	//TODO
 	return true;
 }
 
-bool intersect(GEO::Plane& pa, GEO::Plane& pb, GEO::Vec3D& pinter){
-
-//XXXX
+bool intersect(GEO::Plane& pa, GEO::Plane& pb, GEO::Vec3D& pinter)
+{
+	//TODO
 	return true;
-	
 }
 
 GEO::Plane & GEO::Plane::operator=(const Plane & plane)

@@ -21,71 +21,40 @@ namespace GEO
 		std::vector<Point> _points;
 
 	public:
-		/**
-		*	@brief Default constructor. Creates an empty point cloud.
-		*/
-		PointCloud();
+		PointCloud() = default;
 
-		/**
-		*	@brief Constructor of a point cloud of random form giving the total number of points and the maximum range of those points ((-max_x, max_x), or (-max_y, max_y)).
-		*/
+		// Random puntos en un area de [-(max_x,max_y), (max_x,max_y)]
 		PointCloud(int size, double max_x, double max_y);
 
-		/**
-		*	@brief Constructor of a point cloud from the coordinates of points stored in file.
-		*/
+		// Carga la nube de un fichero con las coordenadas de cada punto
 		PointCloud(const std::string& filename);
+		
+		~PointCloud() = default;
 
-		/**
-		*	@brief Destructor.
-		*/
-		~PointCloud();
-
-		/**
-		*	@brief Adds a point to the point cloud.
-		*/
+		// Añade un Punto
 		void addPoint(Point& p);
 		void addPoint(double x, double y);
 
-		/**
-		*	@brief Returns the points that minimizes the distance to any point from the cloud.
-		*/
+		// Punto que minimiza la distancia con todos los demas
 		Point centralPoint() const;
 
-		/**
-		*	@brief Deletes a point identified by its index.
-		*/
+		// Elimina un punto
 		void deletePoint(int index);
 
-		/**
-		*	@brief Returns the points that defines the edges of the point cloud (min x, max x, min y and max y).
-		*/
-		void getEdges(Point& minPoint_x, Point& minPoint_y, Point& maxPoint_x, Point& maxPoint_y);
+		// Puntos maximos en cada coordenada
+		void getEdges(Point& minPoint_x, Point& minPoint_y, Point& maxPoint_x, Point& maxPoint_y) const;
 
-		/**
-		*	@brief Returns the point in an specific index.
-		*/
+		// Numero de puntos
+		int size() const { return _points.size(); }
+
 		Point getPoint(int position);
 
-		/**
-		*	@brief Returns all the available points as a vector.
-		*/
 		std::vector<Point> getPoints() { return _points; }
 
-		/**
-		*	@brief Assignment operator.
-		*/
-		PointCloud& operator=(const PointCloud& pointCloud);
-
-		/**
-		*	@brief Saves the cloud of points in file with the same format used by the constructor.
-		*/
+		// Guarda las coordenadas de cada punto en un archivo
 		void save(const std::string& filename) const;
 
-		/**
-		*	@brief Returns the size of the point cloud.
-		*/
-		int size() { return _points.size(); }
+		PointCloud& operator=(const PointCloud& pointCloud);
 	};
 	
 }

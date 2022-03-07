@@ -1,12 +1,4 @@
-/* 
- * File:   Triangle3D.h
- * Author: lidia
- *
- * Created on 25 de enero de 2021, 19:14
- */
 #pragma once
-
-
 
 #include "AABB.h"
 #include "Plane.h"
@@ -16,15 +8,11 @@
 
 namespace GEO
 {
-	/**
-*	@brief This class represents a triangle defined by 3 points.
-*	@author Lidia Mª Ortega Alvarado.
-*/
 	class Triangle3D
 	{
 	public:
 
-		friend class DrawTriangle3d;
+		friend class DrawTriangle3D;
 
 		enum PointPosition
 		{
@@ -51,99 +39,40 @@ namespace GEO
 
 
 	public:
-		/**
-		*	@brief Default constructor.
-		*/
-		Triangle3D();
-
-		/**
-		*	@brief Constructor.
-		*/
+		Triangle3D() = default;
+		
 		Triangle3D(double ax, double ay, double az, double bx, double by, double bz, double cx, double cy, double cz);
 
-		/**
-		*	@brief Copy constructor.
-		*/
-		Triangle3D(const Triangle3D& triangle);
-
-		/**
-		*	@brief Constructor.
-		*/
 		Triangle3D(const Vec3D& va, const Vec3D& vb, const Vec3D& vc);
 
-		/**
-		*	@brief Destructor.
-		*/
-		virtual ~Triangle3D();
+		Triangle3D(const Triangle3D& triangle) = default;
 
-		/**
-		*	@brief Returns the are of the triangle.
-		*/
+		virtual ~Triangle3D() = default;
+		
 		double area() const;
 
-		/**
-		*	@brief Returns the position of the point respect to the triangle plane.
-		*/
+		// Posicion relativa de un punto respecto al triangulo
 		PointPosition classify(Vec3D& point);
 
-		/**
-		*	@brief Returns a new triangle with the same values than this one.
-		*/
-		Triangle3D copy() { return Triangle3D(_a, _b, _c); }
 
+		Vec3D normal() const;
 
-
-		/**
-		*	@brief Returns the first point.
-		*/
 		Vec3D getA() { return _a; }
-
-		/**
-		*	@brief Returns the second point.
-		*/
 		Vec3D getB() { return _b; }
-
-		/**
-		*	@brief Returns the third point.
-		*/
 		Vec3D getC() { return _c; }
 
+		void setA(const Vec3D& pa) { _a = pa; }
+		void setB(const Vec3D& pb) { _b = pb; }
+		void setC(const Vec3D& pc) { _c = pc; }
 
-		/**
-		*	@brief Returns the normal of the triangle.
-		*/
-		Vec3D normal();
+		void set(Vec3D& va, Vec3D& vb, Vec3D& vc);
 
-		/**
-		*	@brief Assignment operator.
-		*/
-		virtual Triangle3D& operator=(const Triangle3D& triangle);
 
-		/**
-		*	@brief Shows some information about the triangle at the debug window.
-		*/
+		Triangle3D& operator=(const Triangle3D& triangle) = default;
+		
 		virtual void out();
 
-
-		/**
-		*	@brief Modifies the first point.
-		*/
-		void setA(Vec3D& pa) { _a = pa; }
-
-		/**
-		*	@brief Modifies the second point.
-		*/
-		void setB(Vec3D& pb) { _b = pb; }
-
-		/**
-		*	@brief Modifies the third point.
-		*/
-		void setC(Vec3D& pc) { _c = pc; }
-
-		/**
-		*	@brief Modifies all the points.
-		*/
-		void set(Vec3D& va, Vec3D& vb, Vec3D& vc);
+		
 
 
 	};

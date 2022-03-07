@@ -50,10 +50,18 @@ void GEO::Bezier::save(const std::string& filename) const
 	if (!os.good())
 		std::cout << "Archivo " + folderName + filename + " no se pudo abrir para guardar la curva de Bezier" << std::endl;
 
-	for (auto point : _points)
+	for (const auto& point : _points)
 	{
 		os << std::to_string(point.getX()) + ';' + std::to_string(point.getY()) << std::endl;
 	}
 
 	os.close();
+}
+
+GEO::Point GEO::Bezier::getPoint(unsigned int i) const
+{
+	if (i >= 0 && i < _points.size())
+		return _points[i];
+
+	return {};
 }

@@ -12,7 +12,7 @@
 
 	bool GEO::Circle::isInside (Point &p){
 		
-		//XXXX
+		//TODO
 		return true;
 	}
 

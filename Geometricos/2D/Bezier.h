@@ -18,7 +18,7 @@ namespace GEO
 
 		void save(const std::string& filename) const;
 
-		Point& getPoint(unsigned int i) { return _points[i]; }
-		std::vector<Point>& getPoints() { return _points; }
+		Point getPoint(unsigned int i) const;
+		std::vector<Point> getPoints() const { return _points; }
 	};
 }

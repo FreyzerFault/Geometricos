@@ -1,9 +1,3 @@
-/* 
- * File:   DrawTriangle3d.h
- * Author: lidia
- *
- * Created on 27 de enero de 2021, 17:28
- */
 #pragma once
 
 #include "Scene.h"
@@ -13,20 +7,20 @@
 
 namespace GEO
 {
-    class DrawTriangle3d : public Draw {
+    class DrawTriangle3D : public Draw {
 
         Triangle3D dt;
 
     public:
 
-        DrawTriangle3d(Triangle3D& t);
+        DrawTriangle3D(const Triangle3D& triangle);
 
-        DrawTriangle3d(DrawTriangle3d& ddt) : dt(ddt.dt), Draw() {}
+        DrawTriangle3D(const DrawTriangle3D& ddt) : Draw(), dt(ddt.dt) {}
 
         void drawIt();
         void drawIt(TypeColor c);
 
-        virtual ~DrawTriangle3d() {};
+        ~DrawTriangle3D() override = default;;
     };
 
 }

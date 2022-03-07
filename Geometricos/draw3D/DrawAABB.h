@@ -1,10 +1,3 @@
-
-/* 
- * File:   DrawAABB.h
- * Author: lidia
- *
- * Created on 27 de enero de 2021, 19:32
- */
 #pragma once
 
 #include <vector>
@@ -23,14 +16,14 @@ namespace GEO
 	public:
 		friend class AABB;
 
-		DrawAABB(AABB& t);
+		DrawAABB(const AABB& aabb);
 
-		DrawAABB(const DrawAABB& dt) : _aabb(dt._aabb), dsegment(dt.dsegment), Draw() {}
+		DrawAABB(const DrawAABB& dt) : Draw(), _aabb(dt._aabb), dsegment(dt.dsegment) {}
 
 		void drawIt();
 		void drawIt(TypeColor c);
 
-		virtual ~DrawAABB() {};
+		~DrawAABB() override = default;
 	};
 }
 

@@ -4,7 +4,7 @@
 #include "Scene.h"
 
 
-GEO::DrawRay::DrawRay (RayLine &t): Draw(), ray (&t){
+GEO::DrawRay::DrawRay (const RayLine &t): Draw(), ray (&t){
 
 	// Usando la Parametrica
 	const Point inicio = ray->getA();

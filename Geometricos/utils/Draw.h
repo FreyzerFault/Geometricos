@@ -1,14 +1,6 @@
-/** 
- * @file PAGmodelo.h
- * @authores algarcia|lidia
- *
- * @date 18 de octubre de 2020, 10:53
- * 
- * @brief 
- */
 #pragma once
 
-#include <GL/glew.h>
+#include <gl/glew.h>
 #include <vector>
 #include <glm/glm.hpp>
 #include <assimp/scene.h>
@@ -20,6 +12,7 @@
 
 namespace GEO
 {
+	struct TypeColor;
 
 	/**
 	* @brief Enumeración para los tipos de modelos a gestionar
@@ -29,11 +22,22 @@ namespace GEO
 		float R,G,B;
 		TypeColor (): R(0), G(0), B(0){}
 		TypeColor (float RR, float  GG, float BB): R(RR), G(GG), B(BB){}
+		TypeColor (glm::vec3 col): R(col[0]), G(col[1]), B(col[2]) {}
 		TypeColor (glm::vec4 col): R(col[0]), G(col[1]), B(col[2]) {}
-		glm::vec4 getVec4 (){ return glm::vec4(R,G,B,1.0);}
+		glm::vec3 getVec3 () const { return {R,G,B}; }
+		glm::vec4 getVec4 () const { return {R,G,B,1.0};}
 	};
-	
-	
+
+	// Colores
+	const TypeColor magenta(1.0, 0.0, 1.0);
+	const TypeColor green(0.0, 1.0, 0.0);
+	const TypeColor blue(0.0, 0.0, 1.0);
+	const TypeColor red(1.0, 0.0, 0.0);
+	const TypeColor cyan(0.0, 1.0, 1.0);
+	const TypeColor yellow(1.0, 1.0, 0.0);
+	const TypeColor white(1.0, 1.0, 1.0);
+	const TypeColor black(0.0, 0.0, 0.0);
+
    enum class TypeModel
    {
 	  TRIANGULAR,   ///< El modelo es un triángulo

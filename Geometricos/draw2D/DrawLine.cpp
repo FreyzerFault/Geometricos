@@ -3,7 +3,7 @@
 #include "Scene.h"
 
 
-GEO::DrawLine::DrawLine (Line &line): Draw(), _line (&line){
+GEO::DrawLine::DrawLine (const Line &line): Draw(), _line (&line){
 	// Usando la Parametrica
 	const Vec2D v(_line->getB() - _line->getA());
 	const Point inicio = _line->getPoint(-1000);

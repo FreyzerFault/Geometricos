@@ -1,18 +1,8 @@
-/** 
- * @file PAGrenderer.h
- * @author algarcia
- *
- * @date 28 de septiembre de 2020, 12:19
- * 
- * @brief Declaración de la clase PAGrenderer
- */
+#pragma once
 
-#ifndef PAGRENDERER_H
-#define PAGRENDERER_H
-
-#include "windows.h"
-#include <GL/glew.h>
-#include <GL/gl.h>
+#include "Windows.h"
+#include "gl/glew.h"
+#include "gl/GL.h"
 #include <vector>
 
 #include "Draw.h"
@@ -24,7 +14,7 @@ namespace GEO
 	* @brief Clase encargada de encapsular toda la gestión del área de dibujo
 	*        OpenGL.
 	*
-	* Esta clase coordina todo el renderizado de las escenas OpenGL. Se
+	* Esta clase coordina to el renderizado de las escenas OpenGL. Se
 	* implementa aplicando el patrón de diseño Singleton. Está pensada para que
 	* las funciones callback hagan llamadas a sus métodos
 	*/
@@ -61,6 +51,3 @@ namespace GEO
 		void addLight(Light& newer);
 	};
 }
-
-#endif /* PAGRENDERER_H */
-

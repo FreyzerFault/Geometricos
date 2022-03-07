@@ -1,6 +1,7 @@
 #include "Point.h"
 #include "DrawLine3d.h"
 #include "Line3D.h"
+#include "Scene.h"
 
 
 GEO::DrawLine3d::DrawLine3d (const Line3D& line): Draw(), dt (line){

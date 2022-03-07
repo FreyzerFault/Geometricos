@@ -13,69 +13,47 @@
 #include "Vec3D.h"
 namespace GEO
 {
-
 	/**
 	*	@brief This class represents a set of points distributed in the space.
 	*	@author Lidia Mª Ortega Alvarado.
 	*/
-	class PointCloud3d
+	class PointCloud3D
 	{
 	protected:
 		std::vector<Vec3D> _points;
-		Vec3D _maxPoint, _minPoint;						// AABB.
-		Vec3D _maxPointIndex, _minPointIndex;				// Indices of those vertices which have the boundary coordinates of the mesh.
+		Vec3D _maxPoint, _minPoint;				// AABB.
+		Vec3D _maxPointIndex, _minPointIndex;	// Indices of those vertices which have the boundary coordinates of the mesh.
 
 
 	protected:
-		/**
-		*	@brief Updates the new maximum and minimum points taking into account a new point.
-		*/
+		
+		// Toma en cuenta un nuevo punto para actualizar el Maximo y Minimo
 		void updateMaxMin(int index);
 
 	public:
-		/**
-		*	@brief Default constructor.
-		*/
-		PointCloud3d();
+		// Nube de Puntos infinita
+		PointCloud3D();
 
-		/**
-		*	@brief Loads the point cloud from a file.
-		*/
-		PointCloud3d(const std::string& filename);
+		// Puntos en un vector
+		PointCloud3D(std::vector<Vec3D> pointCloud);
 
-		/**
-	*	@brief Construct the point cloud from a vector of points
-	*/
-		PointCloud3d(std::vector<Vec3D>& pointCloud);
+		// Carga la Nube de un archivo con las coordenadas de cada punto
+		PointCloud3D(const std::string& filename);
 
-		/**
-		*	@brief Constructor.
-		*/
-		PointCloud3d(int size, float max_x, float max_y, float max_z);
+		// Nube con una distribucion en un cubo
+		PointCloud3D(int size, double max_x, double max_y, double max_z);
+		
+		// Distribucion esferica
+		PointCloud3D(int size, double radius);
 
-		/**
-		*	@brief Alternative constructor with an uniform sphere distribution.
-		*/
-		PointCloud3d(int size, float radius);
 
-		/**
-		*	@brief Copy constructor.
-		*/
-		PointCloud3d(const PointCloud3d& pointCloud);
+		PointCloud3D(const PointCloud3D& pointCloud) = default;
+		
+		virtual ~PointCloud3D() = default;
 
-		/**
-		*	@brief Destructor.
-		*/
-		virtual ~PointCloud3d();
 
-		/**
-		*	@brief Adds a new point to the cloud.
-		*/
-		void addPoint(Vec3D& p);
+		void addPoint(const Vec3D& p);
 
-		/**
-		*	@brief Removes all the points.
-		*/
 		void clear() { _points.clear(); }
 
 		/**
@@ -83,10 +61,10 @@ namespace GEO
 		*/
 		//void forgetConvexHullData() { delete _convexHullData; _convexHullData = nullptr; }
 
-		/**
-		*	@brief Returns the bounding box that delimites the point cloud space.
-		*/
+		
+		// Bounding Box
 		AABB getAABB();
+
 
 		/**
 		*	@brief Generates a complete convex hull.
@@ -98,38 +76,23 @@ namespace GEO
 		*/
 		//TriangleMesh* getConvexHullNextTriangle();
 
-		/**
-		*	@brief Returns a certain point.
-		*/
+
 		Vec3D getPoint(int pos);
-
-		/**
-		*	@brief Returns all the cloud points.
-		*/
 		std::vector<Vec3D> getPoints() { return _points; }
+		
+		int size() const { return _points.size(); }
+		
+		PointCloud3D& operator=(const PointCloud3D& pointCloud);
 
-		/**
-		*	@brief Assigment operator.
-		*/
-		virtual PointCloud3d& operator=(const PointCloud3d& pointCloud);
+		// Guarda la Nube de Puntos en un archivo con sus coordenadas
+		void save(const std::string& filename) const;
+		
 
-		/**
-		*	@brief Saves the cloud points in a file.
-		*/
-		void save(const std::string& filename);
-
-		/**
-		*	@brief Returns the number of points that this cloud contains.
-		*/
-		int size() { return _points.size(); }
-
-		/**
-		*    @brief get the index of the most distanced points in the cloud.
-		*/
-
+		// Punto a mas distancia
 		void getMostDistanced(int& a, int& b);
 
 
 	};
+
 }
 

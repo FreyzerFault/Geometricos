@@ -15,11 +15,11 @@ namespace GEO
 {
     class DrawRay : public Draw {
 
-        RayLine* ray;
+        const RayLine* ray;
 
     public:
 
-        DrawRay(RayLine& t);
+        DrawRay(const RayLine& t);
 
         DrawRay(const DrawRay& ddt): Draw(), ray(ddt.ray) {}
 

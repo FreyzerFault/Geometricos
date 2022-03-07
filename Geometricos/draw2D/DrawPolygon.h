@@ -17,11 +17,11 @@ namespace GEO
 {
     class DrawPolygon : public Draw {
 
-        Polygon* _polygon;
+        const Polygon* _polygon;
 
     public:
 
-        DrawPolygon(Polygon& polygon);
+        DrawPolygon(const Polygon& polygon);
 
         DrawPolygon(const DrawPolygon& drawPolygon): Draw(), _polygon(drawPolygon._polygon) {}
 

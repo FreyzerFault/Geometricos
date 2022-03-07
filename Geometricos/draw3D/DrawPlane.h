@@ -1,10 +1,4 @@
 
-/* 
- * File:   DrawPlane.h
- * Author: lidia
- *
- * Created on 28 de enero de 2021, 17:11
- */
 #pragma once
 
 #include "Scene.h"
@@ -13,20 +7,20 @@
 
 namespace GEO
 {
-    class DrawPlane : public Draw {
+	class DrawPlane : public Draw {
 
-        Plane dt;
+		Plane dt;
 
-    public:
+	public:
 
-        DrawPlane(Plane& t);
+		DrawPlane(const Plane& plane);
 
-        DrawPlane(const DrawPlane& ddt) : dt(ddt.dt), Draw() {}
+		DrawPlane(const DrawPlane& ddt) : Draw(), dt(ddt.dt) {}
 
-        void drawIt();
-        void drawIt(TypeColor c);
+		void drawIt();
+		void drawIt(TypeColor c);
 
-        virtual ~DrawPlane() {};
-    };
+		~DrawPlane() override = default;;
+	};
 }
 
