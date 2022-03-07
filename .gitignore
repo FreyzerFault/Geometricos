@@ -3,8 +3,6 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-# Modelos objs 
-!vaca.obj
 
 # User-specific files
 *.rsuser
@@ -336,3 +334,6 @@ ASALocalRun/
 # Local History for Visual Studio
 .localhistory/
 
+
+# Modelos objs 
+!*.obj
