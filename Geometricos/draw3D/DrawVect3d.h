@@ -6,15 +6,16 @@
 
 namespace GEO
 {
-	class DrawVect3d : public Draw {
+	class DrawVect3D : public Draw {
 		Vec3D dp;
 	public:
 
-		DrawVect3d(const Vec3D& p);
-		DrawVect3d(const DrawVect3d& ddp) : Draw(), dp(ddp.dp) {}
+		DrawVect3D(const Vec3D& p);
+		DrawVect3D(const DrawVect3D& ddp) : Draw(), dp(ddp.dp) {}
+
 		void drawIt();
 		void drawIt(TypeColor c);
-		~DrawVect3d() override = default;;
+		~DrawVect3D() override = default;;
 	};
 }
 

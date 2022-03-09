@@ -16,9 +16,10 @@ namespace GEO
 		DrawPlane(const Plane& plane);
 
 		DrawPlane(const DrawPlane& ddt) : Draw(), dt(ddt.dt) {}
-
-		void drawIt();
+		
+		void drawIt(TypeDraw typeDraw = TypeDraw::PLAIN);
 		void drawIt(TypeColor c);
+		void drawIt(TypeColor c, TypeDraw typeDraw);
 
 		~DrawPlane() override = default;;
 	};

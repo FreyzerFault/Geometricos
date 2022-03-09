@@ -19,6 +19,8 @@ namespace GEO
 		void drawBezier2D();
 		void drawLineIntersections2D();
 
+		void drawPlane();
+
 
 		void drawVaca();
 
@@ -26,6 +28,9 @@ namespace GEO
 
 		template <typename T, typename D>
 		void drawIt(const T& item, TypeColor color);
+
+		template <typename T, typename D>
+		void drawIt(const T& item, TypeColor color, TypeDraw typeDraw);
 
 		void draw3DModel(const TriangleModel& model);
 	};
@@ -35,5 +40,12 @@ namespace GEO
 	{
 		drawPointers.push_back(new D(item));
 		dynamic_cast<D*>(drawPointers[drawPointers.size() - 1])->drawIt(color);
+	}
+
+	template <typename T, typename D>
+	void DrawTests::drawIt(const T& item, TypeColor color, TypeDraw typeDraw)
+	{
+		drawPointers.push_back(new D(item));
+		dynamic_cast<D*>(drawPointers[drawPointers.size() - 1])->drawIt(color, typeDraw);
 	}
 }

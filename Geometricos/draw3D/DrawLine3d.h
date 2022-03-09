@@ -5,20 +5,20 @@
 
 namespace GEO
 {
-    class DrawLine3d : public Draw {
+    class DrawLine3D : public Draw {
 
         Line3D dt;
 
     public:
 
-        DrawLine3d(const Line3D& line);
+        DrawLine3D(const Line3D& line);
 
-        DrawLine3d(const DrawLine3d& ddt) : Draw(), dt(ddt.dt) {}
+        DrawLine3D(const DrawLine3D& ddt) : Draw(), dt(ddt.dt) {}
 
         void drawIt();
         void drawIt(TypeColor c);
 
-        ~DrawLine3d() override = default;
+        ~DrawLine3D() override = default;
     };
 }
 

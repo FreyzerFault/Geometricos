@@ -1,12 +1,12 @@
 #include "Point.h"
-#include "DrawLine3d.h"
+#include "DrawLine3D.h"
 #include "Line3D.h"
 #include "Scene.h"
 
 
-GEO::DrawLine3d::DrawLine3d (const Line3D& line): Draw(), dt (line){
-	const Vec3D inicio = line.getPoint(BasicGeom::menosINFINITO);
-	const Vec3D fin = line.getPoint(BasicGeom::INFINITO);
+GEO::DrawLine3D::DrawLine3D (const Line3D& line): Draw(), dt (line){
+	const Vec3D inicio = line.getPoint(-BasicGeom::BIGNUM);
+	const Vec3D fin = line.getPoint(BasicGeom::BIGNUM);
 
 	_vertices.emplace_back(inicio.getX(), inicio.getY(), inicio.getZ());
 	_vertices.emplace_back(fin.getX(), fin.getY(), fin.getZ());
@@ -24,13 +24,13 @@ GEO::DrawLine3d::DrawLine3d (const Line3D& line): Draw(), dt (line){
 }
 
 
-void GEO::DrawLine3d::drawIt (TypeColor c){
+void GEO::DrawLine3D::drawIt (TypeColor c){
 	setColorActivo (c);
 	drawIt();
 }
 
 
-void GEO::DrawLine3d::drawIt (){
+void GEO::DrawLine3D::drawIt (){
 	setShaderProgram ( "algeom" );
 	setDrawMode(TypeDraw::LINE );
 	Scene::getInstance ()->addModel ( this );

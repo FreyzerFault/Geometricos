@@ -5,9 +5,9 @@
 
 
 GEO::Plane::Plane(const Vec3D& p, const Vec3D& u, const Vec3D& v, bool arePoints)
-	: _a(p), _b(arePoints ? u : (p + u)), _c(arePoints ? v : (p + v))
+	: _s(p), _r(arePoints ? u : (p + u)), _t(arePoints ? v : (p + v))
 {
-	if (_a.collinear(_b,_c))
+	if (_s.collinear(_r,_t))
 	{
 		std::cout << "Se ha definido un plano INVALIDO con 3 puntos colineares:" << std::endl;
 		this->out();
@@ -27,9 +27,9 @@ GEO::Plane::Plane(const Vec3D& p, const Vec3D& normal)
 	const Vec3D v0 = arbitrario.cross(n);
 	const Vec3D v1 = v0.cross(n);
 
-	_a = p;
-	_b = _a + v0;
-	_c = _a + v1;
+	_s = p;
+	_r = _s + v0;
+	_t = _s + v1;
 }
 
 bool GEO::Plane::coplanar(const Vec3D& p) const
@@ -41,7 +41,7 @@ bool GEO::Plane::coplanar(const Vec3D& p) const
 double GEO::Plane::distance(const Vec3D& p) const
 {
 	// Cualquier vector Plano -> p
-	const Vec3D v = p - _a;
+	const Vec3D v = p - _s;
 	const Vec3D n = getNormal();
 
 	// La distancia de la proyeccion de v sobre n
@@ -51,22 +51,22 @@ double GEO::Plane::distance(const Vec3D& p) const
 
 double GEO::Plane::getA() const
 {
-	return (BasicGeom::determinant2x2(_c.getZ() - _a.getZ(), _c.getY() - _a.getY(), _b.getY() - _a.getY(), _b.getZ() - _a.getZ()));
+	return (BasicGeom::determinant2x2(_t.getZ() - _s.getZ(), _t.getY() - _s.getY(), _r.getY() - _s.getY(), _r.getZ() - _s.getZ()));
 }
 
 double GEO::Plane::getB() const
 {
-	return (BasicGeom::determinant2x2(_c.getX() - _a.getX(), _c.getZ() - _a.getZ(), _b.getZ() - _a.getZ(), _b.getX() - _a.getX()));
+	return (BasicGeom::determinant2x2(_t.getX() - _s.getX(), _t.getZ() - _s.getZ(), _r.getZ() - _s.getZ(), _r.getX() - _s.getX()));
 }
 
 double GEO::Plane::getC() const
 {
-	return (BasicGeom::determinant2x2(_c.getY() - _a.getY(), _c.getX() - _a.getX(), _b.getX() - _a.getX(), _b.getY() - _a.getY()));
+	return (BasicGeom::determinant2x2(_t.getY() - _s.getY(), _t.getX() - _s.getX(), _r.getX() - _s.getX(), _r.getY() - _s.getY()));
 }
 
 double GEO::Plane::getD() const
 {
-	return -(getA() * _a.getX() + getB() * _a.getY() + getC() * _a.getZ());
+	return -(getA() * _s.getX() + getB() * _s.getY() + getC() * _s.getZ());
 }
 
 GEO::Vec3D GEO::Plane::getNormal() const
@@ -98,7 +98,7 @@ bool GEO::Plane::intersect(const Plane & plane, Line3D & line) const
 
 	// Si las normales son Paralelas, no intersectan
 	if (BasicGeom::equal(n.dot(plane.getNormal()), 1))
-	return false;
+		return false;
 
 	// Vector de la interseccion
 	const Vec3D v = n.cross(plane.getNormal()).normalize();
@@ -137,9 +137,9 @@ GEO::Plane & GEO::Plane::operator=(const Plane & plane)
 {
 	if (this != &plane)
 	{
-		_a = plane._a;
-		_b = plane._b;
-		_c = plane._c;
+		_s = plane._s;
+		_r = plane._r;
+		_t = plane._t;
 	}
 
 	return *this;
@@ -148,9 +148,9 @@ GEO::Plane & GEO::Plane::operator=(const Plane & plane)
 void GEO::Plane::out()
 {
 	std::cout << "Plane->a: ";
-	_a.out();
+	_s.out();
 	std::cout <<"Plane->b: ";
-	_b.out();
+	_r.out();
 	std::cout <<"Plane->c: ";
-	_c.out();
+	_t.out();
 }

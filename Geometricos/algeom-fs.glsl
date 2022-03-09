@@ -136,6 +136,6 @@ vec4 luzFoco ( vec4 colorDePartida )
 void main ()
 {
    vec4 color = colorElegido ();
-   colorFragmento = vec4 ( colorCalculado ( color ).rgb, 1 );
+   colorFragmento = vec4 ( colorCalculado ( color ).rgba );
    
 }

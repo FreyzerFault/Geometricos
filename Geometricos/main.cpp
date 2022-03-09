@@ -307,7 +307,16 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 	case GLFW_KEY_V:
 		if (accion == GLFW_PRESS)
 		{
-			test2D.drawVaca();
+			test3D.drawVaca();
+			
+			refreshWindow(ventana);
+		}
+		break;
+
+	case GLFW_KEY_Q:
+		if (accion == GLFW_PRESS)
+		{
+			test3D.drawPlane();
 			
 			refreshWindow(ventana);
 		}

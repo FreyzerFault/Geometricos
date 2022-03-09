@@ -21,7 +21,7 @@ namespace GEO
 		};
 
 	protected:
-		Vec3D _a, _b, _c;
+		Vec3D _s, _r, _t;
 
 	public:
 		/**
@@ -53,11 +53,11 @@ namespace GEO
 		double getD() const;
 
 		// Vectores cualquiera del Plano normalizados
-		Vec3D getV() const { return (_b - _a).normalize(); }
-		Vec3D getU() const { return (_c - _a).normalize(); }
+		Vec3D getV() const { return (_r - _s).normalize(); }
+		Vec3D getU() const { return (_t - _s).normalize(); }
 
 		// Punto cualquiera del plano
-		Vec3D getP() const { return _a; }
+		Vec3D getP() const { return _s; }
 
 		// Vector Normal
 		Vec3D getNormal() const;

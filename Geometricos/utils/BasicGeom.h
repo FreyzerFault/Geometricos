@@ -11,6 +11,8 @@ namespace GEO
 		constexpr double INFINITO = DBL_MAX;
 		constexpr double menosINFINITO = DBL_MIN;
 
+		constexpr double BIGNUM = 1000000;
+
 		bool equal(double a, double b);
 		bool lequal(double a, double b);
 		bool gequal(double a, double b);

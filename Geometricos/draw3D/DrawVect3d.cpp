@@ -1,7 +1,7 @@
-#include "DrawVect3d.h"
+#include "DrawVect3D.h"
 
 
-GEO::DrawVect3d::DrawVect3d (const Vec3D &p): Draw(), dp (p){
+GEO::DrawVect3D::DrawVect3D (const Vec3D &p): Draw(), dp (p){
 
 	_vertices.emplace_back(p.getX(), p.getY(), p.getZ());
 	_normals.emplace_back(0, 0, 1);
@@ -10,14 +10,14 @@ GEO::DrawVect3d::DrawVect3d (const Vec3D &p): Draw(), dp (p){
 	buildVAO ();
 }
 
-void GEO::DrawVect3d::drawIt (TypeColor c){
+void GEO::DrawVect3D::drawIt (TypeColor c){
 	setColorActivo (c);
 	drawIt();
 }
 
 
 
-void GEO::DrawVect3d::drawIt (){
+void GEO::DrawVect3D::drawIt (){
 	setShaderProgram ( "algeom" );
 	setDrawMode(TypeDraw::POINT );
 	Scene::getInstance ()->addModel ( this );

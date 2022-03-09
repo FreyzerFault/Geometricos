@@ -185,6 +185,62 @@ void GEO::DrawTests::drawLineIntersections2D()
 	}
 }
 
+void GEO::DrawTests::drawPlane()
+{
+	try
+	{
+		const Vec3D center(0,-2,-5);
+
+		Vec3D a(0.0, 0.0, 0.0);
+		Vec3D b(1.0, 0.0, 0.0);
+		Vec3D c(1.0, 1.0, 1.0);
+
+		Vec3D d(0.0, 0.0, 1.0);
+		Vec3D e(1.0, 0.0, 0.0);
+		Vec3D f(1.0, -1.0, 1.0);
+
+		a = a + center;
+		b = b + center;
+		c = c + center;
+		d = d + center;
+		e = e + center;
+		f = f + center;
+
+		const Plane planeA(a,b,c, true);
+		const Plane planeB(d,e,f, true);
+		const Plane planeC(a,c,f, true);
+
+		/*drawIt<Plane, DrawPlane>(planeA, yellow);
+		drawIt<Plane, DrawPlane>(planeB, cyan);
+		drawIt<Plane, DrawPlane>(planeC, magenta);*/
+		drawIt<Plane, DrawPlane>(planeA, yellow, TypeDraw::WIREFRAME);
+		drawIt<Plane, DrawPlane>(planeB, cyan, TypeDraw::WIREFRAME);
+		drawIt<Plane, DrawPlane>(planeC, magenta, TypeDraw::WIREFRAME);
+
+		// INTERSECCIONES
+		Line3D lAB, lBC, lAC;
+
+		if (planeA.intersect(planeB, lAB))
+			drawIt<Line3D, DrawLine3D>(lAB, red);
+
+		if (planeB.intersect(planeC, lBC))
+			drawIt<Line3D, DrawLine3D>(lBC, red);
+
+		if (planeA.intersect(planeC, lAC))
+			drawIt<Line3D, DrawLine3D>(lAC, red);
+
+		Vec3D pABC;
+
+		if (planeA.intersect(planeB, planeC, pABC))
+			drawIt<Vec3D, DrawVect3D>(pABC, white);
+		
+	}
+	catch (std::exception& e)
+	{
+		outputException(e, "DrawPolygon2D");
+	}
+}
+
 void GEO::DrawTests::drawVaca()
 {
 	try
