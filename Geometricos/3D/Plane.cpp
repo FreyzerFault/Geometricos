@@ -74,29 +74,62 @@ GEO::Vec3D GEO::Plane::getNormal() const
 	return getV().cross(getU()).normalize();
 }
 
-
-bool GEO::Plane::intersect(Plane & plane, Line3D & line)
+bool GEO::Plane::intersect(const Line3D& line, Vec3D& point) const
 {
-	//TODO
-	return true;
-}
+	const Vec3D n = getNormal();
+	const Vec3D ab = line.getDest() - line.getOrig();
 
-bool GEO::Plane::intersect(Plane& pa, Plane& pb, Vec3D& pinter)
-{
-	//TODO
-	return true;
-}
-
-bool GEO::Plane::intersect(Line3D & line, Vec3D & point)
-{
+	// Si la Linea es Perpendicular a la Normal, son paralelos
+	if (BasicGeom::equal(n.dot(ab), 0))
+		return false;
 	
-	//TODO
+	const Vec3D ac = getP() - line.getOrig();
+
+	const double t = - (n.dot(ac) / n.dot(ab));
+
+	point = line.getPoint(t);
+
 	return true;
 }
 
-bool intersect(GEO::Plane& pa, GEO::Plane& pb, GEO::Vec3D& pinter)
+bool GEO::Plane::intersect(const Plane & plane, Line3D & line) const
 {
-	//TODO
+	const Vec3D n = getNormal().normalize();
+
+	// Si las normales son Paralelas, no intersectan
+	if (BasicGeom::equal(n.dot(plane.getNormal()), 1))
+	return false;
+
+	// Vector de la interseccion
+	const Vec3D v = n.cross(plane.getNormal()).normalize();
+
+	// Linea en el plano perpendicular a la interseccion
+	const Vec3D perp = v.cross(n).normalize();
+	
+	// Punto de interseccion de la linea perpendicular a la interseccion y la normal
+	// Me da un punto en mi linea de interseccion para crearla
+	const Line3D perpLine(getP(), getP() + perp);
+	Vec3D p;
+	plane.intersect(perpLine, p);
+	
+	line = Line3D(p, p + v);
+
+	return true;
+}
+
+
+bool GEO::Plane::intersect(const Plane& pa, const Plane& pb, Vec3D& point) const
+{
+	Line3D intersLine;
+
+	// Interseccion plano-plano
+	if (!pa.intersect(pb, intersLine))
+		return false;
+
+	// Interseccion linea-plano
+	if (!intersect(intersLine, point))
+		return false;
+
 	return true;
 }
 

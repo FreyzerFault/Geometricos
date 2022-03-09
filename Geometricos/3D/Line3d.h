@@ -23,6 +23,8 @@ namespace GEO
 		bool isTvalid(double t) const override { return true; }
 
 	public:
+		Line3D() = default;
+
 		Line3D(const Vec3D& orig, const Vec3D& dest);
 		
 		Line3D(const Line3D& line) = default;

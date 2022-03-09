@@ -2,6 +2,7 @@
 
 #include <climits>
 #include <vector>
+#include "BasicGeom.h"
 
 
 namespace GEO
@@ -44,6 +45,8 @@ namespace GEO
 		double dot(const Vec3D& v) const;
 		Vec3D cross(const Vec3D& b) const;
 
+		// Valid point: ninguna coord tiene el valor DEFAULT_VALUE
+		bool isValid() const { return BasicGeom::equal(getX(), DEFAULT_VALUE); }
 
 		void set(unsigned int index, double value) { _value[index] = value; }
 		void setVec(double x, double y, double z);

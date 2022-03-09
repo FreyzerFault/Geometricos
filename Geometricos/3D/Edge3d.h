@@ -18,6 +18,8 @@ namespace GEO
 		virtual Vec3D getNearestPoint(const Vec3D& p) const;
 
 	public:
+		Edge3D() = default;
+
 		Edge3D(const Vec3D& orig, const Vec3D& dest);
 		
 		Edge3D(const Edge3D& edge) = default;

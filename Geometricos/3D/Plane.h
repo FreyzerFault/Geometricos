@@ -63,13 +63,13 @@ namespace GEO
 		Vec3D getNormal() const;
 
 		// Punto de Interseccion de la linea con el Plano
-		bool intersect(Line3D& line, Vec3D& point);
-
-		// Punto de Interseccion entre 3 Planos
-		bool intersect(Plane& pa, Plane& pb, Vec3D& pinter);
+		bool intersect(const Line3D& line, Vec3D& point) const;
 
 		// Linea de Interseccion entre 2 Planos
-		bool intersect(Plane& plane, Line3D& line);
+		bool intersect(const Plane& plane, Line3D& line) const;
+
+		// Punto de Interseccion entre 3 Planos
+		bool intersect(const Plane& pa, const Plane& pb, Vec3D& point) const;
 
 		Plane& operator=(const Plane& plane);
 		
