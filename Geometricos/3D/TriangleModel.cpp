@@ -6,11 +6,12 @@
 #include <iostream>
 #include <utility>
 
+static const std::string objPath = "obj/";
 
-GEO::TriangleModel::TriangleModel(const std::string& pathFile) {
+GEO::TriangleModel::TriangleModel(const std::string& name) {
 	try
 	{
-		loadFile (pathFile);
+		loadFile (objPath + name + ".obj");
 	}
 	catch ( std::runtime_error& e )
 	{

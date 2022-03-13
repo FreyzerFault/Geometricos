@@ -2,6 +2,7 @@
 
 #include <climits>
 #include <vector>
+#include <sstream>
 #include "BasicGeom.h"
 
 
@@ -73,11 +74,15 @@ namespace GEO
 		Vec3D operator-(const Vec3D& v) const;
 		Vec3D operator*(double s) const;
 		Vec3D operator/(double s) const;
+		
+		Vec3D operator+(const double a) const;
+		Vec3D operator-(const double a) const;
 
 		// Inverso
 		Vec3D operator-() const { return {-_value[X], -_value[Y], -_value[Z]}; }
-		
-		virtual void out();
+
+		virtual std::string toString() const;
+		virtual void out() const;
 	};
 }
 

@@ -6,22 +6,22 @@
 
 namespace GEO
 {
-    class DrawSegment3d : public Draw {
+    class DrawSegment3D : public Draw {
 
         Segment3D dt;
 
     public:
 
-        DrawSegment3d(const Segment3D& segment);
+        DrawSegment3D(const Segment3D& segment);
 
-        DrawSegment3d(const DrawSegment3d& ddt) : Draw(), dt(ddt.dt) {}
+        DrawSegment3D(const DrawSegment3D& ddt) : Draw(), dt(ddt.dt) {}
 
-        DrawSegment3d& operator= (const DrawSegment3d& ddt) { dt = ddt.dt; return *this; }
+        DrawSegment3D& operator= (const DrawSegment3D& ddt) { dt = ddt.dt; return *this; }
 
         void drawIt();
         void drawIt(TypeColor c);
 
-        ~DrawSegment3d() override = default;
+        ~DrawSegment3D() override = default;
     };
 }
 

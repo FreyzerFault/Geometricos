@@ -114,6 +114,16 @@ GEO::Vec3D GEO::Vec3D::operator/(double s) const
 	return *this * (1 / s);
 }
 
+GEO::Vec3D GEO::Vec3D::operator+(const double a) const
+{
+	return {getX() + a, getY() + a, getZ() + a};
+}
+
+GEO::Vec3D GEO::Vec3D::operator-(const double a) const
+{
+	return {getX() - a, getY() - a, getZ() - a};
+}
+
 GEO::Vec3D GEO::Vec3D::scalarMul(double value) const
 {
 	return {getX() * value, getY() * value, getZ() * value};
@@ -155,8 +165,13 @@ GEO::Vec3D GEO::Vec3D::cross(const Vec3D & b) const
 	};
 }
 
-void GEO::Vec3D::out()
+std::string GEO::Vec3D::toString() const
 {
-	std::cout << "Coordinate x: " << std::to_string(getX()) << ", Coordinate y: " ;
-		std::cout << std::to_string(getY()) << ", Coordinate z: " << std::to_string(getZ());
+	return  "Vec3D [ " + std::to_string(getX()) + ", " +
+		std::to_string(getY()) + ", " + std::to_string(getZ()) + " ]";
+}
+
+void GEO::Vec3D::out() const
+{
+	std::cout << toString() << std::endl;
 }

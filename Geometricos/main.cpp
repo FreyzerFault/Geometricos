@@ -243,7 +243,8 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 			refreshWindow(ventana);
 		}
 		break;
-		
+
+		/*
 		// ================================ POLIGONO ================================
 	case GLFW_KEY_P:
 		if (accion == GLFW_PRESS)
@@ -304,15 +305,10 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 			refreshWindow(ventana);
 		}
 		break;
-	case GLFW_KEY_V:
-		if (accion == GLFW_PRESS)
-		{
-			test3D.drawVaca();
-			
-			refreshWindow(ventana);
-		}
-		break;
 
+		*/
+
+		// =============================== PLANOS ===============================
 	case GLFW_KEY_Q:
 		if (accion == GLFW_PRESS)
 		{
@@ -321,6 +317,54 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 			refreshWindow(ventana);
 		}
 		break;
+
+		// =============================== POINT CLOUDS ===============================
+	case GLFW_KEY_P:
+		if (accion == GLFW_PRESS)
+		{
+			test3D.drawPointCloud3D();
+			
+			refreshWindow(ventana);
+		}
+		break;
+
+		// =============================== MODELOS 3D ===============================
+	case GLFW_KEY_V:
+		if (accion == GLFW_PRESS)
+		{
+			test3D.drawVaca();
+			
+			refreshWindow(ventana);
+		}
+		break;
+	case GLFW_KEY_D:
+		if (accion == GLFW_PRESS)
+		{
+			test3D.drawDado();
+			
+			refreshWindow(ventana);
+		}
+		break;
+	case GLFW_KEY_C:
+		if (accion == GLFW_PRESS)
+		{
+			test3D.drawCuenco();
+			
+			refreshWindow(ventana);
+		}
+		break;
+	case GLFW_KEY_M:
+		if (accion == GLFW_PRESS)
+		{
+			// Colorea los triangulos maximos y minimos en cada coordenada del modelo
+			const TriangleModel vaca("vaca");
+			test3D.drawModel(vaca);
+			test3D.drawMaxMinTriangles(vaca);
+			
+			refreshWindow(ventana);
+		}
+		break;
+
 
 	case GLFW_KEY_1:
 		if (accion == GLFW_PRESS)

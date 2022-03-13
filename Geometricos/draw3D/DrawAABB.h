@@ -4,14 +4,14 @@
 #include "Scene.h"
 #include "AABB.h"
 #include "Draw.h"
-#include "DrawSegment3d.h"
+#include "DrawSegment3D.h"
 
 namespace GEO
 {
 	class DrawAABB : public Draw {
 
 		AABB _aabb;
-		std::vector<DrawSegment3d> dsegment;
+		std::vector<DrawSegment3D> dsegment;
 
 	public:
 		friend class AABB;

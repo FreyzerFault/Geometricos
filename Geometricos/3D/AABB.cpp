@@ -7,37 +7,19 @@ GEO::AABB::AABB()
 {
 }
 
-GEO::AABB::AABB(Vec3D & min, Vec3D & max)
+GEO::AABB::AABB(const Vec3D& min, const Vec3D& max)
 	: _min(min), _max(max)
 {
 }
 
-GEO::AABB::AABB(const AABB & aabb)
-	: _min(aabb._min), _max(aabb._max)
+
+GEO::Vec3D GEO::AABB::getCenter() const
 {
+	// El Extent pasa por el centro y esta a la mitad desde min a max
+	return {getMin() + getExtent() / 2};
 }
 
-GEO::AABB::~AABB()
+GEO::Vec3D GEO::AABB::getExtent() const
 {
-}
-
-
-GEO::Vec3D GEO::AABB::getCenter()
-{
-	//XXXX
-	return Vec3D();
-}
-
-GEO::Vec3D GEO::AABB::getExtent()
-{
-	//XXXX
-	return Vec3D();
-}
-
-GEO::AABB & GEO::AABB::operator=(const AABB & orig)
-{
-	_min = orig._min;
-	_max = orig._max;
-
-	return *this;
+	return {_max - _min};
 }

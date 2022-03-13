@@ -1,10 +1,3 @@
-
-/* 
- * File:   Line3d.h
- * Author: lidia
- *
- * Created on 25 de enero de 2021, 19:55
- */
 #pragma once
 
 #include "Edge3D.h"

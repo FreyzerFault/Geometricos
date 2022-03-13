@@ -107,7 +107,7 @@ void GEO::PointCloud3D::addPoint(const Vec3D& p)
 	this->updateMaxMin(_points.size() - 1);
 }
 
-GEO::AABB GEO::PointCloud3D::getAABB()
+GEO::AABB GEO::PointCloud3D::getAABB() const
 {
 	return {_minPoint, _maxPoint};
 }
@@ -162,7 +162,61 @@ void GEO::PointCloud3D::updateMaxMin(int index)
 }
 
 
-void GEO::PointCloud3D::getMostDistanced (int &a, int &b){
-	//TODO
+void GEO::PointCloud3D::getMostDistanced (int &a, int &b) const
+{
+	const Vec3D center = getAABB().getCenter();
+	Vec3D max(center);
+	Vec3D min(center + BasicGeom::BIGNUM);
+	for (const Vec3D& point : _points)
+	{
+		if ((point - center).module() > (max - center).module())
+			max = point;
+		if ((point - center).module() < (min - center).module())
+			min = point;
+	}
+
+	for (int i = 0; i < _points.size(); i++)
+	{
+		const Vec3D& point = _points[i];
+		if (point == max)
+			a = i;
+		if (point == min)
+			b = i;
+	}
+
 	a=0; b=0;
+}
+
+void GEO::PointCloud3D::getMaxPoints(Vec3D& maxX, Vec3D& maxY, Vec3D& maxZ) const
+{
+	maxX.setX(-BasicGeom::BIGNUM);
+	maxY.setY(-BasicGeom::BIGNUM);
+	maxZ.setZ(-BasicGeom::BIGNUM);
+
+	for (const Vec3D& point : _points)
+	{
+		if (point.getX() > maxX.getX())
+			maxX = point;
+		if (point.getY() > maxY.getY())
+			maxY = point;
+		if (point.getZ() > maxZ.getZ())
+			maxZ = point;
+	}
+}
+
+void GEO::PointCloud3D::getMinPoints(Vec3D& minX, Vec3D& minY, Vec3D& minZ) const
+{
+	minX.setX(BasicGeom::BIGNUM);
+	minY.setY(BasicGeom::BIGNUM);
+	minZ.setZ(BasicGeom::BIGNUM);
+
+	for (const Vec3D& point : _points)
+	{
+		if (point.getX() < minX.getX())
+			minX = point;
+		if (point.getY() < minY.getY())
+			minY = point;
+		if (point.getZ() < minZ.getZ())
+			minZ = point;
+	}
 }

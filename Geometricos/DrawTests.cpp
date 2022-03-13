@@ -235,7 +235,7 @@ void GEO::DrawTests::drawPlane()
 		Vec3D pABC;
 
 		if (planeA.intersect(planeB, planeC, pABC))
-			drawIt<Vec3D, DrawVect3D>(pABC, white);
+			drawIt<Vec3D, DrawVec3D>(pABC, white);
 		
 	}
 	catch (std::exception& e)
@@ -244,58 +244,116 @@ void GEO::DrawTests::drawPlane()
 	}
 }
 
+enum OrdenTriangulos
+{
+	MinX = 0,
+	MinY = 1,
+	MinZ = 2,
+	MaxX = 3,
+	MaxY = 4,
+	MaxZ = 5,
+};
+std::string getOrden(int i)
+{
+	switch (i)
+	{
+	case 0:
+		return "MinX";
+	case 1:
+		return "MinY";
+	case 2:
+		return "MinZ";
+	case 3:
+		return "MaxX";
+	case 4:
+		return "MaxY";
+	case 5:
+		return "MaxZ";
+
+	default:
+		return "MinX";
+	}
+}
+
+void GEO::DrawTests::drawPointCloud3D()
+{
+	try
+	{
+		const PointCloud3D pc(50, 1, 1, 1);
+		drawIt<PointCloud3D, DrawCloud3D>(pc, black);
+
+		std::vector<Vec3D> points(6);
+		pc.getMinPoints(points[MinX], points[MinY], points[MinZ]);
+		pc.getMaxPoints(points[MaxX], points[MaxY], points[MaxZ]);
+
+		int colorIndex = 0;
+		for (int i = 0; i < points.size(); ++i)
+		{
+			const Vec3D& point = points[i];
+			std::cout << getOrden(i) << ": " << point.toString() << std::endl;
+			drawIt<Vec3D, DrawVec3D>(point, colors[colorIndex++]);
+		}
+
+		int a, b;
+		pc.getMostDistanced(a, b);
+
+		const Vec3D& maxPoint = pc.getPoint(a);
+		const Vec3D& minPoint = pc.getPoint(b);
+
+		const Segment3D segment(minPoint, maxPoint);
+		drawIt<Segment3D, DrawSegment3D>(segment, red);
+
+		const Line3D line(minPoint, maxPoint);
+		drawIt<Line3D, DrawLine3D>(line, yellow);
+
+		Vec3D farPoint;
+		double maxDistance = 0;
+		const Edge3D* edge = &line;
+		for (const Vec3D& point : pc.getPoints())
+		{
+			const double d = edge->distance(point);
+			if (d > maxDistance)
+			{
+				farPoint = point;
+				maxDistance = d;
+			}
+		}
+		drawIt<Vec3D, DrawVec3D>(farPoint, cyan);
+	}
+	catch (std::exception& e)
+	{
+		outputException(e, "drawPointCloud3D");
+	}
+}
+
 void GEO::DrawTests::drawVaca()
 {
 	try
 	{
-		const TriangleModel vaca("obj/vaca.obj");
+		const TriangleModel vaca("vaca");
 		drawIt<TriangleModel, DrawTriangleModel>(vaca, white);
 		
-
-		//Descomentar para ver como se pintan las 100 primeras caras del modelo de amarillo           
-
-
 		std::cout << "hay un total de " << vaca.numTriangulos() << " triángulos" << std::endl;
 
-		const std::vector<Triangle3D> triangulos = vaca.getFaces();
-		for (int i=0; i<100; i++)
-		{
-			Triangle3D tri(triangulos[i]);
-			Vec3D normal = tri.getNormal() * 0.1;
+		// Triangulos de la Vaca:
+		// La mitad son amarillos, la otra magentas
+		/*for (unsigned i = 0; i < vaca.numTriangulos()/2; i++){
+			Triangle3D tri(vaca.getFace(i));
+			Vec3D normal = tri.getNormal() * 0.01;
 			tri.setA(tri.getA() + normal);
 			tri.setB(tri.getB() + normal);
 			tri.setC(tri.getC() + normal);
 			drawIt<Triangle3D, DrawTriangle3D>(tri, yellow);
 		}
-
-				   // descomentar para observar la nube de puntos asociada al modelo; 
-				   //comentar antes la visualización completa del modelo
-
-   //                PointCloud3d pc = tm.getCloud();
-   //                DrawCloud3d *dpc = new DrawCloud3d (pc);
-   //                dpc->drawIt();
-   //                
-
-				   // descomentar para observar los triángulos de forma individual. Es mucho más lento 
-   //                TypeColor verde (0.0, 1.0, 0.0); 
-   //                Triangle3D tri; 
-   //                DrawTriangle3d *dtri;  
-   //                for (unsigned i = 0; i<tm.numTriangulos()/2; i++){
-   //                    tri = tm.getFace(i);
-   //                    dtri = new DrawTriangle3d (tri);
-   //                    dtri->drawIt(verde);
-   //                }
-   //                TypeColor magenta (1.0, 0.0, 1.0);  
-   //                
-   //                for (unsigned i = tm.numTriangulos()/2+1; i<tm.numTriangulos(); i++){
-   //                    tri = tm.getFace(i);
-   //                    dtri = new DrawTriangle3d (tri);
-   //                    dtri->drawIt(magenta);
-   //                }
-
-
-
-
+		
+		for (unsigned i = vaca.numTriangulos()/2+1; i < vaca.numTriangulos(); i++){
+			Triangle3D tri(vaca.getFace(i));
+			Vec3D normal = tri.getNormal() * 0.01;
+			tri.setA(tri.getA() + normal);
+			tri.setB(tri.getB() + normal);
+			tri.setC(tri.getC() + normal);
+			drawIt<Triangle3D, DrawTriangle3D>(tri, magenta);
+		}*/
 	}
 	catch (std::exception& e)
 	{
@@ -307,12 +365,94 @@ void GEO::DrawTests::drawCuenco()
 {
 	try
 	{
-		const TriangleModel cuenco("obj/cuenco.obj");
-		drawIt<TriangleModel, DrawTriangleModel>(cuenco, green);
+		const TriangleModel cuenco("cuenco");
+		drawIt<TriangleModel, DrawTriangleModel>(cuenco, white);
+
+		
 	}
 	catch (std::exception& e)
 	{
-		outputException(e, "drawVaca");
+		outputException(e, "drawCuenco");
+	}
+}
+
+void GEO::DrawTests::drawDado()
+{
+	try
+	{
+		const TriangleModel dado("dado");
+		drawIt<TriangleModel, DrawTriangleModel>(dado, white);
+	}
+	catch (std::exception& e)
+	{
+		outputException(e, "drawDado");
+	}
+}
+
+void GEO::DrawTests::drawModel(const TriangleModel& model)
+{
+	drawIt<TriangleModel, DrawTriangleModel>(model, white);
+}
+
+void GEO::DrawTests::drawMaxMinTriangles(const TriangleModel& model)
+{
+	try
+	{
+		// Sacamos los puntos limite de cada coordenada a partir de la nube de puntos
+		const PointCloud3D cloud = model.getCloud();
+
+		std::vector<Vec3D> points(6);
+		cloud.getMinPoints(points[MinX], points[MinY], points[MinZ]);
+		cloud.getMaxPoints(points[MaxX], points[MaxY], points[MaxZ]);
+		
+		// Listas con los Triangulos que interesan
+		std::vector<std::vector<Triangle3D>> tris(6);
+
+		for (unsigned i = 0; i < model.numTriangulos(); i++)
+		{
+			Triangle3D tri(model.getFace(i));
+			Vec3D a = tri.getA();
+			Vec3D b = tri.getB();
+			Vec3D c = tri.getC();
+
+			// Busca los Triangulos que tengan un punto que coincida
+			if (a == points[MaxX] || b == points[MaxX] || c == points[MaxX])
+				tris[MaxX].push_back(tri);
+
+			if (a == points[MaxY] || b == points[MaxY] || c == points[MaxY])
+				tris[MaxY].push_back(tri);
+
+			if (a == points[MaxZ] || b == points[MaxZ] || c == points[MaxZ])
+				tris[MaxZ].push_back(tri);
+
+			if (a == points[MinX] || b == points[MinX] || c == points[MinX])
+				tris[MinX].push_back(tri);
+
+			if (a == points[MinY] || b == points[MinY] || c == points[MinY])
+				tris[MinY].push_back(tri);
+
+			if (a == points[MinZ] || b == points[MinZ] || c == points[MinZ])
+				tris[MinZ].push_back(tri);
+		}
+		// Dibujamos todos los triangulos de cada lista de un color distinto
+		int colorIndex = 0;
+		for (auto& list : tris)
+		{
+			const TypeColor color = colors[colorIndex++];
+			for (Triangle3D& tri : list)
+			{
+				// Antes de dibujarlos los movemos hacia fuera un poco para que si se renderiza a la vez del modelo no se superponga
+				Vec3D normal = tri.getNormal() * 0.01;
+				tri.setA(tri.getA() + normal);
+				tri.setB(tri.getB() + normal);
+				tri.setC(tri.getC() + normal);
+				drawIt<Triangle3D, DrawTriangle3D>(tri, color);
+			}
+		}
+	}
+	catch (std::exception& e)
+	{
+		outputException(e, "drawMaxMinTriangles");
 	}
 }
 

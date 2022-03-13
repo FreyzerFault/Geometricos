@@ -108,7 +108,7 @@
     <ClInclude Include="draw3D\DrawRay3d.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="draw3D\DrawSegment3d.h">
+    <ClInclude Include="draw3D\DrawSegment3D.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="draw3D\DrawTriangle3D.h">
@@ -117,7 +117,7 @@
     <ClInclude Include="draw3D\DrawTriangleModel.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="draw3D\DrawVect3D.h">
+    <ClInclude Include="draw3D\DrawVec3D.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="3D\AABB.h">
@@ -251,7 +251,7 @@
     <ClCompile Include="draw3D\DrawRay3d.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="draw3D\DrawSegment3d.cpp">
+    <ClCompile Include="draw3D\DrawSegment3D.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="draw3D\DrawTriangle3D.cpp">
@@ -260,7 +260,7 @@
     <ClCompile Include="draw3D\DrawTriangleModel.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="draw3D\DrawVect3D.cpp">
+    <ClCompile Include="draw3D\DrawVec3D.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="3D\AABB.cpp">

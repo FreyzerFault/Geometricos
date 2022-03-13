@@ -23,10 +23,17 @@ namespace GEO
 		// 3D
 		void drawPlane();
 
+		void drawPointCloud3D();
 
 		// Modelos 3D:
 		void drawVaca();
 		void drawCuenco();
+		void drawDado();
+
+		void drawModel(const TriangleModel& model);
+
+		// Calcular los Triangulos del modelo con mayor y menor X, Y y Z
+		void drawMaxMinTriangles(const TriangleModel& model);
 
 		void clear();
 

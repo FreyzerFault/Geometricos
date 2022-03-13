@@ -54,10 +54,10 @@
     <ClInclude Include="draw3D\DrawLine3D.h" />
     <ClInclude Include="draw3D\DrawPlane.h" />
     <ClInclude Include="draw3D\DrawRay3d.h" />
-    <ClInclude Include="draw3D\DrawSegment3d.h" />
+    <ClInclude Include="draw3D\DrawSegment3D.h" />
     <ClInclude Include="draw3D\DrawTriangle3D.h" />
     <ClInclude Include="draw3D\DrawTriangleModel.h" />
-    <ClInclude Include="draw3D\DrawVect3D.h" />
+    <ClInclude Include="draw3D\DrawVec3D.h" />
     <ClInclude Include="InclDraw2D.h" />
     <ClInclude Include="InclDraw3D.h" />
     <ClInclude Include="InclGeom2D.h" />
@@ -104,10 +104,10 @@
     <ClCompile Include="draw3D\DrawLine3D.cpp" />
     <ClCompile Include="draw3D\DrawPlane.cpp" />
     <ClCompile Include="draw3D\DrawRay3d.cpp" />
-    <ClCompile Include="draw3D\DrawSegment3d.cpp" />
+    <ClCompile Include="draw3D\DrawSegment3D.cpp" />
     <ClCompile Include="draw3D\DrawTriangle3D.cpp" />
     <ClCompile Include="draw3D\DrawTriangleModel.cpp" />
-    <ClCompile Include="draw3D\DrawVect3D.cpp" />
+    <ClCompile Include="draw3D\DrawVec3D.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="DrawTests.cpp" />
     <ClCompile Include="utils\Draw.cpp" />

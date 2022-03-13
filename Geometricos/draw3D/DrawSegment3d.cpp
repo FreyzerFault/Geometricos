@@ -1,9 +1,9 @@
-#include "DrawSegment3d.h"
+#include "DrawSegment3D.h"
 
 #include "Scene.h"
 
 
-GEO::DrawSegment3d::DrawSegment3d (const Segment3D& segment): dt (segment), Draw(){
+GEO::DrawSegment3D::DrawSegment3D (const Segment3D& segment): dt (segment), Draw(){
 	
 	const Vec3D inicio = segment.getOrig();
 	const Vec3D fin = segment.getDest();
@@ -25,13 +25,13 @@ GEO::DrawSegment3d::DrawSegment3d (const Segment3D& segment): dt (segment), Draw
 }
 
 
-void GEO::DrawSegment3d::drawIt (TypeColor c){
+void GEO::DrawSegment3D::drawIt (TypeColor c){
 	setColorActivo (c);
 	drawIt();
 }
 
 
-void GEO::DrawSegment3d::drawIt (){
+void GEO::DrawSegment3D::drawIt (){
 	setShaderProgram ( "algeom" );
 	setDrawMode(TypeDraw::LINE );
 	Scene::getInstance ()->addModel ( this );

@@ -37,6 +37,10 @@ namespace GEO
 	const TypeColor yellow(1.0, 1.0, 0.0);
 	const TypeColor white(1.0, 1.0, 1.0);
 	const TypeColor black(0.0, 0.0, 0.0);
+	
+	static std::vector<TypeColor> colors {
+		red, blue, green, magenta, yellow, cyan
+	};
 
    enum class TypeModel
    {

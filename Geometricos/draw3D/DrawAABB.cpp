@@ -1,5 +1,5 @@
 #include "DrawAABB.h"
-#include "DrawSegment3d.h"
+#include "DrawSegment3D.h"
 
 
 GEO::DrawAABB::DrawAABB (const AABB& aabb): Draw(), _aabb (aabb){

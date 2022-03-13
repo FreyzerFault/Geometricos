@@ -45,7 +45,7 @@ namespace GEO
 		void clear() { _points.clear(); }
 
 		// Bounding Box
-		AABB getAABB();
+		AABB getAABB() const;
 
 
 		// Elimina los datos calculados del Convex Hull
@@ -71,8 +71,10 @@ namespace GEO
 		
 
 		// Punto a mas distancia
-		void getMostDistanced(int& a, int& b);
+		void getMostDistanced(int& a, int& b) const;
 
+		void getMaxPoints(Vec3D& maxX, Vec3D& maxY, Vec3D& maxZ) const;
+		void getMinPoints(Vec3D& minX, Vec3D& minY, Vec3D& minZ) const;
 
 	};
 
