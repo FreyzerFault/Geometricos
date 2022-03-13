@@ -1,13 +1,4 @@
-/* 
- * File:   Triangle.h
- * Author: lidia
- *
- * Created on 5 de enero de 2021, 13:57
- */
-
-#ifndef TRIANGLE_H
-#define TRIANGLE_H
-
+#pragma once
 
 #include "Vec2D.h"
 
@@ -55,6 +46,3 @@ namespace GEO
 		Vec2D getC() { return c; }
 	};
 }
-
-
-#endif /* TRIANGLE_H */

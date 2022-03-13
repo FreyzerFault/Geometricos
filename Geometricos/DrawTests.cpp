@@ -189,8 +189,6 @@ void GEO::DrawTests::drawPlane()
 {
 	try
 	{
-		const Vec3D center(0,-2,-5);
-
 		Vec3D a(0.0, 0.0, 0.0);
 		Vec3D b(1.0, 0.0, 0.0);
 		Vec3D c(1.0, 1.0, 1.0);
@@ -199,12 +197,14 @@ void GEO::DrawTests::drawPlane()
 		Vec3D e(1.0, 0.0, 0.0);
 		Vec3D f(1.0, -1.0, 1.0);
 
-		a = a + center;
+		//const Vec3D center(0,0,0);
+
+		/*a = a + center;
 		b = b + center;
 		c = c + center;
 		d = d + center;
 		e = e + center;
-		f = f + center;
+		f = f + center;*/
 
 		const Plane planeA(a,b,c, true);
 		const Plane planeB(d,e,f, true);
@@ -216,6 +216,9 @@ void GEO::DrawTests::drawPlane()
 		drawIt<Plane, DrawPlane>(planeA, yellow, TypeDraw::WIREFRAME);
 		drawIt<Plane, DrawPlane>(planeB, cyan, TypeDraw::WIREFRAME);
 		drawIt<Plane, DrawPlane>(planeC, magenta, TypeDraw::WIREFRAME);
+		drawIt<Plane, DrawPlane>(planeA, yellow);
+		drawIt<Plane, DrawPlane>(planeB, cyan);
+		drawIt<Plane, DrawPlane>(planeC, magenta);
 
 		// INTERSECCIONES
 		Line3D lAB, lBC, lAC;

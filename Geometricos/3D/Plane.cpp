@@ -92,7 +92,7 @@ bool GEO::Plane::intersect(const Line3D& line, Vec3D& point) const
 	return true;
 }
 
-bool GEO::Plane::intersect(const Plane & plane, Line3D & line) const
+bool GEO::Plane::intersect(const Plane& plane, Line3D& line) const
 {
 	const Vec3D n = getNormal().normalize();
 
@@ -100,18 +100,42 @@ bool GEO::Plane::intersect(const Plane & plane, Line3D & line) const
 	if (BasicGeom::equal(n.dot(plane.getNormal()), 1))
 		return false;
 
-	// Vector de la interseccion
-	const Vec3D v = n.cross(plane.getNormal()).normalize();
+	// Implementacion propia a partir de la perpendicular de la perpendicular,
+	// que deberia de intersectar uno de los planos y pertenece al otro plano,
+	// por lo que el punto de interseccion seria un punto de la linea que buscamos
 
-	// Linea en el plano perpendicular a la interseccion
-	const Vec3D perp = v.cross(n).normalize();
-	
-	// Punto de interseccion de la linea perpendicular a la interseccion y la normal
-	// Me da un punto en mi linea de interseccion para crearla
-	const Line3D perpLine(getP(), getP() + perp);
-	Vec3D p;
-	plane.intersect(perpLine, p);
-	
+	//// Vector de la interseccion
+	//const Vec3D v = n.cross(plane.getNormal()).normalize();
+
+	//// Linea en el plano perpendicular a la interseccion
+	//const Vec3D perp = v.cross(n).normalize();
+	//
+	//// Punto de interseccion de la linea perpendicular a la interseccion y la normal
+	//// Me da un punto en mi linea de interseccion para crearla
+	//const Line3D perpLine(getP(), getP() + perp);
+	//Vec3D p;
+	//plane.intersect(perpLine, p);
+	//
+	//line = Line3D(p, p + v);
+
+
+	// Implementacion de http://paulbourke.net/geometry/pointlineplane/:
+
+	const Vec3D n1 = getNormal();
+	const Vec3D n2 = plane.getNormal();
+	const double d1 = getD();
+	const double d2 = plane.getD();
+	const double determinant = n1.dot(n1) * n2.dot(n2) - n1.dot(n2) * n1.dot(n2);
+
+	// A partir de la ecuacion de la linea que buscamos:
+	// p(x,y) = p0 + u * v = c1*n1 + c2*n2 + u(n1 x n2)
+	// Despejamos c1 y c2:
+	const double c1 = (d1 * n2.dot(n2) - d2 * n1.dot(n2)) / determinant;
+	const double c2 = (d2 * n1.dot(n1) - d1 * n1.dot(n2)) / determinant;
+
+	const Vec3D p = n1 * c1 + n2 * c2;
+	const Vec3D v = n1.cross(n2);
+
 	line = Line3D(p, p + v);
 
 	return true;

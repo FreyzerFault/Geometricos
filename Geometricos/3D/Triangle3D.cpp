@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <cmath>
 #include "BasicGeom.h"
@@ -18,13 +17,25 @@ GEO::Triangle3D::Triangle3D(const Vec3D& va, const Vec3D& vb, const Vec3D& vc)
 
 double GEO::Triangle3D::area() const
 {
+	// La MITAD del Area del rectangulo que formaria
 	return (_a - _b).module() * (_a - _c).module() / 2;
 }
 
-GEO::Triangle3D::PointPosition GEO::Triangle3D::classify(Vec3D & point)
+GEO::Triangle3D::PointPosition GEO::Triangle3D::classify(const Vec3D& point) const
 {
-	//TODO
+	// Resolviendo la ecuacion del plano Ax + By + Cz + D = s
+	const Plane plane(_a, _b, _c, true);
+	const double s = plane.getA() * point.getX() + plane.getB() * point.getY() + plane.getC() * point.getZ() + plane.getD();
 
+	// s determina el lado del punto
+
+	if (s > BasicGeom::EPSILON)
+		return POSITIVE;
+
+	if (s < BasicGeom::EPSILON)
+		return NEGATIVE;
+
+	// Si s == 0
 	return COPLANAR;
 }
 
@@ -39,7 +50,7 @@ GEO::Vec3D GEO::Triangle3D::normal() const
 
 
 
-void GEO::Triangle3D::set(Vec3D & va, Vec3D & vb, Vec3D & vc)
+void GEO::Triangle3D::set(const Vec3D& va, const Vec3D& vb, const Vec3D& vc)
 {
 	_a = va;
 	_b = vb;

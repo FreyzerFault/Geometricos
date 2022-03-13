@@ -52,8 +52,7 @@ namespace GEO
 		double area() const;
 
 		// Posicion relativa de un punto respecto al triangulo
-		PointPosition classify(Vec3D& point);
-
+		PointPosition classify(const Vec3D& point) const;
 
 		Vec3D normal() const;
 
@@ -65,7 +64,7 @@ namespace GEO
 		void setB(const Vec3D& pb) { _b = pb; }
 		void setC(const Vec3D& pc) { _c = pc; }
 
-		void set(Vec3D& va, Vec3D& vb, Vec3D& vc);
+		void set(const Vec3D& va, const Vec3D& vb, const Vec3D& vc);
 
 
 		Triangle3D& operator=(const Triangle3D& triangle) = default;
