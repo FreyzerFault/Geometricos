@@ -164,7 +164,9 @@ void GEO::PointCloud3D::updateMaxMin(int index)
 
 void GEO::PointCloud3D::getMostDistanced (int &a, int &b) const
 {
-	const Vec3D center = getAABB().getCenter();
+	a = 0; b = 0;
+	// Mas alejado del centro y mas cercano al centro
+	/*const Vec3D center = getAABB().getCenter();
 	Vec3D max(center);
 	Vec3D min(center + BasicGeom::BIGNUM);
 	for (const Vec3D& point : _points)
@@ -182,9 +184,22 @@ void GEO::PointCloud3D::getMostDistanced (int &a, int &b) const
 			a = i;
 		if (point == min)
 			b = i;
-	}
+	}*/
 
-	a=0; b=0;
+	double maxDistance = 0;
+	// Mas alejados entre si
+	for (int i = 0; i < _points.size(); i++)
+	{
+		for (int j = 0; j < _points.size(); j++)
+		{
+			const double d = (_points[i] - _points[j]).module();
+			if (d > maxDistance)
+			{
+				a = i; b = j;
+				maxDistance = d;
+			}
+		}
+	}
 }
 
 void GEO::PointCloud3D::getMaxPoints(Vec3D& maxX, Vec3D& maxY, Vec3D& maxZ) const
@@ -219,4 +234,10 @@ void GEO::PointCloud3D::getMinPoints(Vec3D& minX, Vec3D& minY, Vec3D& minZ) cons
 		if (point.getZ() < minZ.getZ())
 			minZ = point;
 	}
+}
+
+GEO::Vec3D GEO::PointCloud3D::getRandomPoint() const
+{
+	const int randomIndex = trunc((double)rand() / RAND_MAX * _points.size());
+	return _points[randomIndex];
 }

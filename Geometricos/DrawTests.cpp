@@ -210,15 +210,7 @@ void GEO::DrawTests::drawPlane()
 		const Plane planeB(d,e,f, true);
 		const Plane planeC(a,c,f, true);
 
-		/*drawIt<Plane, DrawPlane>(planeA, yellow);
-		drawIt<Plane, DrawPlane>(planeB, cyan);
-		drawIt<Plane, DrawPlane>(planeC, magenta);*/
-		drawIt<Plane, DrawPlane>(planeA, yellow, TypeDraw::WIREFRAME);
-		drawIt<Plane, DrawPlane>(planeB, cyan, TypeDraw::WIREFRAME);
-		drawIt<Plane, DrawPlane>(planeC, magenta, TypeDraw::WIREFRAME);
-		drawIt<Plane, DrawPlane>(planeA, yellow);
-		drawIt<Plane, DrawPlane>(planeB, cyan);
-		drawIt<Plane, DrawPlane>(planeC, magenta);
+		
 
 		// INTERSECCIONES
 		Line3D lAB, lBC, lAC;
@@ -236,6 +228,14 @@ void GEO::DrawTests::drawPlane()
 
 		if (planeA.intersect(planeB, planeC, pABC))
 			drawIt<Vec3D, DrawVec3D>(pABC, white);
+
+
+		drawIt<Plane, DrawPlane>(planeA, yellow, TypeDraw::WIREFRAME);
+		drawIt<Plane, DrawPlane>(planeB, cyan, TypeDraw::WIREFRAME);
+		drawIt<Plane, DrawPlane>(planeC, magenta, TypeDraw::WIREFRAME);
+		drawIt<Plane, DrawPlane>(planeA, yellow);
+		drawIt<Plane, DrawPlane>(planeB, cyan);
+		drawIt<Plane, DrawPlane>(planeC, magenta);
 		
 	}
 	catch (std::exception& e)
@@ -300,6 +300,9 @@ void GEO::DrawTests::drawPointCloud3D()
 		const Vec3D& maxPoint = pc.getPoint(a);
 		const Vec3D& minPoint = pc.getPoint(b);
 
+		maxPoint.out();
+		minPoint.out();
+
 		const Segment3D segment(minPoint, maxPoint);
 		drawIt<Segment3D, DrawSegment3D>(segment, red);
 
@@ -319,6 +322,26 @@ void GEO::DrawTests::drawPointCloud3D()
 			}
 		}
 		drawIt<Vec3D, DrawVec3D>(farPoint, cyan);
+
+		const AABB aabb = pc.getAABB();
+		drawIt<AABB, DrawAABB>(aabb, white);
+
+		const Vec3D v1(1,0,0);
+		const Vec3D v2(0,0,1);
+
+		const Plane plane(aabb.getMin(), v1, v2, false);
+
+		Line3D randomLine(pc.getRandomPoint(), pc.getRandomPoint());
+		Vec3D intersectionPoint;
+		while (!plane.intersect(randomLine, intersectionPoint))
+		{
+			randomLine = Line3D(pc.getRandomPoint(), pc.getRandomPoint());
+		}
+
+		drawIt<Line3D, DrawLine3D>(randomLine, red);
+		drawIt<Vec3D, DrawVec3D>(intersectionPoint, white);
+		
+		drawIt<Plane, DrawPlane>(plane, yellow);
 	}
 	catch (std::exception& e)
 	{
@@ -391,7 +414,7 @@ void GEO::DrawTests::drawDado()
 
 void GEO::DrawTests::drawModel(const TriangleModel& model)
 {
-	drawIt<TriangleModel, DrawTriangleModel>(model, white);
+	drawIt<TriangleModel, DrawTriangleModel>(model, black);
 }
 
 void GEO::DrawTests::drawMaxMinTriangles(const TriangleModel& model)

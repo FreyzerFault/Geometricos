@@ -17,8 +17,8 @@ namespace GEO
 		bool lequal(double a, double b);
 		bool gequal(double a, double b);
 		
-		double determinant2x2(double a, double b, double c, double d);
-		double determinant3x3(double a, double b, double c, double d, double e, double f, double g, double h, double i);
+		double det2x2(double a, double b, double c, double d);
+		double det3x3(double a, double b, double c, double d, double e, double f, double g, double h, double i);
 		
 		double min3(double a, double b, double c);
 		double max3(double a, double b, double c);
@@ -45,14 +45,14 @@ namespace GEO
 			return a > b || equal(a, b);
 		}
 
-		inline double determinant2x2(
+		inline double det2x2(
 			const double a, const double b,
 			const double c, const double d)
 		{
 			return (a * c - b * d);
 		}
 
-		inline double determinant3x3(
+		inline double det3x3(
 			const double a, const double b, const double c,
 			const double d, const double e, const double f,
 			const double g, const double h, const double i)

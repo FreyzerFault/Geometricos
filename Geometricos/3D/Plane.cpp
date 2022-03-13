@@ -51,17 +51,17 @@ double GEO::Plane::distance(const Vec3D& p) const
 
 double GEO::Plane::getA() const
 {
-	return (BasicGeom::determinant2x2(_t.getZ() - _s.getZ(), _t.getY() - _s.getY(), _r.getY() - _s.getY(), _r.getZ() - _s.getZ()));
+	return (BasicGeom::det2x2(_t.getZ() - _s.getZ(), _t.getY() - _s.getY(), _r.getY() - _s.getY(), _r.getZ() - _s.getZ()));
 }
 
 double GEO::Plane::getB() const
 {
-	return (BasicGeom::determinant2x2(_t.getX() - _s.getX(), _t.getZ() - _s.getZ(), _r.getZ() - _s.getZ(), _r.getX() - _s.getX()));
+	return (BasicGeom::det2x2(_t.getX() - _s.getX(), _t.getZ() - _s.getZ(), _r.getZ() - _s.getZ(), _r.getX() - _s.getX()));
 }
 
 double GEO::Plane::getC() const
 {
-	return (BasicGeom::determinant2x2(_t.getY() - _s.getY(), _t.getX() - _s.getX(), _r.getX() - _s.getX(), _r.getY() - _s.getY()));
+	return (BasicGeom::det2x2(_t.getY() - _s.getY(), _t.getX() - _s.getX(), _r.getX() - _s.getX(), _r.getY() - _s.getY()));
 }
 
 double GEO::Plane::getD() const
@@ -77,15 +77,13 @@ GEO::Vec3D GEO::Plane::getNormal() const
 bool GEO::Plane::intersect(const Line3D& line, Vec3D& point) const
 {
 	const Vec3D n = getNormal();
-	const Vec3D ab = line.getDest() - line.getOrig();
+	const Vec3D v = line.getDest() - line.getOrig();
 
 	// Si la Linea es Perpendicular a la Normal, son paralelos
-	if (BasicGeom::equal(n.dot(ab), 0))
+	if (BasicGeom::equal(n.dot(v), 0))
 		return false;
-	
-	const Vec3D ac = getP() - line.getOrig();
 
-	const double t = - (n.dot(ac) / n.dot(ab));
+	const double t = - ((n.dot(line.getOrig()) + getD()) / n.dot(v));
 
 	point = line.getPoint(t);
 
@@ -118,25 +116,49 @@ bool GEO::Plane::intersect(const Plane& plane, Line3D& line) const
 	//
 	//line = Line3D(p, p + v);
 
+	
+	const Vec3D n1 = getNormal();
+	const Vec3D n2 = plane.getNormal();
+	const Vec3D n3 = n1.cross(n2);
+
+	const double a1 = n1.getX(), b1 = n1.getY(), c1 = n1.getZ(), d1 = getD();
+	const double a2 = n2.getX(), b2 = n2.getY(), c2 = n2.getZ(), d2 = plane.getD();
+	const double a3 = n3.getX(), b3 = n3.getY(), c3 = n3.getZ();
+
+	const double DET = BasicGeom::det3x3(a1, b1, c1, a2, b2, c2, a3, b3, c3);
+
+	if (BasicGeom::equal(DET, 0))
+		return false;
+
+	const double x = d2 * BasicGeom::det2x2(b1, c1, b3, c3)
+	- d1 * BasicGeom::det2x2(b2, c2, b3, c3);
+	const double y = d2 * BasicGeom::det2x2(a3, c3, a1, c1)
+	- d1 * BasicGeom::det2x2(a3, c3, a2, c2);
+	const double z = d2 * BasicGeom::det2x2(a1, b1, a3, b3)
+	- d1 * BasicGeom::det2x2(a2,b2,a3,b3);
+
+	const Vec3D p(x,y,z);
+
+	line = Line3D(p, p + n3);
+
+	
 
 	// Implementacion de http://paulbourke.net/geometry/pointlineplane/:
 
-	const Vec3D n1 = getNormal();
-	const Vec3D n2 = plane.getNormal();
-	const double d1 = getD();
-	const double d2 = plane.getD();
-	const double determinant = n1.dot(n1) * n2.dot(n2) - n1.dot(n2) * n1.dot(n2);
+	//const double d1 = getD();
+	//const double d2 = plane.getD();
+	//const double determinant = n1.dot(n1) * n2.dot(n2) - n1.dot(n2) * n1.dot(n2);
 
-	// A partir de la ecuacion de la linea que buscamos:
-	// p(x,y) = p0 + u * v = c1*n1 + c2*n2 + u(n1 x n2)
-	// Despejamos c1 y c2:
-	const double c1 = (d1 * n2.dot(n2) - d2 * n1.dot(n2)) / determinant;
-	const double c2 = (d2 * n1.dot(n1) - d1 * n1.dot(n2)) / determinant;
+	//// A partir de la ecuacion de la linea que buscamos:
+	//// p(x,y) = p0 + u * v = c1*n1 + c2*n2 + u(n1 x n2)
+	//// Despejamos c1 y c2:
+	//const double c1 = (d1 * n2.dot(n2) - d2 * n1.dot(n2)) / determinant;
+	//const double c2 = (d2 * n1.dot(n1) - d1 * n1.dot(n2)) / determinant;
 
-	const Vec3D p = n1 * c1 + n2 * c2;
-	const Vec3D v = n1.cross(n2);
+	//const Vec3D p = n1 * c1 + n2 * c2;
+	//const Vec3D v = n1.cross(n2);
 
-	line = Line3D(p, p + v);
+	//line = Line3D(p, p + v);
 
 	return true;
 }

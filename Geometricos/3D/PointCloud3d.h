@@ -76,6 +76,8 @@ namespace GEO
 		void getMaxPoints(Vec3D& maxX, Vec3D& maxY, Vec3D& maxZ) const;
 		void getMinPoints(Vec3D& minX, Vec3D& minY, Vec3D& minZ) const;
 
+		Vec3D getRandomPoint() const;
+
 	};
 
 }

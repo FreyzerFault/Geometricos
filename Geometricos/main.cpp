@@ -47,6 +47,11 @@ void mostrarAyuda()
 		<< "b -> Añade una curva de Bezier" << std::endl
 		<< "u -> Añade segmento, linea y rayo y calcula sus intersecciones" << std::endl
 		<< "================" << std::endl
+		<< "3D:" << std::endl
+		<< "q -> Ejercicio 1: Nube de Puntos" << std::endl
+		<< "w -> Ejercicio 2: Planos" << std::endl
+		<< "e -> Ejercicio 3: Modelos de Triangulos" << std::endl
+		<< "================" << std::endl
 		<< "1 -> PLANTA" << std::endl
 		<< "2 -> ALZADO" << std::endl
 		<< "3 -> PERFIL" << std::endl
@@ -307,19 +312,9 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		break;
 
 		*/
-
-		// =============================== PLANOS ===============================
-	case GLFW_KEY_Q:
-		if (accion == GLFW_PRESS)
-		{
-			test3D.drawPlane();
-			
-			refreshWindow(ventana);
-		}
-		break;
-
+		
 		// =============================== POINT CLOUDS ===============================
-	case GLFW_KEY_P:
+	case GLFW_KEY_Q:
 		if (accion == GLFW_PRESS)
 		{
 			test3D.drawPointCloud3D();
@@ -328,7 +323,29 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		}
 		break;
 
+		// =============================== PLANOS ===============================
+	case GLFW_KEY_W:
+		if (accion == GLFW_PRESS)
+		{
+			test3D.drawPlane();
+			
+			refreshWindow(ventana);
+		}
+		break;
+
 		// =============================== MODELOS 3D ===============================
+	case GLFW_KEY_E:
+		if (accion == GLFW_PRESS)
+		{
+			// Colorea los triangulos maximos y minimos en cada coordenada del modelo
+			const TriangleModel vaca("vaca");
+			test3D.drawModel(vaca);
+			test3D.drawMaxMinTriangles(vaca);
+			
+			refreshWindow(ventana);
+		}
+		break;
+
 	case GLFW_KEY_V:
 		if (accion == GLFW_PRESS)
 		{
@@ -349,17 +366,6 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		if (accion == GLFW_PRESS)
 		{
 			test3D.drawCuenco();
-			
-			refreshWindow(ventana);
-		}
-		break;
-	case GLFW_KEY_M:
-		if (accion == GLFW_PRESS)
-		{
-			// Colorea los triangulos maximos y minimos en cada coordenada del modelo
-			const TriangleModel vaca("vaca");
-			test3D.drawModel(vaca);
-			test3D.drawMaxMinTriangles(vaca);
 			
 			refreshWindow(ventana);
 		}
