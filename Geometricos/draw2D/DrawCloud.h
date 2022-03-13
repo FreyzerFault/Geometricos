@@ -16,20 +16,20 @@
 
 namespace GEO
 {
-	class DrawPointCloud: public Draw {
+	class DrawCloud: public Draw {
 	    
 	    PointCloud dt;
 	    
 	    public:
 	        
-	    DrawPointCloud (const PointCloud &t); 
+	    DrawCloud (const PointCloud &t); 
 	    
-	    DrawPointCloud (const DrawPointCloud &ddt): dt (ddt.dt) , Draw() {}
+	    DrawCloud (const DrawCloud &ddt): dt (ddt.dt) , Draw() {}
 	    
 	    void drawIt ();
 	    void drawIt (TypeColor c);
 
-	    ~DrawPointCloud() override = default;
+	    ~DrawCloud() override = default;
 	};
 }
 

@@ -10,39 +10,13 @@ namespace GEO
 
 	public:
 		friend class DrawTriangle; //evitar
-
-		/**
-		 * @brief Constructor
-		 * @param aa vertex
-		 * @param bb vertex
-		 * @param cc vertex
-		 */
-		Triangle(Vec2D& aa, Vec2D& bb, Vec2D& cc);
-
-		/**
-		 * @brief Copy constructor
-		 * @param t
-		 */
-
-		Triangle(const Triangle& t);
-
-		/**
-		 * @brief getters
-		 * @return vertex A
-		 */
-
+		
+		Triangle(const Vec2D& aa, const Vec2D& bb, const Vec2D& cc);
+		
+		Triangle(const Triangle& t) = default;
+		
 		Vec2D getA() { return a; }
-
-		/**
-		 * @brief getters
-		 * @return vertex A
-		 */
 		Vec2D getB() { return b; }
-
-		/**
-		 * @brief getters
-		 * @return vertex A
-		 */
 		Vec2D getC() { return c; }
 	};
 }

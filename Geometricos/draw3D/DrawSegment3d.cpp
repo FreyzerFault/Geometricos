@@ -3,7 +3,7 @@
 #include "Scene.h"
 
 
-GEO::DrawSegment3d::DrawSegment3d (const Segment3d& segment): dt (segment), Draw(){
+GEO::DrawSegment3d::DrawSegment3d (const Segment3D& segment): dt (segment), Draw(){
 	
 	const Vec3D inicio = segment.getOrig();
 	const Vec3D fin = segment.getDest();

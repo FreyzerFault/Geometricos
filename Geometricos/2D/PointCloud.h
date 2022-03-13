@@ -1,13 +1,4 @@
-
-/* 
- * File:   PointCloud.h
- * Author: lidia
- *
- * Created on 19 de enero de 2021, 12:46
- */
-
-#ifndef POINTCLOUD_H
-#define POINTCLOUD_H
+#pragma once
 
 #include <vector>
 #include "Point.h"
@@ -58,8 +49,4 @@ namespace GEO
 	};
 	
 }
-
-
-
-#endif /* POINTCLOUD_H */
 

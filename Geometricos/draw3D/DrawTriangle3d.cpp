@@ -3,9 +3,9 @@
 
 GEO::DrawTriangle3D::DrawTriangle3D (const Triangle3D &triangle): Draw(), dt (triangle){
     
-    _vertices.emplace_back(dt._a.getX(), dt._a.getY() , dt._a.getZ());
-    _vertices.emplace_back(dt._b.getX(), dt._b.getY() , dt._b.getZ());
-    _vertices.emplace_back(dt._c.getX(), dt._c.getY() , dt._c.getZ());
+    _vertices.emplace_back(triangle._a.getX(), triangle._a.getY() , triangle._a.getZ());
+    _vertices.emplace_back(triangle._b.getX(), triangle._b.getY() , triangle._b.getZ());
+    _vertices.emplace_back(triangle._c.getX(), triangle._c.getY() , triangle._c.getZ());
 
     const Vec3D n = triangle.normal();
 
@@ -13,9 +13,9 @@ GEO::DrawTriangle3D::DrawTriangle3D (const Triangle3D &triangle): Draw(), dt (tr
     _normals.emplace_back(n.getX(), n.getY(), n.getZ());
     _normals.emplace_back(n.getX(), n.getY(), n.getZ());
 
-    _indices.push_back ( 0 );
-    _indices.push_back ( 1 );
-    _indices.push_back ( 2 );
+    _indices.push_back (0);
+    _indices.push_back (1);
+    _indices.push_back (2);
 
     buildVAO ();
     

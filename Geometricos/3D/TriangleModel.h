@@ -37,6 +37,8 @@ namespace GEO
 		unsigned numTriangulos() const;
 
 		PointCloud3D getCloud() const;
+
+		AABB getAABB() const;
 	};
 }
 

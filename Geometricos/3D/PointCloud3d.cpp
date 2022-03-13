@@ -113,7 +113,7 @@ GEO::AABB GEO::PointCloud3D::getAABB()
 }
 
 
-GEO::Vec3D GEO::PointCloud3D::getPoint(int pos)
+GEO::Vec3D GEO::PointCloud3D::getPoint(int pos) const
 {
 	if (pos >= 0 && (pos < _points.size())) {
 		return _points[pos];

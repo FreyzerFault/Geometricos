@@ -1,14 +1,14 @@
 
 #include <iostream>
-#include "Segment3d.h"
+#include "Segment3D.h"
 
 
-GEO::Segment3d::Segment3d(const Vec3D& orig, const Vec3D& dest)
+GEO::Segment3D::Segment3D(const Vec3D& orig, const Vec3D& dest)
 	: Edge3D(orig, dest)
 {
 }
 
-GEO::Segment3d & GEO::Segment3d::operator=(const Segment3d & segment)
+GEO::Segment3D & GEO::Segment3D::operator=(const Segment3D & segment)
 {
 	if (this != &segment)
 	{
@@ -18,7 +18,7 @@ GEO::Segment3d & GEO::Segment3d::operator=(const Segment3d & segment)
 	return *this;
 }
 
-void GEO::Segment3d::out()
+void GEO::Segment3D::out()
 {
 	std::cout << "Segment->Origin: ";
 	_orig.out();

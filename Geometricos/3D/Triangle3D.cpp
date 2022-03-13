@@ -24,7 +24,7 @@ double GEO::Triangle3D::area() const
 GEO::Triangle3D::PointPosition GEO::Triangle3D::classify(const Vec3D& point) const
 {
 	// Resolviendo la ecuacion del plano Ax + By + Cz + D = s
-	const Plane plane(_a, _b, _c, true);
+	const Plane plane = getPlane();
 	const double s = plane.getA() * point.getX() + plane.getB() * point.getY() + plane.getC() * point.getZ() + plane.getD();
 
 	// s determina el lado del punto
@@ -48,6 +48,15 @@ GEO::Vec3D GEO::Triangle3D::normal() const
 	return v1.cross(v2).normalize();
 }
 
+GEO::Plane GEO::Triangle3D::getPlane() const
+{
+	return {_a, _b, _c, true};
+}
+
+GEO::Vec3D GEO::Triangle3D::getNormal() const
+{
+	return getPlane().getNormal();
+}
 
 
 void GEO::Triangle3D::set(const Vec3D& va, const Vec3D& vb, const Vec3D& vc)

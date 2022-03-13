@@ -36,7 +36,7 @@
     <ClInclude Include="3D\Plane.h" />
     <ClInclude Include="3D\PointCloud3D.h" />
     <ClInclude Include="3D\Ray3D.h" />
-    <ClInclude Include="3D\Segment3d.h" />
+    <ClInclude Include="3D\Segment3D.h" />
     <ClInclude Include="3D\Triangle3D.h" />
     <ClInclude Include="3D\TriangleModel.h" />
     <ClInclude Include="3D\Vec3D.h" />
@@ -44,7 +44,7 @@
     <ClInclude Include="draw2D\DrawBezier.h" />
     <ClInclude Include="draw2D\DrawLine.h" />
     <ClInclude Include="draw2D\DrawPoint.h" />
-    <ClInclude Include="draw2D\DrawPointCloud.h" />
+    <ClInclude Include="draw2D\DrawCloud.h" />
     <ClInclude Include="draw2D\DrawPolygon.h" />
     <ClInclude Include="draw2D\DrawRay.h" />
     <ClInclude Include="draw2D\DrawSegment.h" />
@@ -87,14 +87,14 @@
     <ClCompile Include="3D\Plane.cpp" />
     <ClCompile Include="3D\PointCloud3D.cpp" />
     <ClCompile Include="3D\Ray3D.cpp" />
-    <ClCompile Include="3D\Segment3d.cpp" />
+    <ClCompile Include="3D\Segment3D.cpp" />
     <ClCompile Include="3D\Triangle3D.cpp" />
     <ClCompile Include="3D\TriangleModel.cpp" />
     <ClCompile Include="3D\Vec3D.cpp" />
     <ClCompile Include="draw2D\DrawBezier.cpp" />
     <ClCompile Include="draw2D\DrawLine.cpp" />
     <ClCompile Include="draw2D\DrawPoint.cpp" />
-    <ClCompile Include="draw2D\DrawPointCloud.cpp" />
+    <ClCompile Include="draw2D\DrawCloud.cpp" />
     <ClCompile Include="draw2D\DrawPolygon.cpp" />
     <ClCompile Include="draw2D\DrawRay.cpp" />
     <ClCompile Include="draw2D\DrawSegment.cpp" />

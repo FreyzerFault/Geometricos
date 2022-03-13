@@ -1,10 +1,3 @@
-
-/* 
- * File:   PontCloud3d.h
- * Author: lidia
- *
- * Created on 26 de enero de 2021, 17:36
- */
 #pragma once
 
 #include <string>
@@ -13,18 +6,13 @@
 #include "Vec3D.h"
 namespace GEO
 {
-	/**
-	*	@brief This class represents a set of points distributed in the space.
-	*	@author Lidia Mª Ortega Alvarado.
-	*/
 	class PointCloud3D
 	{
 	protected:
 		std::vector<Vec3D> _points;
 		Vec3D _maxPoint, _minPoint;				// AABB.
 		Vec3D _maxPointIndex, _minPointIndex;	// Indices of those vertices which have the boundary coordinates of the mesh.
-
-
+		
 	protected:
 		
 		// Toma en cuenta un nuevo punto para actualizar el Maximo y Minimo
@@ -56,29 +44,23 @@ namespace GEO
 
 		void clear() { _points.clear(); }
 
-		/**
-		*	@brief Deletes the data saved from the convex hull step by step process.
-		*/
-		//void forgetConvexHullData() { delete _convexHullData; _convexHullData = nullptr; }
-
-		
 		// Bounding Box
 		AABB getAABB();
 
 
-		/**
-		*	@brief Generates a complete convex hull.
-		*/
+		// Elimina los datos calculados del Convex Hull
+		//void forgetConvexHullData() { delete _convexHullData; _convexHullData = nullptr; }
+
+
+		// Genera el Convex Hull
 		//TriangleMesh* getConvexHull();
 
-		/**
-		*	@brief Generates the next triangle from the current convex hull.
-		*/
+		// Genera el siguiente Triangulo del Convex Hull
 		//TriangleMesh* getConvexHullNextTriangle();
 
 
-		Vec3D getPoint(int pos);
-		std::vector<Vec3D> getPoints() { return _points; }
+		Vec3D getPoint(int pos) const;
+		std::vector<Vec3D> getPoints() const { return _points; }
 		
 		int size() const { return _points.size(); }
 		

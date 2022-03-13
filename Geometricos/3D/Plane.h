@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Line3D.h"
-#include "Segment3d.h"
+#include "Segment3D.h"
 #include "Vec3D.h"
 
 namespace GEO

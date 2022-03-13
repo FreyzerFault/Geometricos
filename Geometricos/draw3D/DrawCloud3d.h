@@ -14,7 +14,7 @@ namespace GEO
     public:
 
 
-        DrawCloud3D(const PointCloud3D& t);
+        DrawCloud3D(const PointCloud3D& pointCloud);
 
         DrawCloud3D(const DrawCloud3D& ddt) : Draw(), dt(ddt.dt) {}
 

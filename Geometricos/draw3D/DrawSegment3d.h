@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Segment3d.h"
+#include "Segment3D.h"
 #include "Draw.h"
 
 
@@ -8,11 +8,11 @@ namespace GEO
 {
     class DrawSegment3d : public Draw {
 
-        Segment3d dt;
+        Segment3D dt;
 
     public:
 
-        DrawSegment3d(const Segment3d& segment);
+        DrawSegment3d(const Segment3D& segment);
 
         DrawSegment3d(const DrawSegment3d& ddt) : Draw(), dt(ddt.dt) {}
 

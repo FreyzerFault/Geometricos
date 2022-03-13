@@ -2,7 +2,7 @@
 
 #include "DrawLine.h"
 #include "DrawPoint.h"
-#include "DrawPointCloud.h"
+#include "DrawCloud.h"
 #include "DrawPolygon.h"
 #include "DrawRay.h"
 #include "DrawSegment.h"

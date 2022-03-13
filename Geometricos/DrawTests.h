@@ -12,6 +12,7 @@ namespace GEO
 		std::vector<Draw*> drawPointers;
 
 	public:
+		// 2D
 		void drawPolygon2D();
 		void drawTriangle2D();
 		void drawLines2D();
@@ -19,10 +20,13 @@ namespace GEO
 		void drawBezier2D();
 		void drawLineIntersections2D();
 
+		// 3D
 		void drawPlane();
 
 
+		// Modelos 3D:
 		void drawVaca();
+		void drawCuenco();
 
 		void clear();
 

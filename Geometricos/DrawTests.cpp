@@ -82,7 +82,7 @@ void GEO::DrawTests::drawPointCloud2D()
 	try
 	{
 		const PointCloud pc(50, 5, 5);
-		drawIt<PointCloud, DrawPointCloud>(pc, red);
+		drawIt<PointCloud, DrawCloud>(pc, red);
 
 		pc.save("PointCloud");
 	}
@@ -107,7 +107,7 @@ void GEO::DrawTests::drawBezier2D()
 		pc.addPoint(c);
 		pc.addPoint(d);
 		
-		drawIt<PointCloud, DrawPointCloud>(pc, red);
+		drawIt<PointCloud, DrawCloud>(pc, red);
 
 		Bezier bezier;
 		bezier.addPoint(a);
@@ -255,17 +255,18 @@ void GEO::DrawTests::drawVaca()
 		//Descomentar para ver como se pintan las 100 primeras caras del modelo de amarillo           
 
 
-   //                std::cout << "hay un total de " << tm.numTriangulos() << " triángulos" << std::endl;
-   //                TypeColor amarillo (1.0, 1.0, 0.0);  
-   //                
-   //                std::vector<Triangle3D> triangulos = tm.getFaces();
-   //                Triangle3D tri; 
-   //                DrawTriangle3d *dtri;  
-   //                for (int i=0; i<100; i++){
-   //                    tri = triangulos[i];
-   //                    dtri = new DrawTriangle3d (tri);
-   //                    dtri -> drawIt(amarillo);
-   //                }
+		std::cout << "hay un total de " << vaca.numTriangulos() << " triángulos" << std::endl;
+
+		const std::vector<Triangle3D> triangulos = vaca.getFaces();
+		for (int i=0; i<100; i++)
+		{
+			Triangle3D tri(triangulos[i]);
+			Vec3D normal = tri.getNormal() * 0.1;
+			tri.setA(tri.getA() + normal);
+			tri.setB(tri.getB() + normal);
+			tri.setC(tri.getC() + normal);
+			drawIt<Triangle3D, DrawTriangle3D>(tri, yellow);
+		}
 
 				   // descomentar para observar la nube de puntos asociada al modelo; 
 				   //comentar antes la visualización completa del modelo
@@ -295,6 +296,19 @@ void GEO::DrawTests::drawVaca()
 
 
 
+	}
+	catch (std::exception& e)
+	{
+		outputException(e, "drawVaca");
+	}
+}
+
+void GEO::DrawTests::drawCuenco()
+{
+	try
+	{
+		const TriangleModel cuenco("obj/cuenco.obj");
+		drawIt<TriangleModel, DrawTriangleModel>(cuenco, green);
 	}
 	catch (std::exception& e)
 	{

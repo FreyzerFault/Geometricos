@@ -3,7 +3,7 @@
 #include "AABB.h"
 #include "Plane.h"
 #include "Ray3D.h"
-#include "Segment3d.h"
+#include "Segment3D.h"
 #include "Vec3D.h"
 
 namespace GEO
@@ -59,6 +59,9 @@ namespace GEO
 		Vec3D getA() { return _a; }
 		Vec3D getB() { return _b; }
 		Vec3D getC() { return _c; }
+
+		Plane getPlane() const;
+		Vec3D getNormal() const;
 
 		void setA(const Vec3D& pa) { _a = pa; }
 		void setB(const Vec3D& pb) { _b = pb; }

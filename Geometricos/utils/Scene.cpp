@@ -20,7 +20,7 @@ GEO::Scene* GEO::Scene::_instance = nullptr;
  */
 GEO::Scene::~Scene ( )
 {
-   if ( ! _models.empty () )
+   if ( !_models.empty () )
    {
       for ( Draw* m : _models )
       {

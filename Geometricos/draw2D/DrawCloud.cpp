@@ -1,8 +1,8 @@
 
-#include "DrawPointCloud.h"
+#include "DrawCloud.h"
 
 
-GEO::DrawPointCloud::DrawPointCloud (const PointCloud &t): Draw(), dt (t){
+GEO::DrawCloud::DrawCloud (const PointCloud &t): Draw(), dt (t){
 	const auto& points = dt.getPoints();
 	for (int i = 0; i < points.size(); ++i)
 	{
@@ -15,13 +15,13 @@ GEO::DrawPointCloud::DrawPointCloud (const PointCloud &t): Draw(), dt (t){
 }
 
 
-void GEO::DrawPointCloud::drawIt (TypeColor c){
+void GEO::DrawCloud::drawIt (TypeColor c){
 	setColorActivo (c);
 	drawIt();
 }
 
 
-void GEO::DrawPointCloud::drawIt (){
+void GEO::DrawCloud::drawIt (){
 	setShaderProgram ( "algeom" );
 	setDrawMode(TypeDraw::POINT );
 	Scene::getInstance ()->addModel ( this );

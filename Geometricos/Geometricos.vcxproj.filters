@@ -63,7 +63,7 @@
     <ClInclude Include="draw2D\DrawPoint.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="draw2D\DrawPointCloud.h">
+    <ClInclude Include="draw2D\DrawCloud.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="draw2D\DrawPolygon.h">
@@ -138,7 +138,7 @@
     <ClInclude Include="3D\Ray3D.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="3D\Segment3d.h">
+    <ClInclude Include="3D\Segment3D.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="3D\Triangle3D.h">
@@ -209,7 +209,7 @@
     <ClCompile Include="draw2D\DrawPoint.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="draw2D\DrawPointCloud.cpp">
+    <ClCompile Include="draw2D\DrawCloud.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="draw2D\DrawPolygon.cpp">
@@ -281,7 +281,7 @@
     <ClCompile Include="3D\Ray3D.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="3D\Segment3d.cpp">
+    <ClCompile Include="3D\Segment3D.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="3D\Triangle3D.cpp">
