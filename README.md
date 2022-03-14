@@ -128,6 +128,8 @@ Para las clases Line y RayLine he hecho lo mismo pero al irlos sobrecargando en 
 
 Los dibujo con transparencia y un contorno para que se distinga, con el modo de dibujo PLAIN y una luz ambiente con un alpha pequeño. Y el modo WIREFRAME para el contorno.
 
+Además, para calcular A, B, C y D, como hemos tenido problemas con los determinantes y que la formula estaba mal, al final lo he calculado a partir de la normal tal que N(x,y,z) => A=x, B=y, C=z, D = -(A*p(x) + B*p(y) + C*p(z))
+
 ### Nube de puntos
 
 Luego para el método getMostDistanced(a, b) lo he interpretado como los puntos de la nube cuya distancia entre ellos es la mayor, así que para encontrarlos habría que hacer un algoritmo O(n^2):
