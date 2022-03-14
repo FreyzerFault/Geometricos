@@ -49,7 +49,7 @@ namespace GEO
 			const double a, const double b,
 			const double c, const double d)
 		{
-			return (a * c - b * d);
+			return (a * d - b * c);
 		}
 
 		inline double det3x3(

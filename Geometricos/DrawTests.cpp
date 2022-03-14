@@ -197,6 +197,22 @@ void GEO::DrawTests::drawPlane()
 		Vec3D e(1.0, 0.0, 0.0);
 		Vec3D f(1.0, -1.0, 1.0);
 
+		Vec3D g(0.0, 0.0, 0.0);
+		Vec3D h(1.0, 1.0, 1.0);
+		Vec3D i(1.0, 1.0, 0.0);
+
+		/*Vec3D a(0.0, 0.0, 0.0);
+		Vec3D b(1.0, 0.0, 0.0);
+		Vec3D c(0.0, 0.0, 1.0);
+
+		Vec3D d(-4.0, 0.0, 0.0);
+		Vec3D e(0.0, 0.0, 3.0);
+		Vec3D f(0.0, 4.0, 0.0);
+
+		Vec3D g(0, -2, 0);
+		Vec3D h(0, 0, -2);
+		Vec3D i(1, 1, 0);*/
+
 		//const Vec3D center(0,0,0);
 
 		/*a = a + center;
@@ -206,9 +222,9 @@ void GEO::DrawTests::drawPlane()
 		e = e + center;
 		f = f + center;*/
 
-		const Plane planeA(a,b,c, true);
-		const Plane planeB(d,e,f, true);
-		const Plane planeC(a,c,f, true);
+		const Plane planeA(a,b,c);
+		const Plane planeB(d,e,f);
+		const Plane planeC(g,h,i);
 
 		
 

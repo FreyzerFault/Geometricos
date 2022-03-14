@@ -238,6 +238,6 @@ void GEO::PointCloud3D::getMinPoints(Vec3D& minX, Vec3D& minY, Vec3D& minZ) cons
 
 GEO::Vec3D GEO::PointCloud3D::getRandomPoint() const
 {
-	const int randomIndex = trunc((double)rand() / RAND_MAX * _points.size());
+	const int randomIndex = trunc((double)rand() / RAND_MAX * (_points.size() - 1));
 	return _points[randomIndex];
 }

@@ -31,7 +31,7 @@ namespace GEO
 		*	@param arePoints
 		*	@param If arePoints is false, then params are p + u * lambda + v * mu, otherwise are points (R, S, T).
 		*/
-		Plane(const Vec3D& p, const Vec3D& u, const Vec3D& v, bool arePoints);
+		Plane(const Vec3D& p, const Vec3D& u, const Vec3D& v, bool arePoints = true);
 
 		// Plano definido por un punto y su normal
 		Plane(const Vec3D& p, const Vec3D& normal);
@@ -73,7 +73,7 @@ namespace GEO
 
 		Plane& operator=(const Plane& plane);
 		
-		virtual void out();
+		void out();
 	};
 }
 

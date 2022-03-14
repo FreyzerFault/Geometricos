@@ -51,17 +51,20 @@ double GEO::Plane::distance(const Vec3D& p) const
 
 double GEO::Plane::getA() const
 {
-	return (BasicGeom::det2x2(_t.getZ() - _s.getZ(), _t.getY() - _s.getY(), _r.getY() - _s.getY(), _r.getZ() - _s.getZ()));
+	return getNormal().getX();
+	//return BasicGeom::det2x2(_t.getZ() - _s.getZ(), _t.getY() - _s.getY(), _r.getY() - _s.getY(), _r.getZ() - _s.getZ());
 }
 
 double GEO::Plane::getB() const
 {
-	return (BasicGeom::det2x2(_t.getX() - _s.getX(), _t.getZ() - _s.getZ(), _r.getZ() - _s.getZ(), _r.getX() - _s.getX()));
+	return getNormal().getY();
+	//return BasicGeom::det2x2(_t.getX() - _s.getX(), _t.getZ() - _s.getZ(), _r.getZ() - _s.getZ(), _r.getX() - _s.getX());
 }
 
 double GEO::Plane::getC() const
 {
-	return (BasicGeom::det2x2(_t.getY() - _s.getY(), _t.getX() - _s.getX(), _r.getX() - _s.getX(), _r.getY() - _s.getY()));
+	return getNormal().getZ();
+	//return BasicGeom::det2x2(_t.getY() - _s.getY(), _t.getX() - _s.getX(), _r.getX() - _s.getX(), _r.getY() - _s.getY());
 }
 
 double GEO::Plane::getD() const
@@ -72,6 +75,7 @@ double GEO::Plane::getD() const
 GEO::Vec3D GEO::Plane::getNormal() const
 {
 	return getV().cross(getU()).normalize();
+	//return {getA(), getB(), getC()};
 }
 
 bool GEO::Plane::intersect(const Line3D& line, Vec3D& point) const
@@ -92,7 +96,7 @@ bool GEO::Plane::intersect(const Line3D& line, Vec3D& point) const
 
 bool GEO::Plane::intersect(const Plane& plane, Line3D& line) const
 {
-	const Vec3D n = getNormal().normalize();
+	const Vec3D n = getNormal();
 
 	// Si las normales son Paralelas, no intersectan
 	if (BasicGeom::equal(n.dot(plane.getNormal()), 1))
@@ -119,7 +123,7 @@ bool GEO::Plane::intersect(const Plane& plane, Line3D& line) const
 	
 	const Vec3D n1 = getNormal();
 	const Vec3D n2 = plane.getNormal();
-	const Vec3D n3 = n1.cross(n2);
+	const Vec3D n3 = n1.cross(n2).normalize();
 
 	const double a1 = n1.getX(), b1 = n1.getY(), c1 = n1.getZ(), d1 = getD();
 	const double a2 = n2.getX(), b2 = n2.getY(), c2 = n2.getZ(), d2 = plane.getD();
@@ -135,7 +139,7 @@ bool GEO::Plane::intersect(const Plane& plane, Line3D& line) const
 	const double y = d2 * BasicGeom::det2x2(a3, c3, a1, c1)
 	- d1 * BasicGeom::det2x2(a3, c3, a2, c2);
 	const double z = d2 * BasicGeom::det2x2(a1, b1, a3, b3)
-	- d1 * BasicGeom::det2x2(a2,b2,a3,b3);
+	- d1 * BasicGeom::det2x2(a2, b2, a3, b3);
 
 	const Vec3D p(x,y,z);
 
