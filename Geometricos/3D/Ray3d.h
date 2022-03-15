@@ -16,7 +16,9 @@ namespace GEO
 		Ray3D(const Ray3D& ray) = default;
 
 		~Ray3D() override = default;
-		
+
+		Vec3D getVector() const { return _dest - _orig; }
+
 		Ray3D& operator=(const Ray3D& ray);
 
 		void out() override;

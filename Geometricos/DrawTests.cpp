@@ -433,6 +433,12 @@ void GEO::DrawTests::drawModel(const TriangleModel& model)
 	drawIt<TriangleModel, DrawTriangleModel>(model, black);
 }
 
+void GEO::DrawTests::drawAABB(const TriangleModel& model)
+{
+	const AABB aabb = model.getAABB();
+	drawIt<AABB, DrawAABB>(aabb, white);
+}
+
 void GEO::DrawTests::drawMaxMinTriangles(const TriangleModel& model)
 {
 	try
@@ -493,6 +499,41 @@ void GEO::DrawTests::drawMaxMinTriangles(const TriangleModel& model)
 	{
 		outputException(e, "drawMaxMinTriangles");
 	}
+}
+
+GEO::PointCloud3D GEO::DrawTests::drawPointCloudInAABB(const AABB& aabb)
+{
+	PointCloud3D pc(50, aabb.getMax().getX(), aabb.getMax().getY(), aabb.getMax().getZ());
+	drawIt<PointCloud3D, DrawCloud3D>(pc, white);
+
+	return pc;
+}
+
+std::vector<GEO::Vec3D> GEO::DrawTests::drawPointsInsideModel(const PointCloud3D& pc, const TriangleModel& model)
+{
+	std::vector<GEO::Vec3D> pointsInside;
+
+	for (const Vec3D& point : pc.getPoints())
+	{
+		TypeColor color;
+		if (model.pointIntoMesh(point))
+		{
+			pointsInside.push_back(point);
+			color = red;
+		}
+		else
+			color = white;
+
+		drawIt<Vec3D, DrawVec3D>(point, color);
+	}
+
+	return pointsInside;
+}
+
+void GEO::DrawTests::drawPlane(const Vec3D& a, const Vec3D& b, const Vec3D& c)
+{
+	const Plane p(a,b,c);
+	drawIt<Plane, DrawPlane>(p, yellow);
 }
 
 void GEO::DrawTests::clear()

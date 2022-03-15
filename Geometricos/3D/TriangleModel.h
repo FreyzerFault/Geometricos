@@ -31,6 +31,18 @@ namespace GEO
 		TriangleModel(const TriangleModel& orig) = default;
 		virtual ~TriangleModel() = default;
 
+		// Detecta si el punto esta dentro de la Malla
+		bool pointIntoMesh(const Vec3D& point) const;
+
+		// Interseccion de un RAYO con el modelo
+		// t es el Triangulo Intersectado mas cercano, p el punto de interseccion
+		bool rayTraversalExh(const Ray3D& r, Vec3D& p, Triangle3D& t) const;
+
+
+		// Todas las Intersecciones de un RAYO con el modelo
+		// t es la lista de Triangulos con los que Intersecta, y p los puntos
+		bool rayTraversalExh(const Ray3D& r, std::vector<Vec3D>& p, std::vector<Triangle3D>& t) const;
+
 		Triangle3D getFace(int i) const;
 		std::vector<Triangle3D> getFaces() const;
 

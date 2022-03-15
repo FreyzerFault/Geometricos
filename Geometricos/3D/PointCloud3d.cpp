@@ -18,7 +18,11 @@ GEO::PointCloud3D::PointCloud3D()
 }
 
 GEO::PointCloud3D::PointCloud3D (std::vector<Vec3D> pointCloud):_points(std::move(pointCloud)),
-																_maxPoint(menosINFINITO, menosINFINITO, menosINFINITO), _minPoint(INFINITO, INFINITO, INFINITO){}
+	_maxPoint(menosINFINITO, menosINFINITO, menosINFINITO), _minPoint(INFINITO, INFINITO, INFINITO)
+{
+	for (int i = 0; i < _points.size(); i++)
+		updateMaxMin(i);
+}
 
 GEO::PointCloud3D::PointCloud3D(const std::string& filename)
 	: _maxPoint(menosINFINITO, menosINFINITO, menosINFINITO), _minPoint(INFINITO, INFINITO, INFINITO)

@@ -32,8 +32,18 @@ namespace GEO
 
 		void drawModel(const TriangleModel& model);
 
+		// AABB de un Modelo 3D
+		void drawAABB(const TriangleModel& model);
+
 		// Calcular los Triangulos del modelo con mayor y menor X, Y y Z
 		void drawMaxMinTriangles(const TriangleModel& model);
+
+		// Dibujar una nube de puntos dentro de un AABB
+		PointCloud3D drawPointCloudInAABB(const AABB& aabb);
+
+		std::vector<GEO::Vec3D> drawPointsInsideModel(const PointCloud3D& pc, const TriangleModel& model);
+
+		void drawPlane(const Vec3D& a, const Vec3D& b, const Vec3D& c);
 
 		void clear();
 

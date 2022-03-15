@@ -341,6 +341,14 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 			const TriangleModel vaca("vaca");
 			test3D.drawModel(vaca);
 			test3D.drawMaxMinTriangles(vaca);
+
+			test3D.drawAABB(vaca);
+
+			PointCloud3D pc(50, vaca.getAABB().getMax().getX(), vaca.getAABB().getMax().getY(), vaca.getAABB().getMax().getZ());
+
+			std::vector<Vec3D> pointsInside = test3D.drawPointsInsideModel(pc, vaca);
+
+			test3D.drawPlane(pointsInside[0], pointsInside[1], pointsInside[2]);
 			
 			refreshWindow(ventana);
 		}

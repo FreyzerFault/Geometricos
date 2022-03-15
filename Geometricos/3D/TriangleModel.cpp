@@ -137,6 +137,89 @@ void GEO::TriangleModel::processMeshAssimp (const aiMesh* mesh, const aiScene* s
 }
 
 
+bool GEO::TriangleModel::pointIntoMesh(const Vec3D& point) const
+{
+	// 2 Random RAYs
+	const Ray3D ray1(point, Vec3D(rand(), rand(), rand()));
+	const Ray3D ray2(point, Vec3D(rand(), rand(), rand()));
+
+	std::vector<Vec3D> points1;
+	std::vector<Vec3D> points2;
+	std::vector<Triangle3D> tris1;
+	std::vector<Triangle3D> tris2;
+
+	rayTraversalExh(ray1, points1, tris1);
+	rayTraversalExh(ray2, points2, tris2);
+
+	const bool par1 = points1.size() % 2 == 0;
+	const bool par2 = points1.size() % 2 == 0;
+
+	// Si es PAR esta FUERA
+	if (par1 && par2)
+		return false;
+
+	// Si es IMPAR esta DENTRO
+	if (!par1 && !par2)
+		return true;
+
+	// Si hay discrepancia lanzamos otro
+	const Ray3D ray3(point, Vec3D(rand(), rand(), rand()));
+	std::vector<Vec3D> points3;
+	std::vector<Triangle3D> tris3;
+	rayTraversalExh(ray3, points3, tris3);
+	const bool par3 = points1.size() % 2 == 0;
+	
+	// Si se repite PAR es que esta FUERA
+	if (par3)
+		return false;
+
+	// Esta DENTRO si es IMPAR
+	return true;
+}
+
+bool GEO::TriangleModel::rayTraversalExh(const Ray3D& r, Vec3D& p, Triangle3D& t) const
+{
+	double minDistance = BasicGeom::INFINITO;
+
+	for (const Triangle3D& tri : getFaces())
+	{
+		Vec3D point;
+		if (tri.rayIntersection(r, point))
+		{
+			const double d = (point - r.getOrig()).module();
+			if (d < minDistance)
+			{
+				minDistance = d;
+				t = tri;
+				p = point;
+			}
+		}
+	}
+
+	if (minDistance < BasicGeom::INFINITO)
+		return true;
+
+	return false;
+}
+
+bool GEO::TriangleModel::rayTraversalExh(const Ray3D& r, std::vector<Vec3D>& p, std::vector<Triangle3D>& t) const
+{
+	for (const Triangle3D& tri : getFaces())
+	{
+		Vec3D point;
+		if (tri.rayIntersection(r, point))
+		{
+			p.push_back(point);
+			t.push_back(tri);
+		}
+	}
+
+	if (!p.empty())
+		return true;
+
+	return false;
+
+}
 
 GEO::Triangle3D GEO::TriangleModel:: getFace(int i) const
 {

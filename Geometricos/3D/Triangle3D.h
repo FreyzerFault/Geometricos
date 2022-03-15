@@ -54,6 +54,10 @@ namespace GEO
 		// Posicion relativa de un punto respecto al triangulo
 		PointPosition classify(const Vec3D& point) const;
 
+		// Test de INTERSECCION Rayo-Triangulo con el Test de Möller
+		// point es el Punto de interseccion
+		bool rayIntersection(const Ray3D& ray, Vec3D& point) const;
+
 		Vec3D normal() const;
 
 		Vec3D getA() { return _a; }

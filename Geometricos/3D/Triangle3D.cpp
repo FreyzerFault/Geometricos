@@ -39,6 +39,58 @@ GEO::Triangle3D::PointPosition GEO::Triangle3D::classify(const Vec3D& point) con
 	return COPLANAR;
 }
 
+bool GEO::Triangle3D::rayIntersection(const Ray3D& ray, Vec3D& point) const
+{
+	const Vec3D v0 = _a;
+	const Vec3D v1 = _b;
+	const Vec3D v2 = _c;
+
+	const Vec3D rayP = ray.getOrig();
+	const Vec3D rayV = ray.getVector();
+
+	const Vec3D edge1 = v1 - v0;
+	const Vec3D edge2 = v2 - v0;
+
+	const Vec3D h = rayV.cross(edge2);
+
+	const double a = edge1.dot(h);
+
+	// Rayo Paralelo al triangulo
+	if (BasicGeom::equal(a, 0))
+		return false;
+
+	const double f = 1.0 / a;
+
+	const Vec3D s = rayP - v0;
+
+	const double u = f * s.dot(h);
+
+	if (u < 0.0 || u > 1.0)
+		return false;
+
+
+	const Vec3D q = s.cross(edge1);
+
+	const double v = f * rayV.dot(q);
+
+	if (v < 0.0 || u + v > 1.0)
+		return false;
+
+
+	// Calculamos t
+	const float t = f * edge2.dot(q);
+
+	if (t > BasicGeom::EPSILON)
+	{
+		point = rayP + rayV * t;
+		return true;
+	}
+
+
+	// Interseccion = Linea, NO un punto
+	return false;
+}
+
 
 GEO::Vec3D GEO::Triangle3D::normal() const
 {
