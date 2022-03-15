@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Line3D.h"
+#include "PointCloud3D.h"
 #include "Segment3D.h"
 #include "Vec3D.h"
 
@@ -45,6 +46,11 @@ namespace GEO
 
 		// Distancia al punto p
 		double distance(const Vec3D& p) const;
+
+		// Proyeccion de un Punto sobre el Plano
+		Vec3D projectedPoint (const Vec3D& point) const;
+
+		PointCloud3D projectedCloud (const PointCloud3D& pc) const;
 
 		// AX + BY + CZ + D = 0.
 		double getA() const;

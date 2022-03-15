@@ -49,6 +49,30 @@ double GEO::Plane::distance(const Vec3D& p) const
 	return v.dot(n);
 }
 
+GEO::Vec3D GEO::Plane::projectedPoint(const Vec3D& point) const
+{
+	// Aplicando la Ecuacion que sale de P = Proj(P) + r * n / ||n||
+	// Siendo r = Distancia más corta con el plano
+	// Y el vector p->Proj(p) paralelo a la normal del plano
+	// Al final se llega a que
+	const Vec3D n = getNormal();
+	const double d = getD();
+
+	return point - n * (point.dot(n) + d);
+}
+
+GEO::PointCloud3D GEO::Plane::projectedCloud(const PointCloud3D& pc) const
+{
+	PointCloud3D projectedPC;
+
+	for (const Vec3D& point : pc.getPoints())
+	{
+		projectedPC.addPoint(projectedPoint(point));
+	}
+
+	return projectedPC;
+}
+
 double GEO::Plane::getA() const
 {
 	return getNormal().getX();

@@ -48,9 +48,15 @@ void mostrarAyuda()
 		<< "u -> Añade segmento, linea y rayo y calcula sus intersecciones" << std::endl
 		<< "================" << std::endl
 		<< "3D:" << std::endl
+		<< std::endl
+		<< "Practica 2:" << std::endl
 		<< "q -> Ejercicio 1: Nube de Puntos" << std::endl
 		<< "w -> Ejercicio 2: Planos" << std::endl
 		<< "e -> Ejercicio 3: Modelos de Triangulos" << std::endl
+		<< std::endl
+		<< "Practica 3:" << std::endl
+		<< "r -> Ejercicio 1: Vaca con Nube de Puntos en su AABB + los de dentro son ROJOS" << std::endl
+		<< "t -> Ejercicio 2: Plano formado por Puntos dentro de la vaca + Proyeccion de los Vertices de la Vaca" << std::endl
 		<< "================" << std::endl
 		<< "1 -> PLANTA" << std::endl
 		<< "2 -> ALZADO" << std::endl
@@ -313,7 +319,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 
 		*/
 		
-		// =============================== POINT CLOUDS ===============================
+		// =============================== POINT CLOUDS y Puntos de mas distantes ===============================
 	case GLFW_KEY_Q:
 		if (accion == GLFW_PRESS)
 		{
@@ -323,7 +329,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		}
 		break;
 
-		// =============================== PLANOS ===============================
+		// =============================== PLANOS y Intersecciones ===============================
 	case GLFW_KEY_W:
 		if (accion == GLFW_PRESS)
 		{
@@ -333,7 +339,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		}
 		break;
 
-		// =============================== MODELOS 3D ===============================
+		// =============================== MODELOS 3D y sus Triangulos mas alejados ===============================
 	case GLFW_KEY_E:
 		if (accion == GLFW_PRESS)
 		{
@@ -342,13 +348,58 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 			test3D.drawModel(vaca);
 			test3D.drawMaxMinTriangles(vaca);
 
+			refreshWindow(ventana);
+		}
+		break;
+		// =============================== MODELOS 3D y su AABB + Puntos dentro de la malla ===============================
+	case GLFW_KEY_R:
+		if (accion == GLFW_PRESS)
+		{
+			// Colorea los triangulos maximos y minimos en cada coordenada del modelo
+			const TriangleModel vaca("vaca");
+			test3D.drawModel(vaca);
+
 			test3D.drawAABB(vaca);
 
 			PointCloud3D pc(50, vaca.getAABB().getMax().getX(), vaca.getAABB().getMax().getY(), vaca.getAABB().getMax().getZ());
 
 			std::vector<Vec3D> pointsInside = test3D.drawPointsInsideModel(pc, vaca);
+			
+			refreshWindow(ventana);
+		}
+		break;
+		// =============================== MODELOS 3D y sus Triangulos mas alejados ===============================
+	case GLFW_KEY_T:
+		if (accion == GLFW_PRESS)
+		{
+			// Colorea los triangulos maximos y minimos en cada coordenada del modelo
+			const TriangleModel vaca("vaca");
+			test3D.drawModel(vaca);
+			test3D.drawMaxMinTriangles(vaca);
 
-			test3D.drawPlane(pointsInside[0], pointsInside[1], pointsInside[2]);
+			// 50 puntos random dentro del AABB
+			PointCloud3D pc(50, vaca.getAABB().getMax().getX(), vaca.getAABB().getMax().getY(), vaca.getAABB().getMax().getZ());
+
+			// Puntos dentro del modelo
+			std::vector<Vec3D> pointsInside;
+			for (const Vec3D& point : pc.getPoints())
+			{
+				if (vaca.pointIntoMesh(point))
+					pointsInside.push_back(point);
+
+				// Maximo 3 puntos
+				if (pointsInside.size() == 3)
+					break;
+			}
+			
+			if (pointsInside.size() < 3)
+				std::cout << "No hay suficientes puntos dentro del modelo para crear un plano (" +
+				std::to_string(pointsInside.size()) + " / 3) " << std::endl;
+
+			// Con 3 puntos de dentro creamos un plano
+			Plane projectionPlane = test3D.drawPlane(pointsInside[0], pointsInside[1], pointsInside[2]);
+
+			test3D.drawPointCloudProjection(projectionPlane, vaca.getCloud());
 			
 			refreshWindow(ventana);
 		}

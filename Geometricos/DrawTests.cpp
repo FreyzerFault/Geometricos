@@ -530,10 +530,20 @@ std::vector<GEO::Vec3D> GEO::DrawTests::drawPointsInsideModel(const PointCloud3D
 	return pointsInside;
 }
 
-void GEO::DrawTests::drawPlane(const Vec3D& a, const Vec3D& b, const Vec3D& c)
+GEO::Plane GEO::DrawTests::drawPlane(const Vec3D& a, const Vec3D& b, const Vec3D& c)
 {
 	const Plane p(a,b,c);
 	drawIt<Plane, DrawPlane>(p, yellow);
+
+	return p;
+}
+
+GEO::PointCloud3D GEO::DrawTests::drawPointCloudProjection(const Plane& plane, const PointCloud3D& cloud)
+{
+	PointCloud3D projectedPC = plane.projectedCloud(cloud);
+	drawIt<PointCloud3D, DrawCloud3D>(projectedPC, red);
+
+	return projectedPC;
 }
 
 void GEO::DrawTests::clear()

@@ -41,9 +41,14 @@ namespace GEO
 		// Dibujar una nube de puntos dentro de un AABB
 		PointCloud3D drawPointCloudInAABB(const AABB& aabb);
 
+		// Dibujar nube de puntos, los puntos dentro del modelo son ROJOS
 		std::vector<GEO::Vec3D> drawPointsInsideModel(const PointCloud3D& pc, const TriangleModel& model);
 
-		void drawPlane(const Vec3D& a, const Vec3D& b, const Vec3D& c);
+		// Dibujar un plano a partir de 3 puntos
+		Plane drawPlane(const Vec3D& a, const Vec3D& b, const Vec3D& c);
+
+		// Dibujar una nube de puntos proyectada en un plano
+		PointCloud3D drawPointCloudProjection(const Plane& plane, const PointCloud3D& cloud);
 
 		void clear();
 
