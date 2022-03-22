@@ -16,9 +16,14 @@ namespace GEO
 		DrawTriangleModel(const DrawTriangleModel& ddt) : Draw(), dt(ddt.dt) {}
 
 
-		void drawItPlain();
-		void drawIt();
+
+		void drawIt(TypeDraw typeDraw = TypeDraw::WIREFRAME);
 		void drawIt(TypeColor c);
+		void drawIt(TypeColor c, TypeDraw typeDraw);
+
+		/*void drawItPlain();
+		void drawIt();
+		void drawIt(TypeColor c);*/
 
 		~DrawTriangleModel() override = default;;
 	};

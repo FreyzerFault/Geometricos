@@ -279,6 +279,19 @@ void GEO::Draw::render ( glm::mat4 matrizV, glm::mat4 matrizVP, Light& l )
 			glPolygonMode ( GL_FRONT_AND_BACK, GL_FILL );
 			glDrawElements ( GL_TRIANGLES, _indices.size (), GL_UNSIGNED_INT, nullptr );
 			break;
+
+		  case TypeDraw::TRANSPARENCY:
+			  color = glm::vec4(colorAct.getVec3(), 0.2f);
+			  _program->setUniform("micolor", color);
+			  _program->selectRoutine(GL_FRAGMENT_SHADER, "colorElegido",
+				  "colorMaterial");
+			  _program->selectRoutine(GL_FRAGMENT_SHADER, "colorCalculado",
+				  "colorMio");
+			  _program->applyRoutines(GL_FRAGMENT_SHADER);
+			  
+			  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			  glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, nullptr);
+			  break;
 	  }
 
 	  

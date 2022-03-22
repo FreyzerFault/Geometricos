@@ -370,7 +370,7 @@ void GEO::DrawTests::drawVaca()
 	try
 	{
 		const TriangleModel vaca("vaca");
-		drawIt<TriangleModel, DrawTriangleModel>(vaca, white);
+		drawIt<TriangleModel, DrawTriangleModel>(vaca, white, TypeDraw::PLAIN);
 		
 		std::cout << "hay un total de " << vaca.numTriangulos() << " triángulos" << std::endl;
 
@@ -533,7 +533,7 @@ std::vector<GEO::Vec3D> GEO::DrawTests::drawPointsInsideModel(const PointCloud3D
 GEO::Plane GEO::DrawTests::drawPlane(const Vec3D& a, const Vec3D& b, const Vec3D& c)
 {
 	const Plane p(a,b,c);
-	drawIt<Plane, DrawPlane>(p, yellow);
+	drawIt<Plane, DrawPlane>(p, yellow, TypeDraw::TRANSPARENCY);
 
 	return p;
 }
@@ -563,5 +563,5 @@ void GEO::DrawTests::clear()
 void GEO::DrawTests::draw3DModel(const TriangleModel& model)
 {
 	drawPointers.push_back(new DrawTriangleModel(model));
-	dynamic_cast<DrawTriangleModel*>(drawPointers[drawPointers.size() - 1])->drawItPlain();
+	dynamic_cast<DrawTriangleModel*>(drawPointers[drawPointers.size() - 1])->drawIt(TypeDraw::PLAIN);
 }

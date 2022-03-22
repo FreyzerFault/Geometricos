@@ -25,35 +25,58 @@ GEO::DrawTriangleModel::DrawTriangleModel (const TriangleModel &triModel):  Draw
 	
 }
 
-void GEO::DrawTriangleModel::drawIt (){
 
-	setShaderProgram ( "algeom" );
-			//.setAmbient ( glm::vec3 ( .1, .3, .7 ) )
-			//    .setDiffuse ( glm::vec3 ( .1, .3, .7 ) )
-			//    .setEspecular ( glm::vec3 ( 1, 1, 1 ) )
-			//    .setExpBright ( 100 )
-			//    .apply ( glm::rotate (glm::radians(-90.0f), glm::vec3 ( 1.0f, .0f, .0f )));
-	setDrawMode(TypeDraw::WIREFRAME );
-	Scene::getInstance ()->addModel ( this );
-	
-
-}
-
-void GEO::DrawTriangleModel::drawIt (TypeColor c){
-	setColorActivo (c);
+void GEO::DrawTriangleModel::drawIt(TypeColor c) {
+	setColorActivo(c);
+	setAmbient(glm::vec4(colorAct.getVec3(), 1));
 	drawIt();
-	
+}
+
+void GEO::DrawTriangleModel::drawIt(TypeColor c, TypeDraw typeDraw)
+{
+	setColorActivo(c);
+	setAmbient(glm::vec4(colorAct.getVec3(), 1));
+	drawIt(typeDraw);
 }
 
 
-void GEO::DrawTriangleModel::drawItPlain (){
-	setShaderProgram ( "algeom" )
-			.setAmbient ( glm::vec3 ( .1, .3, .7 ) )
-				.setDiffuse ( glm::vec3 ( .1, .3, .7 ) )
-				.setEspecular ( glm::vec3 ( 1, 1, 1 ) )
-				.setExpBright ( 100 )
-				.apply ( glm::rotate (glm::radians(-90.0f), glm::vec3 ( 1.0f, .0f, .0f )));
-	setDrawMode(TypeDraw::PLAIN);
-	Scene::getInstance ()->addModel ( this );
-	
+void GEO::DrawTriangleModel::drawIt(TypeDraw typeDraw) {
+	setShaderProgram("algeom");
+	setDrawMode(typeDraw);
+	GEO::Scene::getInstance()->addModel(this);
+
 }
+
+//
+//void GEO::DrawTriangleModel::drawIt (){
+//
+//	setShaderProgram ( "algeom" );
+//			//.setAmbient ( glm::vec3 ( .1, .3, .7 ) )
+//			//    .setDiffuse ( glm::vec3 ( .1, .3, .7 ) )
+//			//    .setEspecular ( glm::vec3 ( 1, 1, 1 ) )
+//			//    .setExpBright ( 100 )
+//			//    .apply ( glm::rotate (glm::radians(-90.0f), glm::vec3 ( 1.0f, .0f, .0f )));
+//	setDrawMode(TypeDraw::WIREFRAME );
+//	Scene::getInstance ()->addModel ( this );
+//	
+//
+//}
+//
+//void GEO::DrawTriangleModel::drawIt (TypeColor c){
+//	setColorActivo (c);
+//	drawIt();
+//	
+//}
+//
+//
+//void GEO::DrawTriangleModel::drawItPlain (){
+//	setShaderProgram ( "algeom" )
+//			.setAmbient ( glm::vec3 ( .1, .3, .7 ) )
+//				.setDiffuse ( glm::vec3 ( .1, .3, .7 ) )
+//				.setEspecular ( glm::vec3 ( 1, 1, 1 ) )
+//				.setExpBright ( 100 )
+//				.apply ( glm::rotate (glm::radians(-90.0f), glm::vec3 ( 1.0f, .0f, .0f )));
+//	setDrawMode(TypeDraw::PLAIN);
+//	Scene::getInstance ()->addModel ( this );
+//	
+//}

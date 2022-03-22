@@ -101,17 +101,10 @@ void GEO::Scene::refresh ( )
 
       try
       {
+        // First Pass GL_ONE_MINUS_SRC_ALPHA
          glBlendFunc ( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-         for ( Draw* m : _models )
-         {
-            if ( m != nullptr )
-            {
-               m->render ( mV, mVP, _lights[0] );
-            }
-         }
-
-         glBlendFunc ( GL_SRC_ALPHA, GL_ONE );
-         for ( int i = 1; i < _lights.size (); i++ )
+         
+         for ( int i = 0; i < _lights.size (); i++ )
          {
             for ( Draw* m : _models )
             {
@@ -120,6 +113,8 @@ void GEO::Scene::refresh ( )
                   m->render( mV, mVP, _lights[i] );
                }
             }
+            // From Second Pass Lights with GL_ONE
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE);
          }
       }
       catch ( std::runtime_error& e )

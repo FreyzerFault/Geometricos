@@ -17,7 +17,7 @@ namespace GEO
 
 		DrawPlane(const DrawPlane& ddt) : Draw(), dt(ddt.dt) {}
 		
-		void drawIt(TypeDraw typeDraw = TypeDraw::PLAIN);
+		void drawIt(TypeDraw typeDraw = TypeDraw::TRANSPARENCY);
 		void drawIt(TypeColor c);
 		void drawIt(TypeColor c, TypeDraw typeDraw);
 

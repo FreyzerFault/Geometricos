@@ -58,6 +58,7 @@ namespace GEO
 	  POINT = 3,
 	  LINE = 4,
 	  POLYGON = 5,
+	  TRANSPARENCY = 6,
    };
 
    /**
