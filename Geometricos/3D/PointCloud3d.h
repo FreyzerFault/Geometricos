@@ -29,10 +29,12 @@ namespace GEO
 		PointCloud3D(const std::string& filename);
 
 		// Nube con una distribucion en un cubo
-		PointCloud3D(int size, double max_x, double max_y, double max_z);
+		PointCloud3D(int size, double max_x, double max_y, double max_z, const Vec3D& center = Vec3D(0, 0, 0));
 		
 		// Distribucion esferica
-		PointCloud3D(int size, double radius);
+		PointCloud3D(int size, double radius, const Vec3D& center = Vec3D(0, 0, 0));
+
+		PointCloud3D(int size, const AABB& aabb);
 
 
 		PointCloud3D(const PointCloud3D& pointCloud) = default;

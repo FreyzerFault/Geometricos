@@ -69,7 +69,7 @@ GEO::PointCloud3D::PointCloud3D(const std::string& filename)
 	inputStream.close();// Cerramos fichero.
 }
 
-GEO::PointCloud3D::PointCloud3D(int size, double max_x, double max_y, double max_z)
+GEO::PointCloud3D::PointCloud3D(int size, double max_x, double max_y, double max_z, const Vec3D& center)
 	: _maxPoint(menosINFINITO, menosINFINITO, menosINFINITO), _minPoint(INFINITO, INFINITO, INFINITO)
 {
 	_points = std::vector<Vec3D>();
@@ -80,12 +80,12 @@ GEO::PointCloud3D::PointCloud3D(int size, double max_x, double max_y, double max
 		const double y = static_cast <double> (rand()) / (RAND_MAX / (max_y * 2.0)) - max_y;
 		const double z = static_cast <double> (rand()) / (RAND_MAX / (max_z * 2.0)) - max_z;
 
-		this->addPoint(Vec3D(x,y,z));
+		this->addPoint(Vec3D(x + center.getX(),y + center.getY(),z + center.getZ()));
 		--size;
 	}
 }
 
-GEO::PointCloud3D::PointCloud3D(int size, double radius)
+GEO::PointCloud3D::PointCloud3D(int size, double radius, const Vec3D& center)
 	: _maxPoint(menosINFINITO, menosINFINITO, menosINFINITO), _minPoint(INFINITO, INFINITO, INFINITO)
 {
 	_points = std::vector<Vec3D>();
@@ -100,7 +100,28 @@ GEO::PointCloud3D::PointCloud3D(int size, double radius)
 
 		const double r = radius * std::sqrt(static_cast <double> (rand()) / (static_cast <double> (RAND_MAX)));
 
-		this->addPoint(Vec3D(r * x, r * y, r * z));
+		this->addPoint(Vec3D(r*x + center.getX(), r*y + center.getY(), r*z + center.getZ()));
+		--size;
+	}
+}
+
+GEO::PointCloud3D::PointCloud3D(int size, const AABB& aabb)
+{
+
+	_points = std::vector<Vec3D>();
+
+	const Vec3D max = aabb.getMax() - aabb.getCenter();
+	const Vec3D center = aabb.getCenter();
+
+	while (size > 0)
+	{
+		const double x = static_cast <double> (rand()) / (RAND_MAX / (max.getX() * 2.0)) - max.getX() + center.getX();
+		const double y = static_cast <double> (rand()) / (RAND_MAX / (max.getY() * 2.0)) - max.getY() + center.getY();
+		const double z = static_cast <double> (rand()) / (RAND_MAX / (max.getZ() * 2.0)) - max.getZ() + center.getZ();
+
+		Vec3D point(x,y,z);
+
+		this->addPoint(point);
 		--size;
 	}
 }

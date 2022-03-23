@@ -356,14 +356,14 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		if (accion == GLFW_PRESS)
 		{
 			// Colorea los triangulos maximos y minimos en cada coordenada del modelo
-			const TriangleModel vaca("vaca");
-			test3D.drawModel(vaca);
+			const TriangleModel model("cuenco");
+			test3D.drawModel(model);
 
-			test3D.drawAABB(vaca);
+			test3D.drawAABB(model);
+			
+			PointCloud3D pc(50,  model.getAABB());
 
-			PointCloud3D pc(50, vaca.getAABB().getMax().getX(), vaca.getAABB().getMax().getY(), vaca.getAABB().getMax().getZ());
-
-			std::vector<Vec3D> pointsInside = test3D.drawPointsInsideModel(pc, vaca);
+			std::vector<Vec3D> pointsInside = test3D.drawPointsInsideModel(pc, model);
 			
 			refreshWindow(ventana);
 		}
@@ -373,18 +373,18 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		if (accion == GLFW_PRESS)
 		{
 			// Colorea los triangulos maximos y minimos en cada coordenada del modelo
-			const TriangleModel vaca("vaca");
-			test3D.drawModel(vaca);
-			test3D.drawMaxMinTriangles(vaca);
+			const TriangleModel model("cuenco");
+			test3D.drawModel(model);
+			test3D.drawMaxMinTriangles(model);
 
 			// 50 puntos random dentro del AABB
-			PointCloud3D pc(50, vaca.getAABB().getMax().getX(), vaca.getAABB().getMax().getY(), vaca.getAABB().getMax().getZ());
+			PointCloud3D pc(50, model.getAABB());
 
 			// Puntos dentro del modelo
 			std::vector<Vec3D> pointsInside;
 			for (const Vec3D& point : pc.getPoints())
 			{
-				if (vaca.pointIntoMesh(point))
+				if (model.pointIntoMesh(point))
 					pointsInside.push_back(point);
 
 				// Maximo 3 puntos
@@ -395,12 +395,13 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 			if (pointsInside.size() < 3)
 				std::cout << "No hay suficientes puntos dentro del modelo para crear un plano (" +
 				std::to_string(pointsInside.size()) + " / 3) " << std::endl;
+			else
+			{
+				// Con 3 puntos de dentro creamos un plano
+				Plane projectionPlane = test3D.drawPlane(pointsInside[0], pointsInside[1], pointsInside[2]);
 
-			// Con 3 puntos de dentro creamos un plano
-			Plane projectionPlane = test3D.drawPlane(pointsInside[0], pointsInside[1], pointsInside[2]);
-
-			test3D.drawPointCloudProjection(projectionPlane, vaca.getCloud());
-			
+				test3D.drawPointCloudProjection(projectionPlane, model.getCloud());
+			}
 			refreshWindow(ventana);
 		}
 		break;
