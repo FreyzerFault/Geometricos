@@ -80,6 +80,8 @@ namespace GEO
 
 		Vec3D getRandomPoint() const;
 
+		bool isEmpty() const { return _points.empty(); }
+
 	};
 
 }

@@ -192,10 +192,17 @@ bool GEO::Polygon::pointInConvexPolygon(const GEO::Point& point) const
 	return true;
 }
 
+// Struct para escribir doubles con coma en vez de punto
+struct Comma final : std::numpunct<char>
+{
+	char do_decimal_point() const override { return ','; }
+};
+
 void GEO::Polygon::save(const std::string& filename) const
 {
 	static std::string folderName = "Polygon/";
 	std::ofstream os(folderName + filename + ".txt");
+	os.imbue(std::locale(std::locale::classic(), new Comma));
 	if (!os.good())
 		std::cout << "Archivo " + folderName + filename + " no se pudo abrir para guardar el Poligono" << std::endl;
 

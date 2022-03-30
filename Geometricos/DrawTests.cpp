@@ -509,14 +509,21 @@ GEO::PointCloud3D GEO::DrawTests::drawPointCloudInAABB(const AABB& aabb)
 	return pc;
 }
 
-std::vector<GEO::Vec3D> GEO::DrawTests::drawPointsInsideModel(const PointCloud3D& pc, const TriangleModel& model)
+std::vector<GEO::Vec3D> GEO::DrawTests::drawPointsInsideModel(const PointCloud3D& pc, const TriangleModel& model, const bool useVoxel)
 {
 	std::vector<GEO::Vec3D> pointsInside;
 
 	for (const Vec3D& point : pc.getPoints())
 	{
 		TypeColor color;
-		if (model.pointIntoMesh(point))
+		bool pointIn = false;
+		if (useVoxel)
+			//TODOpointInt = model.;
+			std::cout << std::endl;
+		else
+			pointIn = model.pointIntoMesh(point);
+
+		if (pointIn)
 		{
 			pointsInside.push_back(point);
 			color = red;

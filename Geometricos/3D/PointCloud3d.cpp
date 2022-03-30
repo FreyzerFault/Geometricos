@@ -12,6 +12,9 @@
 using namespace GEO::BasicGeom;
 
 
+static const std::string pcPath = "PointCloud/";
+
+
 GEO::PointCloud3D::PointCloud3D() 
 	: _maxPoint(menosINFINITO, menosINFINITO, menosINFINITO), _minPoint(INFINITO, INFINITO, INFINITO) 
 {
@@ -44,19 +47,19 @@ GEO::PointCloud3D::PointCloud3D(const std::string& filename)
 
 	std::string currentLine; 				// Línea actual del fichero.
 	std::ifstream inputStream;				// Flujo de entrada.
-	inputStream.open(filename.c_str());
+	inputStream.open(pcPath + filename + ".txt");
 
 	if (!inputStream.good())
 		std::cout << "No se ha podido cargar una Nube de Puntos porque no se abre el fichero " + filename << std::endl;
 
 	while (std::getline(inputStream, currentLine))
 	{
-		std::vector<std::string> coord = splitBySemicolon(currentLine);
+		std::vector<std::string> coords = splitBySemicolon(currentLine);
 
-		if (coord.size() == 3)
+		if (coords.size() == 3)
 		{
 			try {
-				this->addPoint(Vec3D(std::stod(coord[0]), std::stod(coord[1]), std::stod(coord[2])));
+				this->addPoint(Vec3D(std::stod(coords[0]), std::stod(coords[1]), std::stod(coords[2])));
 			}
 			catch (const std::exception& excep)
 			{
@@ -158,20 +161,26 @@ GEO::PointCloud3D& GEO::PointCloud3D::operator=(const PointCloud3D & pointCloud)
 	return *this;
 }
 
+// Struct para escribir doubles con coma en vez de punto
+struct Comma final : std::numpunct<char>
+{
+	char do_decimal_point() const override { return ','; }
+};
+
 void GEO::PointCloud3D::save(const std::string & filename) const
 {
-	std::ofstream file(filename);
+	std::ofstream file(pcPath + filename + ".txt");
+	file.imbue(std::locale(std::locale::classic(), new Comma));
 	if (!file.good())
 		std::cout << "No se ha podido guardar una Nube de Puntos porque no se pudo abrir el archivo " + filename << std::endl;;
 
 	for (const auto& p : _points)
 	{
-		file << p.getX() << ";" << p.getY() << ";" << p.getZ() << std::endl;
+		file << std::to_string(p.getX()) << ";" << std::to_string(p.getY()) << ";" << std::to_string(p.getZ()) << std::endl;
 	}
 
 	file.close();
 }
-
 
 void GEO::PointCloud3D::updateMaxMin(int index)
 {

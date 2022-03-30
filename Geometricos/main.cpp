@@ -36,6 +36,13 @@ DrawTests test2D;
 DrawTests test3D;
 
 
+
+static float getDeltaTime(float t0)
+{
+	return (clock() - t0) / CLOCKS_PER_SEC;
+}
+
+
 void mostrarAyuda()
 {
 	std::cout << "Ayuda" << std::endl
@@ -372,7 +379,6 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 	case GLFW_KEY_T:
 		if (accion == GLFW_PRESS)
 		{
-			// Colorea los triangulos maximos y minimos en cada coordenada del modelo
 			const TriangleModel model("cuenco");
 			test3D.drawModel(model);
 			test3D.drawMaxMinTriangles(model);
@@ -402,6 +408,48 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 
 				test3D.drawPointCloudProjection(projectionPlane, model.getCloud());
 			}
+			refreshWindow(ventana);
+		}
+		break;
+
+		// =============================== PRACTICA 4: VOXELIZACION ===============================
+	case GLFW_KEY_Y:
+		if (accion == GLFW_PRESS)
+		{
+			// Colorea los triangulos maximos y minimos en cada coordenada del modelo
+			const TriangleModel model("vaca");
+			test3D.drawModel(model);
+
+			test3D.drawAABB(model);
+
+			//PointCloud3D pc(100, model.getAABB());
+
+			// NO FUNCIONA LA IMPORTACION POR FICHERO (stod no funciona (solo coge el primer char))
+
+			// Generamos la nube de Puntos desde fichero
+			int numPuntos = 1000;
+			std::string pcFileName = std::to_string(numPuntos) + "PointsCuenco";
+			auto* pc = new PointCloud3D(pcFileName);
+
+			// Si no esta el fichero guardado la generamos de 0 y lo guardamos
+			if (pc->isEmpty())
+			{
+				pc = new PointCloud3D(numPuntos, model.getAABB());
+				pc->save(pcFileName);
+			}
+
+			// Calculo del Tiempo de encontrar puntos dentro de una malla
+			float time = clock();
+			test3D.drawPointsInsideModel(*pc, model, false);
+			std::cout << "Tiempo de Nube de Puntos: " + std::to_string(getDeltaTime(time));
+
+			// Calculo del Tiempo de encontrar puntos dentro de una malla con VOXELES
+			time = clock();
+			test3D.drawPointsInsideModel(*pc, model, true);
+			std::cout << "Tiempo de VOXEL: " + std::to_string(getDeltaTime(time));
+
+
+
 			refreshWindow(ventana);
 		}
 		break;

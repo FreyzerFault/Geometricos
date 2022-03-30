@@ -15,14 +15,20 @@ namespace GEO
 
 	public:
 
-		AABB();
+		AABB() = default;
 		
-		AABB(const Vec3D& min, const Vec3D& max);
+		AABB(const Vec3D& min, const Vec3D& max)
+		: _min(min), _max(max) {}
 		
 		AABB(const AABB& aabb) = default;
 		
 		virtual ~AABB() = default;
 
+		// Interseccion AABB-Tri
+		bool AABBtri(Triangle3D& tri)
+		{
+			
+		}
 
 		// Punto central
 		Vec3D getCenter() const;

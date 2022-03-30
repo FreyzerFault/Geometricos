@@ -68,6 +68,7 @@
     <ClInclude Include="utils\RenderSettings.h" />
     <ClInclude Include="utils\Scene.h" />
     <ClInclude Include="utils\ShaderProgram.h" />
+    <ClInclude Include="Voxel.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="2D\Bezier.cpp" />
@@ -114,6 +115,7 @@
     <ClCompile Include="utils\RenderSettings.cpp" />
     <ClCompile Include="utils\Scene.cpp" />
     <ClCompile Include="utils\ShaderProgram.cpp" />
+    <ClCompile Include="Voxel.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
