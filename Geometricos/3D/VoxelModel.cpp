@@ -39,6 +39,7 @@ GEO::VoxelModel::VoxelModel(TriangleModel& triModel, double voxelSize) : triMode
 				Vec3D voxelMax = voxelMin + voxelSize;
 
 				Voxel voxel(voxelMin, voxelMax);
-				voxels.insert({white, voxel});
+				voxel.getColor();
+				voxels.push_back(voxel);
 			}
 }
