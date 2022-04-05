@@ -168,7 +168,10 @@
     <ClInclude Include="3D\VoxelModel.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="draw3D\drawIt.h">
+    <ClInclude Include="draw3D\DrawVoxel.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="draw3D\DrawVoxelModel.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
@@ -311,7 +314,10 @@
     <ClCompile Include="3D\VoxelModel.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="draw3D\drawIt.cpp">
+    <ClCompile Include="draw3D\DrawVoxel.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="draw3D\DrawVoxelModel.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>

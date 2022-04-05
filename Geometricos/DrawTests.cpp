@@ -580,7 +580,7 @@ void GEO::DrawTests::drawVoxel(const Voxel& voxel)
 
 void GEO::DrawTests::drawVoxelModel(const VoxelModel& voxelModel)
 {
-	for (const auto& [type, voxel] : voxelModel.getVoxels())
+	for (const auto& voxel : voxelModel.getVoxels())
 	{
 		drawIt<Voxel, DrawVoxel>(voxel);
 	}	
