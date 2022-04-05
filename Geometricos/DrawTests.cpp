@@ -572,3 +572,16 @@ void GEO::DrawTests::draw3DModel(const TriangleModel& model)
 	drawPointers.push_back(new DrawTriangleModel(model));
 	dynamic_cast<DrawTriangleModel*>(drawPointers[drawPointers.size() - 1])->drawIt(TypeDraw::PLAIN);
 }
+
+void GEO::DrawTests::drawVoxel(const Voxel& voxel)
+{
+	drawIt<Voxel, DrawVoxel>(voxel);
+}
+
+void GEO::DrawTests::drawVoxelModel(const VoxelModel& voxelModel)
+{
+	for (const auto& [type, voxel] : voxelModel.getVoxels())
+	{
+		drawIt<Voxel, DrawVoxel>(voxel);
+	}	
+}

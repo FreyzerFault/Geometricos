@@ -370,7 +370,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 			
 			PointCloud3D pc(50,  model.getAABB());
 
-			std::vector<Vec3D> pointsInside = test3D.drawPointsInsideModel(pc, model);
+			std::vector<Vec3D> pointsInside = test3D.drawPointsInsideModel(pc, model, false);
 			
 			refreshWindow(ventana);
 		}
@@ -457,15 +457,19 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 	case GLFW_KEY_V:
 		if (accion == GLFW_PRESS)
 		{
-			test3D.drawVaca();
+			Voxel voxel(Vec3D(-1,-1,-1), Vec3D(1,1,1));
+			test3D.drawVoxel(voxel);
 			
 			refreshWindow(ventana);
 		}
 		break;
-	case GLFW_KEY_D:
+	case GLFW_KEY_B:
 		if (accion == GLFW_PRESS)
 		{
-			test3D.drawDado();
+			TriangleModel model("vaca");
+			VoxelModel voxelModel(model, .1);
+
+			test3D.drawVoxelModel(voxelModel);
 			
 			refreshWindow(ventana);
 		}

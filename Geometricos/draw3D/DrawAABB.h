@@ -20,7 +20,7 @@ namespace GEO
 
 		DrawAABB(const DrawAABB& dt) : Draw(), _aabb(dt._aabb), dsegment(dt.dsegment) {}
 
-		void drawIt();
+		virtual void drawIt();
 		void drawIt(TypeColor c);
 
 		~DrawAABB() override = default;

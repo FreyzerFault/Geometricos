@@ -31,6 +31,7 @@
     <ClInclude Include="2D\Vec2D.h" />
     <ClInclude Include="2D\Vertex.h" />
     <ClInclude Include="3D\AABB.h" />
+    <ClInclude Include="draw3D\drawIt.h" />
     <ClInclude Include="3D\Edge3D.h" />
     <ClInclude Include="3D\Line3D.h" />
     <ClInclude Include="3D\Plane.h" />
@@ -40,6 +41,7 @@
     <ClInclude Include="3D\Triangle3D.h" />
     <ClInclude Include="3D\TriangleModel.h" />
     <ClInclude Include="3D\Vec3D.h" />
+    <ClInclude Include="3D\VoxelModel.h" />
     <ClInclude Include="DebugLogging.h" />
     <ClInclude Include="draw2D\DrawBezier.h" />
     <ClInclude Include="draw2D\DrawLine.h" />
@@ -68,7 +70,7 @@
     <ClInclude Include="utils\RenderSettings.h" />
     <ClInclude Include="utils\Scene.h" />
     <ClInclude Include="utils\ShaderProgram.h" />
-    <ClInclude Include="Voxel.h" />
+    <ClInclude Include="3D\Voxel.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="2D\Bezier.cpp" />
@@ -83,6 +85,7 @@
     <ClCompile Include="2D\Vec2D.cpp" />
     <ClCompile Include="2D\Vertex.cpp" />
     <ClCompile Include="3D\AABB.cpp" />
+    <ClCompile Include="draw3D\drawIt.cpp" />
     <ClCompile Include="3D\Edge3D.cpp" />
     <ClCompile Include="3D\Line3D.cpp" />
     <ClCompile Include="3D\Plane.cpp" />
@@ -92,6 +95,7 @@
     <ClCompile Include="3D\Triangle3D.cpp" />
     <ClCompile Include="3D\TriangleModel.cpp" />
     <ClCompile Include="3D\Vec3D.cpp" />
+    <ClCompile Include="3D\VoxelModel.cpp" />
     <ClCompile Include="draw2D\DrawBezier.cpp" />
     <ClCompile Include="draw2D\DrawLine.cpp" />
     <ClCompile Include="draw2D\DrawPoint.cpp" />
@@ -115,7 +119,7 @@
     <ClCompile Include="utils\RenderSettings.cpp" />
     <ClCompile Include="utils\Scene.cpp" />
     <ClCompile Include="utils\ShaderProgram.cpp" />
-    <ClCompile Include="Voxel.cpp" />
+    <ClCompile Include="3D\Voxel.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

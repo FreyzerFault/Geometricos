@@ -162,7 +162,13 @@
     <ClInclude Include="DebugLogging.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="Voxel.h">
+    <ClInclude Include="3D\Voxel.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\VoxelModel.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="draw3D\drawIt.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
@@ -299,7 +305,13 @@
     <ClCompile Include="DrawTests.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="Voxel.cpp">
+    <ClCompile Include="3D\Voxel.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\VoxelModel.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="draw3D\drawIt.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>

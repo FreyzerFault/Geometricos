@@ -25,10 +25,7 @@ namespace GEO
 		virtual ~AABB() = default;
 
 		// Interseccion AABB-Tri
-		bool AABBtri(Triangle3D& tri)
-		{
-			
-		}
+		bool AABBtri(Triangle3D& tri) const;
 
 		// Punto central
 		Vec3D getCenter() const;

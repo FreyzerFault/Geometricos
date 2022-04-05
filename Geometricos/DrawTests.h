@@ -52,6 +52,9 @@ namespace GEO
 
 		void clear();
 
+		template <class T, class D>
+		void drawIt(const T& item);
+
 		template <typename T, typename D>
 		void drawIt(const T& item, TypeColor color);
 
@@ -59,7 +62,17 @@ namespace GEO
 		void drawIt(const T& item, TypeColor color, TypeDraw typeDraw);
 
 		void draw3DModel(const TriangleModel& model);
+
+		void drawVoxel(const Voxel& voxel);
+		void drawVoxelModel(const VoxelModel& voxelModel);
 	};
+
+	template <typename T, typename D>
+	void DrawTests::drawIt(const T& item)
+	{
+		drawPointers.push_back(new D(item));
+		dynamic_cast<D*>(drawPointers[drawPointers.size() - 1])->drawIt();
+	}
 
 	template <typename T, typename D>
 	void DrawTests::drawIt(const T& item, TypeColor color)
