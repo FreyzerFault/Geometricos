@@ -7,12 +7,14 @@
 
 namespace GEO
 {
+	class TriangleModel;
+
 	enum class TypeVoxel
 	{
 		NP,
-		white,	// Fuera edl Modelo
-		grey,	// Intersecciona con el Modelo
-		black	// Dentro del Modelo
+		out,	// Fuera edl Modelo
+		intersect,	// Intersecciona con el Modelo
+		in,	// Dentro del Modelo
 	};
 
 	class Voxel : public AABB
@@ -20,7 +22,7 @@ namespace GEO
 		std::vector<Vec3D> points;
 		TypeVoxel type = TypeVoxel::NP;
 
-		std::vector<Triangle3D*> tris;
+		std::vector<const Triangle3D*> tris;
 
 	public:
 		Voxel() = default;
@@ -33,7 +35,11 @@ namespace GEO
 
 		bool remove(const Vec3D& p);
 
+		std::vector<const Triangle3D*>& getTris() { return tris; }
 
+		void checkTris(const TriangleModel& triModel);
+
+		TypeVoxel getType() const { return type; }
 		TypeColor getColor() const;
 	};
 }

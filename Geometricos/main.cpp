@@ -64,6 +64,9 @@ void mostrarAyuda()
 		<< "Practica 3:" << std::endl
 		<< "r -> Ejercicio 1: Vaca con Nube de Puntos en su AABB + los de dentro son ROJOS" << std::endl
 		<< "t -> Ejercicio 2: Plano formado por Puntos dentro de la vaca + Proyeccion de los Vertices de la Vaca" << std::endl
+		<< std::endl
+		<< "Practica 4:" << std::endl
+		<< "y -> Ejercicio 1: Voxel Model" << std::endl
 		<< "================" << std::endl
 		<< "1 -> PLANTA" << std::endl
 		<< "2 -> ALZADO" << std::endl
@@ -239,6 +242,8 @@ void resetScene()
 	test2D.clear();
 	test3D.clear();
 }
+
+static TriangleModel vaca("vaca");
 
 
 void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
@@ -416,15 +421,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 	case GLFW_KEY_Y:
 		if (accion == GLFW_PRESS)
 		{
-			// Colorea los triangulos maximos y minimos en cada coordenada del modelo
-			const TriangleModel model("vaca");
-			test3D.drawModel(model);
-
-			test3D.drawAABB(model);
-
-			//PointCloud3D pc(100, model.getAABB());
-
-			// NO FUNCIONA LA IMPORTACION POR FICHERO (stod no funciona (solo coge el primer char))
+			test3D.drawModel(vaca);
 
 			// Generamos la nube de Puntos desde fichero
 			int numPuntos = 1000;
@@ -434,21 +431,28 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 			// Si no esta el fichero guardado la generamos de 0 y lo guardamos
 			if (pc->isEmpty())
 			{
-				pc = new PointCloud3D(numPuntos, model.getAABB());
+				pc = new PointCloud3D(numPuntos, vaca.getAABB());
 				pc->save(pcFileName);
 			}
+			
+			std::vector<Vec3D> pointsInsideA;
+			std::vector<Vec3D> pointsInsideB;
 
 			// Calculo del Tiempo de encontrar puntos dentro de una malla
 			float time = clock();
-			test3D.drawPointsInsideModel(*pc, model, false);
-			std::cout << "Tiempo de Nube de Puntos: " + std::to_string(getDeltaTime(time));
+			pointsInsideA = test3D.drawPointsInsideModel(*pc, vaca, false);
+			std::cout << "Tiempo de Nube de Puntos: " + std::to_string(getDeltaTime(time)) << std::endl;
+
+			vaca.generateVoxelModel();
 
 			// Calculo del Tiempo de encontrar puntos dentro de una malla con VOXELES
 			time = clock();
-			test3D.drawPointsInsideModel(*pc, model, true);
-			std::cout << "Tiempo de VOXEL: " + std::to_string(getDeltaTime(time));
+			pointsInsideB = test3D.drawPointsInsideModel(*pc, vaca, true);
+			std::cout << "Tiempo de VOXEL: " + std::to_string(getDeltaTime(time)) << std::endl;
 
+			double error = (pointsInsideB.size() - pointsInsideA.size()) / pointsInsideB.size();
 
+			std::cout << "Error en PointInMesh del VoxelModel: " << error * 100 << "%" << std::endl;
 
 			refreshWindow(ventana);
 		}
@@ -457,8 +461,11 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 	case GLFW_KEY_V:
 		if (accion == GLFW_PRESS)
 		{
-			Voxel voxel(Vec3D(-1,-1,-1), Vec3D(1,1,1));
-			test3D.drawVoxel(voxel);
+			test3D.drawModel(vaca);
+
+			vaca.generateVoxelModel();
+
+			test3D.drawVoxelModel(*vaca.getVoxelModel(), TypeVoxel::intersect);
 			
 			refreshWindow(ventana);
 		}
@@ -466,10 +473,12 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 	case GLFW_KEY_B:
 		if (accion == GLFW_PRESS)
 		{
-			TriangleModel model("vaca");
-			VoxelModel voxelModel(model, .1);
+			test3D.drawModel(vaca);
 
-			test3D.drawVoxelModel(voxelModel);
+			vaca.generateVoxelModel();
+
+			test3D.drawVoxelModel(*vaca.getVoxelModel(), TypeVoxel::intersect);
+			test3D.drawVoxelModel(*vaca.getVoxelModel(), TypeVoxel::in);
 			
 			refreshWindow(ventana);
 		}

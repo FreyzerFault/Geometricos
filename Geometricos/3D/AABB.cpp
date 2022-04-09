@@ -295,7 +295,7 @@ bool triBoxOverlap(float boxcenter[3], float boxhalfsize[3], float triverts[3][3
 
 
 
-bool GEO::AABB::AABBtri(Triangle3D& tri) const
+bool GEO::AABB::AABBtri(const Triangle3D& tri) const
 {
 	const Vec3D mycenter = getCenter();
 	const Vec3D extent = _max - _min;
@@ -309,6 +309,11 @@ bool GEO::AABB::AABBtri(Triangle3D& tri) const
 		{(float)tri.getC().getX(), (float)tri.getC().getY(), (float)tri.getC().getZ()},
 	};
 	return triBoxOverlap(center, halfSize, triVerts);
+}
+
+bool GEO::AABB::pointInAABB(const Vec3D& point) const
+{
+	return point < _max && point > _min;
 }
 
 

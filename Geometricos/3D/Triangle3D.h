@@ -60,9 +60,9 @@ namespace GEO
 
 		Vec3D normal() const;
 
-		Vec3D getA() { return _a; }
-		Vec3D getB() { return _b; }
-		Vec3D getC() { return _c; }
+		Vec3D getA() const { return _a; }
+		Vec3D getB() const { return _b; }
+		Vec3D getC() const { return _c; }
 
 		Plane getPlane() const;
 		Vec3D getNormal() const;

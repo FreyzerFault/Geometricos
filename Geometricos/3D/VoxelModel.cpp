@@ -1,5 +1,9 @@
 ﻿#include "VoxelModel.h"
 
+#include <iostream>
+
+#include "TriangleModel.h"
+
 // CALCULA EL MINIMO COMUN MULTIPLO para sacar el tamaño de la caja de Voxeles
 int getMCM(int a, int b)
 {
@@ -20,26 +24,96 @@ int getMCM(int a, int b)
 	}
 }
 
-GEO::VoxelModel::VoxelModel(TriangleModel& triModel, double voxelSize) : triModel(&triModel)
+
+GEO::VoxelModel::VoxelModel(const TriangleModel& triModel, double voxelSize) : triModel(&triModel), voxelSize(voxelSize)
 {
 	const AABB modelAABB = triModel.getAABB();
 
 	const Vec3D extent = modelAABB.getExtent();
 
 	// Si se pasa de tamaño le cogemos el ceil para no quedarnos cortos
-	Vec3D size(std::ceil(extent.getX() / voxelSize), std::ceil(extent.getY() / voxelSize), std::ceil(extent.getZ() / voxelSize));
+	gridSize = Vec3D(std::ceil(extent.getX() / voxelSize), std::ceil(extent.getY() / voxelSize), std::ceil(extent.getZ() / voxelSize));
 
-	for (int x = 0; x < size.getX(); x++)
-		for (int y = 0; y < size.getX(); y++)
-			for (int z = 0; z < size.getX(); z++)
+	std::cout << "VoxelModel creado con " << gridSize.getX() << " * "  << gridSize.getY() << " * " << gridSize.getZ() << " voxeles" << std::endl;
+
+	// Reservamos espacio para la Malla 3D:
+	voxelGrid = new Voxel**[gridSize.getX()];
+
+	for (int x = 0; x < gridSize.getX(); ++x)
+	{
+		voxelGrid[x] = new Voxel*[gridSize.getY()];
+
+		for (int y = 0; y < gridSize.getY(); ++y)
+		{
+			voxelGrid[x][y] = new Voxel[gridSize.getZ()];
+
+			// Creamos los Voxeles
+			for (int z = 0; z < gridSize.getZ(); ++z)
 			{
+				// Esquina inferior del voxel
 				Vec3D voxelMin(x,y,z);
-				voxelMin = voxelMin * voxelSize;
+				voxelMin = voxelMin * voxelSize + modelAABB.getMin();
 
+				// Esquina superior
 				Vec3D voxelMax = voxelMin + voxelSize;
+				
+				voxelGrid[x][y][z] = Voxel(voxelMin, voxelMax);
 
-				Voxel voxel(voxelMin, voxelMax);
-				voxel.getColor();
-				voxels.push_back(voxel);
+				// Comprueba por cada triangulo de la malla si intersecta
+				voxelGrid[x][y][z].checkTris(triModel);
 			}
+		}
+	}
+}
+
+bool GEO::VoxelModel::pointIntoMesh(const Vec3D& point) const
+{
+	Voxel* v = getVoxel(point);
+	if (v == nullptr)
+		return false;
+
+	switch (v->getType())
+	{
+	case TypeVoxel::in:
+		return true;
+	case TypeVoxel::out:
+		return false;
+	case TypeVoxel::intersect:
+
+		// Comprobamos que el punto este por detras de todos los Tris del Voxel
+		// Si esta por delante de alguno, estara fuera siempre que sea CONVEXO
+		for (const Triangle3D* tri : getVoxel(point)->getTris())
+			if ( tri->classify(point) != Triangle3D::NEGATIVE )
+				return false; // Si no esta por detras
+
+		// Si esta por detras en TOS
+		return true;
+
+	default: 
+		return false;
+	}
+}
+
+GEO::Voxel* GEO::VoxelModel::getVoxel(int x, int y, int z) const
+{
+	if (x >= gridSize.getX() || y >= gridSize.getY() || z >= gridSize.getZ() || x < 0 || y < 0 || z < 0)
+		return nullptr;
+
+	return &voxelGrid[x][y][z];
+}
+
+GEO::Voxel* GEO::VoxelModel::getVoxel(const Vec3D& point) const
+{
+	const AABB aabb = triModel->getAABB();
+
+	if (!aabb.pointInAABB(point))
+		return nullptr;
+
+	const Vec3D localPoint = point - aabb.getMin();
+
+	const int x = std::floor(localPoint.getX() / voxelSize);
+	const int y = std::floor(localPoint.getY() / voxelSize);
+	const int z = std::floor(localPoint.getZ() / voxelSize);
+
+	return &voxelGrid[x][y][z];
 }

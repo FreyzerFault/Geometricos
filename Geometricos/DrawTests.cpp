@@ -511,19 +511,13 @@ GEO::PointCloud3D GEO::DrawTests::drawPointCloudInAABB(const AABB& aabb)
 
 std::vector<GEO::Vec3D> GEO::DrawTests::drawPointsInsideModel(const PointCloud3D& pc, const TriangleModel& model, const bool useVoxel)
 {
-	std::vector<GEO::Vec3D> pointsInside;
+	std::vector<Vec3D> pointsInside;
 
 	for (const Vec3D& point : pc.getPoints())
 	{
 		TypeColor color;
-		bool pointIn = false;
-		if (useVoxel)
-			//TODOpointInt = model.;
-			std::cout << std::endl;
-		else
-			pointIn = model.pointIntoMesh(point);
 
-		if (pointIn)
+		if (useVoxel ? model.getVoxelModel()->pointIntoMesh(point) : model.pointIntoMesh(point))
 		{
 			pointsInside.push_back(point);
 			color = red;
@@ -533,7 +527,7 @@ std::vector<GEO::Vec3D> GEO::DrawTests::drawPointsInsideModel(const PointCloud3D
 
 		drawIt<Vec3D, DrawVec3D>(point, color);
 	}
-
+	
 	return pointsInside;
 }
 
@@ -578,10 +572,18 @@ void GEO::DrawTests::drawVoxel(const Voxel& voxel)
 	drawIt<Voxel, DrawVoxel>(voxel);
 }
 
-void GEO::DrawTests::drawVoxelModel(const VoxelModel& voxelModel)
+void GEO::DrawTests::drawVoxelModel(const VoxelModel& voxelModel, TypeVoxel type)
 {
-	for (const auto& voxel : voxelModel.getVoxels())
-	{
-		drawIt<Voxel, DrawVoxel>(voxel);
-	}	
+	const Vec3D gridSize = voxelModel.getGridSize();
+	
+	for (int x = 0; x < gridSize.getX(); ++x)
+		for (int y = 0; y < gridSize.getY(); ++y)
+			for (int z = 0; z < gridSize.getZ(); ++z)
+			{
+				if (voxelModel.getVoxels()[x][y][z].getType() == type)
+				{
+					drawPointers.push_back(new DrawVoxel(voxelModel.getVoxels()[x][y][z]));
+					dynamic_cast<DrawVoxel*>(drawPointers[drawPointers.size() - 1])->drawIt();
+				}
+			}
 }

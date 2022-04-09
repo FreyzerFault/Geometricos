@@ -3,6 +3,7 @@
 #include <climits>
 #include <vector>
 #include <sstream>
+
 #include "BasicGeom.h"
 
 
@@ -77,6 +78,10 @@ namespace GEO
 		
 		Vec3D operator+(const double a) const;
 		Vec3D operator-(const double a) const;
+
+		// Todas las coords son menores
+		bool operator<(const Vec3D& p) const;
+		bool operator>(const Vec3D& p) const;
 
 		// Inverso
 		Vec3D operator-() const { return {-_value[X], -_value[Y], -_value[Z]}; }

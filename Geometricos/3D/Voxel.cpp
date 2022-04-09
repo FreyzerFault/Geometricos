@@ -1,5 +1,7 @@
 ﻿#include "Voxel.h"
 
+#include "TriangleModel.h"
+
 bool GEO::Voxel::remove(const Vec3D& p)
 {
 	for (auto it = points.begin(); it != points.end(); ++it)
@@ -11,18 +13,38 @@ bool GEO::Voxel::remove(const Vec3D& p)
 		}
 	}
 	return false;
+}
 
+void GEO::Voxel::checkTris(const TriangleModel& triModel)
+{
+	for (const Triangle3D& face : triModel.getFaces())
+	{
+		if (AABBtri(face))
+			tris.push_back(&face);
+	}
+
+	// Si intersecta con cualquier triangulo, intersecta con la malla
+	if (!tris.empty())
+		type = TypeVoxel::intersect;
+	else
+	{
+		// Comprobamos si esta fuera o dentro
+		if (triModel.pointIntoMesh(getCenter()))
+			type = TypeVoxel::in;
+		else
+			type = TypeVoxel::out;
+	}
 }
 
 GEO::TypeColor GEO::Voxel::getColor() const
 {
 	switch (type)
 	{
-	case TypeVoxel::black:
+	case TypeVoxel::in:
 		return black;
-	case TypeVoxel::white:
+	case TypeVoxel::out:
 		return white;
-	case TypeVoxel::grey:
+	case TypeVoxel::intersect:
 		return grey;
 	default:
 		return red;// Rojo si no se ha procesado bien

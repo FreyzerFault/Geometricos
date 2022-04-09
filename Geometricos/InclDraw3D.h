@@ -11,3 +11,4 @@
 #include "DrawVec3D.h"
 #include "DrawTriangleModel.h"
 #include "DrawVoxel.h"
+#include "DrawVoxelModel.h"

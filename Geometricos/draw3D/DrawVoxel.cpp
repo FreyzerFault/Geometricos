@@ -8,7 +8,7 @@ GEO::DrawVoxel::DrawVoxel(const Voxel& voxel) : DrawAABB(static_cast<AABB>(voxel
 void GEO::DrawVoxel::drawIt() {
 
 	setShaderProgram("algeom");
-	setDrawMode(TypeDraw::PLAIN);
+	setDrawMode(TypeDraw::WIREFRAME);
 	colorAct = voxel.getColor();
 	Scene::getInstance()->addModel(this);
 }

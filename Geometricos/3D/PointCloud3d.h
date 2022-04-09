@@ -2,8 +2,8 @@
 
 #include <string>
 #include "AABB.h"
-//#include "TriangleMesh.h"
 #include "Vec3D.h"
+
 namespace GEO
 {
 	class PointCloud3D

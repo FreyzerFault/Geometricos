@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "Scene.h"
 #include "Draw.h"
 #include "DrawVoxel.h"
 #include "VoxelModel.h"
@@ -12,17 +11,18 @@ namespace GEO
 
         VoxelModel vm;
 
-        std::vector<DrawVoxel> dv;
+        // Grid 3D de punteros a DrawVoxel
+        DrawVoxel**** dv;
 
     public:
 
-        DrawVoxelModel(const VoxelModel& vm);
+        DrawVoxelModel(VoxelModel vm);
 
         DrawVoxelModel(const DrawVoxelModel& dvm) : Draw(), vm(dvm.vm) {}
 
-        void drawIt();
+        void drawIt(TypeVoxel type = TypeVoxel::intersect);
 
-        ~DrawVoxelModel() override = default;;
+        ~DrawVoxelModel() override;
     };
 
 }

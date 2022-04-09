@@ -1,4 +1,5 @@
 #include "TriangleModel.h"
+#include "VoxelModel.h"
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <stdexcept>
@@ -152,7 +153,7 @@ bool GEO::TriangleModel::pointIntoMesh(const Vec3D& point) const
 	rayTraversalExh(ray2, points2, tris2);
 
 	const bool par1 = points1.size() % 2 == 0;
-	const bool par2 = points1.size() % 2 == 0;
+	const bool par2 = points2.size() % 2 == 0;
 
 	// Si es PAR esta FUERA
 	if (par1 && par2)
@@ -167,10 +168,9 @@ bool GEO::TriangleModel::pointIntoMesh(const Vec3D& point) const
 	std::vector<Vec3D> points3;
 	std::vector<Triangle3D> tris3;
 	rayTraversalExh(ray3, points3, tris3);
-	const bool par3 = points1.size() % 2 == 0;
-	
+
 	// Si se repite PAR es que esta FUERA
-	if (par3)
+	if (points3.size() % 2 == 0)
 		return false;
 
 	// Esta DENTRO si es IMPAR
@@ -261,4 +261,14 @@ GEO::AABB GEO::TriangleModel::getAABB() const
 {
 	// Es lo mismo que la Caja Envolvente de la nube de puntos
 	return getCloud().getAABB();
+}
+
+GEO::VoxelModel* GEO::TriangleModel::generateVoxelModel(double voxelSize)
+{
+	// Si ya se genero y con el mismo voxelSize, no lo generamos otra vez
+	if (voxelModel != nullptr && voxelModel->getVoxelSize() == voxelSize )
+		return voxelModel;
+
+	voxelModel = new VoxelModel(*this, voxelSize);
+	return voxelModel;
 }

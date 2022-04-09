@@ -8,9 +8,12 @@
 #include "Triangle3D.h"
 #include "PointCloud3D.h"
 #include "Vec3D.h"
+#include "VoxelModel.h"
 
 namespace GEO
 {
+	class VoxelModel;
+
 	class TriangleModel {
 
 		friend class DrawTriangleModel;
@@ -20,6 +23,8 @@ namespace GEO
 		std::vector<Vec3D> vv;  // vector de vértices
 		std::vector<Vec3D> vn;  // vector de normales
 		std::vector<unsigned> vi; //vector de índices
+
+		VoxelModel* voxelModel;
 
 		void loadFile(const std::string& pathfile);
 		void processMeshAssimp(const aiMesh* mesh, const aiScene* scene);
@@ -51,6 +56,10 @@ namespace GEO
 		PointCloud3D getCloud() const;
 
 		AABB getAABB() const;
+
+		VoxelModel* generateVoxelModel(double voxelSize = defaultVoxelSize);
+
+		VoxelModel* getVoxelModel() const { return voxelModel; }
 	};
 }
 
