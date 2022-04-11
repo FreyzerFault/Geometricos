@@ -25,8 +25,11 @@ int getMCM(int a, int b)
 }
 
 
-GEO::VoxelModel::VoxelModel(const TriangleModel& triModel, double voxelSize) : triModel(&triModel), voxelSize(voxelSize)
+GEO::VoxelModel::VoxelModel(TriangleModel& triModel, double voxelSize) : triModel(&triModel), voxelSize(voxelSize)
 {
+	// Primero le generamos los Tris porque no son necesarios hasta ahora para agilizar calculos
+	triModel.generateTris();
+
 	const AABB modelAABB = triModel.getAABB();
 
 	const Vec3D extent = modelAABB.getExtent();
@@ -57,7 +60,7 @@ GEO::VoxelModel::VoxelModel(const TriangleModel& triModel, double voxelSize) : t
 				// Esquina superior
 				Vec3D voxelMax = voxelMin + voxelSize;
 				
-				voxelGrid[x][y][z] = Voxel(voxelMin, voxelMax);
+				voxelGrid[x][y][z] = Voxel(voxelMin, voxelMax, this);
 
 				// Comprueba por cada triangulo de la malla si intersecta
 				voxelGrid[x][y][z].checkTris(triModel);
@@ -66,7 +69,7 @@ GEO::VoxelModel::VoxelModel(const TriangleModel& triModel, double voxelSize) : t
 	}
 }
 
-bool GEO::VoxelModel::pointIntoMesh(const Vec3D& point) const
+bool GEO::VoxelModel::pointIntoMesh(const Vec3D& point, bool checkTris, bool useRaycast) const
 {
 	Voxel* v = getVoxel(point);
 	if (v == nullptr)
@@ -80,13 +83,25 @@ bool GEO::VoxelModel::pointIntoMesh(const Vec3D& point) const
 		return false;
 	case TypeVoxel::intersect:
 
-		// Comprobamos que el punto este por detras de todos los Tris del Voxel
-		// Si esta por delante de alguno, estara fuera siempre que sea CONVEXO
-		for (const Triangle3D* tri : getVoxel(point)->getTris())
-			if ( tri->classify(point) != Triangle3D::NEGATIVE )
-				return false; // Si no esta por detras
+		// Podemos comprobar cada triangulo
+		if (checkTris)
+		{
+			// Usamos el metodo tradicional con raycast para los n triangulos O(n)
+			if (useRaycast)
+			{
+				return triModel->pointIntoMesh(point);
+			}
 
-		// Si esta por detras en TOS
+			// Comprobamos que el punto este por detras de todos los Tris del Voxel
+			// Si esta por delante de alguno, estara fuera siempre que sea CONVEXO
+			for (const Triangle3D* tri : v->getTris())
+			{
+				if (tri->classify(point) != Triangle3D::NEGATIVE )
+					return false; // Si no esta por detras
+			}
+		}
+
+	// Si esta por detras en TOS
 		return true;
 
 	default: 

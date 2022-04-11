@@ -17,10 +17,10 @@ bool GEO::Voxel::remove(const Vec3D& p)
 
 void GEO::Voxel::checkTris(const TriangleModel& triModel)
 {
-	for (const Triangle3D& face : triModel.getFaces())
+	for (const Triangle3D& tri : triModel.getTris())
 	{
-		if (AABBtri(face))
-			tris.push_back(&face);
+		if (AABBtri(tri))
+			tris.push_back(&tri);
 	}
 
 	// Si intersecta con cualquier triangulo, intersecta con la malla

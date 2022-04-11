@@ -44,6 +44,9 @@ namespace GEO
 		// Dibujar nube de puntos, los puntos dentro del modelo son ROJOS
 		std::vector<Vec3D> drawPointsInsideModel(const PointCloud3D& pc, const TriangleModel& model, const bool useVoxel);
 
+		// Dibuja solo los puntos de la Nube de Puntos que estan dentro del modelo pero solo los que no considera el metodo con voxeles
+		std::vector<Vec3D> drawPointsInsideModelDiff(const PointCloud3D& pc, const TriangleModel& model);
+
 		// Dibujar un plano a partir de 3 puntos
 		Plane drawPlane(const Vec3D& a, const Vec3D& b, const Vec3D& c);
 

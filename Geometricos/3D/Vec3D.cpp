@@ -126,12 +126,12 @@ GEO::Vec3D GEO::Vec3D::operator-(const double a) const
 
 bool GEO::Vec3D::operator<(const Vec3D& p) const
 {
-	return getX() < p.X && getY() < p.Y && getZ() < p.Z;
+	return getX() < p.getX() && getY() < p.getY() && getZ() < p.getZ();
 }
 
 bool GEO::Vec3D::operator>(const Vec3D& p) const
 {
-	return getX() > p.X && getY() > p.Y && getZ() > p.Z;
+	return getX() > p.getX() && getY() > p.getY() && getZ() > p.getZ();
 }
 
 GEO::Vec3D GEO::Vec3D::scalarMul(double value) const

@@ -24,6 +24,7 @@ namespace GEO
 		std::vector<Vec3D> vn;  // vector de normales
 		std::vector<unsigned> vi; //vector de índices
 
+		std::vector<Triangle3D> tris;
 		VoxelModel* voxelModel;
 
 		void loadFile(const std::string& pathfile);
@@ -39,6 +40,8 @@ namespace GEO
 		// Detecta si el punto esta dentro de la Malla
 		bool pointIntoMesh(const Vec3D& point) const;
 
+		std::vector<Vec3D> pointCloudIntoMesh(const PointCloud3D& pc, bool useVoxel) const;
+
 		// Interseccion de un RAYO con el modelo
 		// t es el Triangulo Intersectado mas cercano, p el punto de interseccion
 		bool rayTraversalExh(const Ray3D& r, Vec3D& p, Triangle3D& t) const;
@@ -50,6 +53,10 @@ namespace GEO
 
 		Triangle3D getFace(int i) const;
 		std::vector<Triangle3D> getFaces() const;
+
+		// Triangulos generados a partir de la geometria por si los necesito almacenar para calculos de voxeles:
+		void generateTris();
+		const std::vector<Triangle3D>& getTris() const { return tris; }
 
 		unsigned numTriangulos() const;
 

@@ -2,6 +2,12 @@
 
 #include "DebugLogging.h"
 
+static float getDeltaTime(float t0)
+{
+	return (clock() - t0) / CLOCKS_PER_SEC;
+}
+
+
 void GEO::DrawTests::drawPolygon2D(){
 	try
 	{
@@ -511,21 +517,58 @@ GEO::PointCloud3D GEO::DrawTests::drawPointCloudInAABB(const AABB& aabb)
 
 std::vector<GEO::Vec3D> GEO::DrawTests::drawPointsInsideModel(const PointCloud3D& pc, const TriangleModel& model, const bool useVoxel)
 {
-	std::vector<Vec3D> pointsInside;
+	const clock_t time = clock();
+	std::vector<Vec3D> pointsInside = model.pointCloudIntoMesh(pc, useVoxel);
+	std::cout << "Tiempo de PointInMesh (usando " << (useVoxel ? "VoxelModel" : "TriangleModel") << "): "
+	+ std::to_string(getDeltaTime(time)) << " seconds" << std::endl;
 
 	for (const Vec3D& point : pc.getPoints())
 	{
-		TypeColor color;
+		TypeColor color = white;
 
-		if (useVoxel ? model.getVoxelModel()->pointIntoMesh(point) : model.pointIntoMesh(point))
+		// Si esta dentro lo dibujamos de rojo
+		for (Vec3D& inside : pointsInside)
 		{
-			pointsInside.push_back(point);
-			color = red;
+			if (inside == point)
+				color = red;
 		}
-		else
-			color = white;
-
+		
 		drawIt<Vec3D, DrawVec3D>(point, color);
+	}
+	
+	return pointsInside;
+}
+
+std::vector<GEO::Vec3D> GEO::DrawTests::drawPointsInsideModelDiff(const PointCloud3D& pc, const TriangleModel& model)
+{
+	std::vector<Vec3D> pointsInside = model.pointCloudIntoMesh(pc, false);
+	std::vector<Vec3D> pointsInsideByVoxel = model.pointCloudIntoMesh(pc, true);
+
+	// Error acumulado del segundo metodo
+	const double sampleA = pointsInside.size();
+	const double sampleB = pointsInsideByVoxel.size();
+	const double error = (sampleB - sampleA) / max(sampleA, sampleB);
+
+	std::cout << "Error en PointInMesh del VoxelModel: " << error * 100 << "%"
+	<< " (TriModel: " << sampleA << " vs VoxelModel: " << sampleB << ")" << std::endl;
+
+	// Dibujamos solo los puntos que difieren
+	for (const Vec3D& point : pointsInside)
+	{
+		bool diff = true;
+
+		// Si encontramos que el metodo de Voxel tambien lo ha clasificado como dentro, no se dibuja
+		for (Vec3D& pointByVoxel : pointsInsideByVoxel)
+		{
+			if (pointByVoxel == point)
+			{
+				diff = false;
+			}
+		}
+
+		// Lo dibujamos si difiere
+		if (diff)
+			drawIt<Vec3D, DrawVec3D>(point, white);
 	}
 	
 	return pointsInside;

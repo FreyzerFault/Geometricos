@@ -177,6 +177,19 @@ bool GEO::TriangleModel::pointIntoMesh(const Vec3D& point) const
 	return true;
 }
 
+std::vector<GEO::Vec3D> GEO::TriangleModel::pointCloudIntoMesh(const PointCloud3D& pc, bool useVoxel) const
+{
+	std::vector<Vec3D> pointsInside;
+
+	for (const Vec3D& point : pc.getPoints())
+	{
+		if (useVoxel ? getVoxelModel()->pointIntoMesh(point) : pointIntoMesh(point))
+			pointsInside.push_back(point);
+	}
+	
+	return pointsInside;
+}
+
 bool GEO::TriangleModel::rayTraversalExh(const Ray3D& r, Vec3D& p, Triangle3D& t) const
 {
 	double minDistance = BasicGeom::INFINITO;
@@ -243,6 +256,20 @@ std::vector<GEO::Triangle3D> GEO::TriangleModel::getFaces() const
 		result.emplace_back(vv[vi[i*3]], vv[vi[i*3+1]], vv[vi[i*3+2]]);
 	}
 	return result;
+}
+
+void GEO::TriangleModel::generateTris()
+{
+	if (tris.empty())
+	{
+		const auto faces = getFaces();
+		tris.reserve(faces.size());
+		for (const Triangle3D& face : faces)
+		{
+			// Se almacenan una copia
+			tris.push_back(face);
+		}
+	}
 }
 
 
