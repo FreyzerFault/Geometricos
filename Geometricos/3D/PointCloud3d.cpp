@@ -181,7 +181,8 @@ GEO::PointCloud3D::PointCloud3D(int n, int k, double maxRegion)
 		PointCloud3D pc(n, radius, center);
 
 		// Concatenamos los puntos generados a los anteriores
-		_points.insert(_points.end(), pc.getPoints().begin(), pc.getPoints().end());
+		std::vector<Vec3D> points = pc.getPoints();
+		_points.insert(_points.end(), points.begin(), points.end());
 	}
 }
 

@@ -494,7 +494,8 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 	case GLFW_KEY_O:
 		if (accion == GLFW_PRESS)
 		{
-			PointCloud3D pc(5, 2, 3);
+			std::srand(clock());
+			PointCloud3D pc(1000, 5, 5);
 
 			test3D.drawPointCloud3D(pc, white);
 
@@ -514,7 +515,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 	case GLFW_KEY_A:
 		if (accion == GLFW_PRESS)
 		{
-			PointCloud3D pc(5, 2, 3);
+			PointCloud3D pc(100, 2, 3);
 
 			test3D.drawPointCloud3D(pc, white);
 
