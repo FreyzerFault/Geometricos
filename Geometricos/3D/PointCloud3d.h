@@ -3,6 +3,8 @@
 #include <string>
 #include "AABB.h"
 #include "Vec3D.h"
+#include "pcl/io/ply_io.h"
+#include "pcl/point_types.h"
 
 namespace GEO
 {
@@ -10,10 +12,9 @@ namespace GEO
 	{
 	protected:
 		std::vector<Vec3D> _points;
+		std::vector<pcl::PointXYZRGB> _pclPoints;
 		Vec3D _maxPoint, _minPoint;				// AABB.
 		Vec3D _maxPointIndex, _minPointIndex;	// Indices of those vertices which have the boundary coordinates of the mesh.
-		
-	protected:
 		
 		// Toma en cuenta un nuevo punto para actualizar el Maximo y Minimo
 		void updateMaxMin(int index);
@@ -28,12 +29,16 @@ namespace GEO
 		// Carga la Nube de un archivo con las coordenadas de cada punto
 		PointCloud3D(const std::string& filename);
 
-		// Nube con una distribucion en un cubo
+		// Distribucion en un cubo
 		PointCloud3D(int size, double max_x, double max_y, double max_z, const Vec3D& center = Vec3D(0, 0, 0));
 		
 		// Distribucion esferica
 		PointCloud3D(int size, double radius, const Vec3D& center = Vec3D(0, 0, 0));
+		
+		// K Clusteres con N puntos
+		PointCloud3D(int n, int k, double maxRegion = 10);
 
+		// Dentro de un AABB
 		PointCloud3D(int size, const AABB& aabb);
 
 
@@ -63,6 +68,9 @@ namespace GEO
 
 		Vec3D getPoint(int pos) const;
 		std::vector<Vec3D> getPoints() const { return _points; }
+
+		pcl::PointXYZRGB getPCLPoint(int pos) const;
+		std::vector<pcl::PointXYZRGB> getPCLPoints() const { return _pclPoints; }
 		
 		int size() const { return _points.size(); }
 		

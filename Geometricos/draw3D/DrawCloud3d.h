@@ -7,22 +7,27 @@
 
 namespace GEO
 {
-    class DrawCloud3D : public Draw {
+	class DrawVec3D;
+	class DrawPoint;
 
-        PointCloud3D dt;
+	class DrawCloud3D : public Draw {
 
-    public:
+		PointCloud3D pc;
+
+		std::vector<DrawVec3D> drawPoints;
+
+	public:
 
 
-        DrawCloud3D(const PointCloud3D& pointCloud);
+		DrawCloud3D(const PointCloud3D& pointCloud);
 
-        DrawCloud3D(const DrawCloud3D& ddt) : Draw(), dt(ddt.dt) {}
+		DrawCloud3D(const DrawCloud3D& ddt) : Draw(), pc(ddt.pc) {}
 
 
-        void drawIt();
-        void drawIt(TypeColor c);
+		void drawIt();
+		void drawIt(TypeColor c);
 
-        ~DrawCloud3D() override = default;
-    };
+		~DrawCloud3D() override = default;
+	};
 }
 

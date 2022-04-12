@@ -297,73 +297,11 @@ std::string getOrden(int i)
 	}
 }
 
-void GEO::DrawTests::drawPointCloud3D()
+void GEO::DrawTests::drawPointCloud3D(const PointCloud3D& pc, TypeColor color)
 {
 	try
 	{
-		const PointCloud3D pc(50, 1, 1, 1);
-		drawIt<PointCloud3D, DrawCloud3D>(pc, black);
-
-		std::vector<Vec3D> points(6);
-		pc.getMinPoints(points[MinX], points[MinY], points[MinZ]);
-		pc.getMaxPoints(points[MaxX], points[MaxY], points[MaxZ]);
-
-		int colorIndex = 0;
-		for (int i = 0; i < points.size(); ++i)
-		{
-			const Vec3D& point = points[i];
-			std::cout << getOrden(i) << ": " << point.toString() << std::endl;
-			drawIt<Vec3D, DrawVec3D>(point, colors[colorIndex++]);
-		}
-
-		int a, b;
-		pc.getMostDistanced(a, b);
-
-		const Vec3D& maxPoint = pc.getPoint(a);
-		const Vec3D& minPoint = pc.getPoint(b);
-
-		maxPoint.out();
-		minPoint.out();
-
-		const Segment3D segment(minPoint, maxPoint);
-		drawIt<Segment3D, DrawSegment3D>(segment, red);
-
-		const Line3D line(minPoint, maxPoint);
-		drawIt<Line3D, DrawLine3D>(line, yellow);
-
-		Vec3D farPoint;
-		double maxDistance = 0;
-		const Edge3D* edge = &line;
-		for (const Vec3D& point : pc.getPoints())
-		{
-			const double d = edge->distance(point);
-			if (d > maxDistance)
-			{
-				farPoint = point;
-				maxDistance = d;
-			}
-		}
-		drawIt<Vec3D, DrawVec3D>(farPoint, cyan);
-
-		const AABB aabb = pc.getAABB();
-		drawIt<AABB, DrawAABB>(aabb, white);
-
-		const Vec3D v1(1,0,0);
-		const Vec3D v2(0,0,1);
-
-		const Plane plane(aabb.getMin(), v1, v2, false);
-
-		Line3D randomLine(pc.getRandomPoint(), pc.getRandomPoint());
-		Vec3D intersectionPoint;
-		while (!plane.intersect(randomLine, intersectionPoint))
-		{
-			randomLine = Line3D(pc.getRandomPoint(), pc.getRandomPoint());
-		}
-
-		drawIt<Line3D, DrawLine3D>(randomLine, red);
-		drawIt<Vec3D, DrawVec3D>(intersectionPoint, white);
-		
-		drawIt<Plane, DrawPlane>(plane, yellow);
+		drawIt<PointCloud3D, DrawCloud3D>(pc, color);
 	}
 	catch (std::exception& e)
 	{
@@ -437,6 +375,81 @@ void GEO::DrawTests::drawDado()
 void GEO::DrawTests::drawModel(const TriangleModel& model)
 {
 	drawIt<TriangleModel, DrawTriangleModel>(model, black);
+}
+
+void GEO::DrawTests::drawMostDistancedPoints()
+{
+	try
+	{
+		const PointCloud3D pc(50, 1, 1, 1);
+		drawPointCloud3D(pc, black);
+
+		std::vector<Vec3D> points(6);
+		pc.getMinPoints(points[MinX], points[MinY], points[MinZ]);
+		pc.getMaxPoints(points[MaxX], points[MaxY], points[MaxZ]);
+
+		int colorIndex = 0;
+		for (int i = 0; i < points.size(); ++i)
+		{
+			const Vec3D& point = points[i];
+			std::cout << getOrden(i) << ": " << point.toString() << std::endl;
+			drawIt<Vec3D, DrawVec3D>(point, colors[colorIndex++]);
+		}
+
+		int a, b;
+		pc.getMostDistanced(a, b);
+
+		const Vec3D& maxPoint = pc.getPoint(a);
+		const Vec3D& minPoint = pc.getPoint(b);
+
+		maxPoint.out();
+		minPoint.out();
+
+		const Segment3D segment(minPoint, maxPoint);
+		drawIt<Segment3D, DrawSegment3D>(segment, red);
+
+		const Line3D line(minPoint, maxPoint);
+		drawIt<Line3D, DrawLine3D>(line, yellow);
+
+		Vec3D farPoint;
+		double maxDistance = 0;
+		const Edge3D* edge = &line;
+		for (const Vec3D& point : pc.getPoints())
+		{
+			const double d = edge->distance(point);
+			if (d > maxDistance)
+			{
+				farPoint = point;
+				maxDistance = d;
+			}
+		}
+		drawIt<Vec3D, DrawVec3D>(farPoint, cyan);
+
+		const AABB aabb = pc.getAABB();
+		drawIt<AABB, DrawAABB>(aabb, white);
+
+		const Vec3D v1(1,0,0);
+		const Vec3D v2(0,0,1);
+
+		const Plane plane(aabb.getMin(), v1, v2, false);
+
+		Line3D randomLine(pc.getRandomPoint(), pc.getRandomPoint());
+		Vec3D intersectionPoint;
+		while (!plane.intersect(randomLine, intersectionPoint))
+		{
+			randomLine = Line3D(pc.getRandomPoint(), pc.getRandomPoint());
+		}
+
+		drawIt<Line3D, DrawLine3D>(randomLine, red);
+		drawIt<Vec3D, DrawVec3D>(intersectionPoint, white);
+		
+		drawIt<Plane, DrawPlane>(plane, yellow);
+		
+	}
+	catch (std::exception& e)
+	{
+		outputException(e, "drawPointCloud3D");
+	}
 }
 
 void GEO::DrawTests::drawAABB(const TriangleModel& model)
@@ -547,7 +560,7 @@ std::vector<GEO::Vec3D> GEO::DrawTests::drawPointsInsideModelDiff(const PointClo
 	// Error acumulado del segundo metodo
 	const double sampleA = pointsInside.size();
 	const double sampleB = pointsInsideByVoxel.size();
-	const double error = (sampleB - sampleA) / max(sampleA, sampleB);
+	const double error = (sampleB - sampleA) / std::max(sampleA, sampleB);
 
 	std::cout << "Error en PointInMesh del VoxelModel: " << error * 100 << "%"
 	<< " (TriModel: " << sampleA << " vs VoxelModel: " << sampleB << ")" << std::endl;

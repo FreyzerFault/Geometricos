@@ -15,6 +15,23 @@ GEO::Vec3D::Vec3D(double x, double y, double z) : _value{x, y, z}
 {
 }
 
+GEO::Vec3D::Vec3D(const Vec3D& p, double r, double theta, double phi)
+{
+	// Calculo de Coords Polares
+	double x = r * sin(theta) * cos(phi);
+	double y = r * sin(theta) * sin(phi);
+	double z = r * cos(theta);
+
+	// Ajuste al centro
+	x += p.getX();
+	y += p.getY();
+	z += p.getZ();
+
+	_value[X] = x;
+	_value[Y] = y;
+	_value[Z] = z;
+}
+
 GEO::Vec3D::Vec3D(const Vec3D & vector)
 {
 	_value[X] = vector._value[X];

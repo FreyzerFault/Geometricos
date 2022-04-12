@@ -53,6 +53,11 @@ void mostrarAyuda()
 		<< "y -> Voxel Model" << std::endl
 		<< "u -> Point Into Mesh (tiempo TriangleModel vs VoxelModel)" << std::endl
 		<< "i -> Point Into Mesh (puntos de menos en VoxelModel respecto a TriangleModel)" << std::endl
+		<< std::endl
+		<< "Practica 5:" << std::endl
+		<< "o -> PointCloud Clusters" << std::endl
+		<< "p -> PointCloud PCL Import" << std::endl
+		<< "a -> PointCloud Clusters K-Means" << std::endl
 		<< "================" << std::endl
 		<< "1 -> PLANTA" << std::endl
 		<< "2 -> ALZADO" << std::endl
@@ -321,7 +326,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 	case GLFW_KEY_Q:
 		if (accion == GLFW_PRESS)
 		{
-			test3D.drawPointCloud3D();
+			test3D.drawMostDistancedPoints();
 			
 			refreshWindow(ventana);
 		}
@@ -427,7 +432,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 
 			// Generamos la nube de Puntos desde fichero
 			int numPuntos = 1000;
-			std::string pcFileName = std::to_string(numPuntos) + "PointsCuenco";
+			std::string pcFileName = std::to_string(numPuntos) + "PointsCuenco.txt";
 			auto* pc = new PointCloud3D(pcFileName);
 
 			// Si no esta el fichero guardado la generamos de 0 y lo guardamos
@@ -483,6 +488,38 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 			test3D.drawPointsInsideModelDiff(*pc, vaca);
 			
 			
+			refreshWindow(ventana);
+		}
+		break;
+	case GLFW_KEY_O:
+		if (accion == GLFW_PRESS)
+		{
+			PointCloud3D pc(5, 2, 3);
+
+			test3D.drawPointCloud3D(pc, white);
+
+			refreshWindow(ventana);
+		}
+		break;
+	case GLFW_KEY_P:
+		if (accion == GLFW_PRESS)
+		{
+			PointCloud3D pc("ground.ply");
+
+			test3D.drawPointCloud3D(pc, white);
+
+			refreshWindow(ventana);
+		}
+		break;
+	case GLFW_KEY_A:
+		if (accion == GLFW_PRESS)
+		{
+			PointCloud3D pc(5, 2, 3);
+
+			test3D.drawPointCloud3D(pc, white);
+
+			// K-MEANS
+
 			refreshWindow(ventana);
 		}
 		break;

@@ -2,14 +2,17 @@
 #include <cinttypes>
 #include <sstream>
 #include <fstream>
+#include <iostream>
+#include <filesystem>
+#include <glm/ext/scalar_constants.hpp>
 #include <vector>
 #include "BasicGeom.h"
 #include "PointCloud3D.h"
 
-#include <iostream>
-#include <glm/ext/scalar_constants.hpp>
 
 using namespace GEO::BasicGeom;
+
+namespace fs = std::filesystem;
 
 
 static const std::string pcPath = "PointCloud/";
@@ -30,6 +33,7 @@ GEO::PointCloud3D::PointCloud3D (std::vector<Vec3D> pointCloud):_points(std::mov
 GEO::PointCloud3D::PointCloud3D(const std::string& filename)
 	: _maxPoint(menosINFINITO, menosINFINITO, menosINFINITO), _minPoint(INFINITO, INFINITO, INFINITO)
 {
+
 	auto splitBySemicolon = [this](const std::string& string) -> std::vector<std::string>
 	{
 		std::stringstream ss(string);
@@ -47,29 +51,53 @@ GEO::PointCloud3D::PointCloud3D(const std::string& filename)
 
 	std::string currentLine; 				// Línea actual del fichero.
 	std::ifstream inputStream;				// Flujo de entrada.
-	inputStream.open(pcPath + filename + ".txt");
 
-	if (!inputStream.good())
-		std::cout << "No se ha podido cargar una Nube de Puntos porque no se abre el fichero " + filename << std::endl;
-
-	while (std::getline(inputStream, currentLine))
+	// Path para detectar la extension
+	fs::path filePath(pcPath + filename);
+	
+	if (filePath.extension() == ".txt")
 	{
-		std::vector<std::string> coords = splitBySemicolon(currentLine);
+		inputStream.open(filePath);
 
-		if (coords.size() == 3)
+		if (!inputStream.good())
+			std::cout << "No se ha podido cargar una Nube de Puntos porque no se abre el fichero " + filename << std::endl;
+
+		while (std::getline(inputStream, currentLine))
 		{
-			try {
-				this->addPoint(Vec3D(std::stod(coords[0]), std::stod(coords[1]), std::stod(coords[2])));
-			}
-			catch (const std::exception& excep)
-			{
-				inputStream.close();
+			std::vector<std::string> coords = splitBySemicolon(currentLine);
 
-				throw excep;
+			if (coords.size() == 3)
+			{
+				try {
+					this->addPoint(Vec3D(std::stod(coords[0]), std::stod(coords[1]), std::stod(coords[2])));
+				}
+				catch (const std::exception& excep)
+				{
+					inputStream.close();
+
+					throw excep;
+				}
 			}
 		}
+		inputStream.close();// Cerramos fichero.
 	}
-	inputStream.close();// Cerramos fichero.
+	else if (filePath.extension() == ".ply")
+	{
+		pcl::PointCloud<pcl::PointXYZRGB> pclPC;
+		
+		if (pcl::io::loadPLYFile(filePath.string(), pclPC) == -1)
+		{
+			PCL_ERROR(("No se pudo leer el archivo " + filePath.filename().string()).c_str());
+			throw std::runtime_error("No se pudo leer el archivo " + filePath.filename().string());
+		}
+		std::cout << "Se ha cargado una Nube de Puntos con PCL \"" << filename << "\"" << std::endl;
+
+		_points.reserve(pclPC.size());
+		for (pcl::PointXYZRGB& point : pclPC)
+		{
+			_points.emplace_back(point.x, point.y, point.z);
+		}
+	}
 }
 
 GEO::PointCloud3D::PointCloud3D(int size, double max_x, double max_y, double max_z, const Vec3D& center)
@@ -95,13 +123,15 @@ GEO::PointCloud3D::PointCloud3D(int size, double radius, const Vec3D& center)
 
 	while (size > 0)
 	{
-		const double theta = static_cast <double> (rand()) / (static_cast <double> (RAND_MAX)) * 2.0 * glm::pi<double>();
-		const double phi = std::acos(1.0 - 2.0 * static_cast <double> (rand()) / (static_cast <double> (RAND_MAX)));
+		// Coordenadas polares
+		const double theta = (double)rand() / (RAND_MAX) * 2.0 * glm::pi<double>();
+		const double phi = std::acos( 1.0 - 2.0 * (double)rand() / RAND_MAX );
 		const double x = std::sin(phi) * std::cos(theta);
 		const double y = std::sin(phi) * std::sin(theta);
 		const double z = std::cos(phi);
 
-		const double r = radius * std::sqrt(static_cast <double> (rand()) / (static_cast <double> (RAND_MAX)));
+		// Radio aleatorio con una distribucion mas concentrada en el centro por el sqrt()
+		const double r = radius * std::sqrt( rand() / (double)RAND_MAX );
 
 		this->addPoint(Vec3D(r*x + center.getX(), r*y + center.getY(), r*z + center.getZ()));
 		--size;
@@ -129,6 +159,32 @@ GEO::PointCloud3D::PointCloud3D(int size, const AABB& aabb)
 	}
 }
 
+GEO::PointCloud3D::PointCloud3D(int n, int k, double maxRegion)
+{
+	if (k > n)
+		throw std::runtime_error ("Se intenta crear una Nube de Puntos con K clusteres > N puntos/cluster");
+
+	// Creamos k Clusteres
+	_points.reserve(n*k);
+	for (int i = 0; i < k; ++i)
+	{
+		// Centro del cluster:
+		const double x = rand() / (double)RAND_MAX * maxRegion;
+		const double y = rand() / (double)RAND_MAX * maxRegion;
+		const double z = rand() / (double)RAND_MAX * maxRegion;
+		Vec3D center(x,y,z);
+
+		// Radio [1,2]:
+		const double radius = rand() / (double)RAND_MAX * 1 + 1;
+
+		// Creamos la Nube de Puntos
+		PointCloud3D pc(n, radius, center);
+
+		// Concatenamos los puntos generados a los anteriores
+		_points.insert(_points.end(), pc.getPoints().begin(), pc.getPoints().end());
+	}
+}
+
 void GEO::PointCloud3D::addPoint(const Vec3D& p)
 {
 	_points.push_back(p);
@@ -145,6 +201,14 @@ GEO::Vec3D GEO::PointCloud3D::getPoint(int pos) const
 {
 	if (pos >= 0 && (pos < _points.size())) {
 		return _points[pos];
+	}
+	return {};
+}
+
+pcl::PointXYZRGB GEO::PointCloud3D::getPCLPoint(int pos) const
+{
+	if (pos >= 0 && (pos < _pclPoints.size())) {
+		return _pclPoints[pos];
 	}
 	return {};
 }

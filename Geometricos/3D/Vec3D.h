@@ -25,6 +25,9 @@ namespace GEO
 		Vec3D(); // Con DEFAULT_VALUE
 		
 		Vec3D(double x, double y, double z);
+
+		// Coordenadas polares a partir de un punto central p
+		Vec3D(const Vec3D& p, double r, double theta, double phi);
 		
 		Vec3D(const Vec3D& vector);
 		

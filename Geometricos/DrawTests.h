@@ -22,8 +22,7 @@ namespace GEO
 
 		// 3D
 		void drawPlane();
-
-		void drawPointCloud3D();
+		void drawPointCloud3D(const PointCloud3D& pc, TypeColor color);
 
 		// Modelos 3D:
 		void drawVaca();
@@ -31,6 +30,10 @@ namespace GEO
 		void drawDado();
 
 		void drawModel(const TriangleModel& model);
+
+		// Ejercicios
+		// Puntos mas distanciados en una nube
+		void drawMostDistancedPoints();
 
 		// AABB de un Modelo 3D
 		void drawAABB(const TriangleModel& model);
