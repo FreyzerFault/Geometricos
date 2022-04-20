@@ -37,7 +37,7 @@ namespace GEO
 	const TypeColor yellow(1.0, 1.0, 0.0);
 	const TypeColor white(1.0, 1.0, 1.0);
 	const TypeColor black(0.0, 0.0, 0.0);
-	const TypeColor grey(.5f, .5f, 0.5f);
+	const TypeColor grey(.5f, .5f, .5f);
 	
 	static std::vector<TypeColor> colors {
 		red, blue, green, magenta, yellow, cyan
@@ -70,50 +70,61 @@ namespace GEO
 	*/
    class Draw
    {
-	  protected:
-		 const float MAXVAL_T = 1000.0; 
-		 GLuint _idVAO = 0;   ///< Identificador del vertex array object asociado al modelo
-		 GLuint _idVBO = 0;   ///< Identificador del VBO con el atributo de coordenadas
-		 GLuint _idIBO = 0;   ///< Identificador del index buffer object
-		 GLuint _idVBOnorm = 0;   ///< Identificador del VBO con las normales
-		 GLuint _idVBOcTex = 0;   ///< Identificador del VBO con las coordenadas de textura
-		 std::vector<glm::vec3> _vertices;   ///< Array con los vértices de la geometría
-		 std::vector<glm::vec3> _normals;   ///< Array con las normales asociadas a los vértices
-		 std::vector<GLuint> _indices;   ///< Array con los índices para el dibujado
-		 TypeDraw _mode = TypeDraw::PLAIN;   ///< Modo en que se va a pintar
-		 Material _material;   ///< Propiedades del material del modelo
-		 ShaderProgram* _program = nullptr;   ///< Shader program a utilizar
-		 glm::mat4 _tModeling = glm::mat4 ( 1 );   ///< Transformación de modelado
-		 TypeColor colorAct; 
+	protected:
+		const float MAXVAL_T = 1000.0;
+		GLuint _idVAO = 0;   ///< Identificador del vertex array object asociado al modelo
+		GLuint _idVBO = 0;   ///< Identificador del VBO con el atributo de coordenadas
+		GLuint _idIBO = 0;   ///< Identificador del index buffer object
+		GLuint _idVBOnorm = 0;   ///< Identificador del VBO con las normales
+		GLuint _idVBOcTex = 0;   ///< Identificador del VBO con las coordenadas de textura
+		std::vector<glm::vec3> _vertices;   ///< Array con los vértices de la geometría
+		std::vector<glm::vec3> _normals;   ///< Array con las normales asociadas a los vértices
+		std::vector<GLuint> _indices;   ///< Array con los índices para el dibujado
+		TypeDraw _mode = TypeDraw::PLAIN;   ///< Modo en que se va a pintar
+		Material _material;   ///< Propiedades del material del modelo
+		ShaderProgram* _program = nullptr;   ///< Shader program a utilizar
+		glm::mat4 _tModeling = glm::mat4 ( 1 );   ///< Transformación de modelado
+		TypeColor colorAct; 
 
-		 void buildVAO ();
-		 void creaVAO2 ();
-		 void processNodeAssimp ( aiNode* node, const aiScene* scene );
-		 void processMeshAssimp ( aiMesh* mesh, const aiScene* scene );
-		 void setShader ( Light& l, glm::mat4 matrizV, glm::mat4 mvIT );
-		 void cleaning ();
+   public:
+		void buildVAO ();
+		void creaVAO2 ();
+		void processNodeAssimp ( aiNode* node, const aiScene* scene );
+		void processMeshAssimp ( aiMesh* mesh, const aiScene* scene );
+		void setShader ( Light& l, glm::mat4 matrizV, glm::mat4 mvIT );
+		void cleaning ();
 
-	  public:
-		 Draw ();
-		 Draw ( const TypeModel& type, std::string pathfile );
-		 Draw ( const Draw& orig );
-		 virtual ~Draw ( );
-		 Draw& setShaderProgram ( const std::string& name );
-		 void render ( glm::mat4 matrixV, glm::mat4 matrixVP, Light& l);
-		 Draw& setDrawMode ( TypeDraw m );
-		 Draw& setMaterial ( const Material& m );
-		 Draw& setAmbient ( glm::vec3 a );
-		 Draw& setAmbient ( glm::vec4 a );
-		 Draw& setDiffuse ( glm::vec3 d );
-		 Draw& setDiffuse ( glm::vec4 d );
-		 Draw& setEspecular ( glm::vec3 e );
-		 Draw& setSpecular ( glm::vec4 e );
-		 Draw& setExpBright ( GLfloat s );
-		 Draw& apply ( glm::mat4 t );
-		 Draw& loadFile ( std::string pathfile );
-		 Draw& setColorActivo (glm::vec4 col);
-		 Draw& setColorActivo (glm::vec3 col);
-		 Draw& setColorActivo (TypeColor col);
+	public:
+		Draw ();
+		Draw ( const TypeModel& type, std::string pathfile );
+		Draw ( const Draw& orig );
+		virtual ~Draw ( );
+		Draw& setShaderProgram ( const std::string& name );
+		void render ( glm::mat4 matrixV, glm::mat4 matrixVP, Light& l);
+		Draw& setDrawMode ( TypeDraw m );
+		Draw& setMaterial ( const Material& m );
+		Draw& setAmbient ( glm::vec3 a );
+		Draw& setAmbient ( glm::vec4 a );
+		Draw& setDiffuse ( glm::vec3 d );
+		Draw& setDiffuse ( glm::vec4 d );
+		Draw& setEspecular ( glm::vec3 e );
+		Draw& setSpecular ( glm::vec4 e );
+		Draw& setExpBright ( GLfloat s );
+		Draw& apply ( glm::mat4 t );
+		Draw& loadFile ( std::string pathfile );
+		Draw& setColorActivo (glm::vec4 col);
+		Draw& setColorActivo (glm::vec3 col);
+		Draw& setColorActivo (TypeColor col);
+
+		void addVertices(std::vector<glm::vec3> vertices);
+		std::vector<glm::vec3> getVertices() const { return _vertices; }
+		int getNumVertices() const { return _vertices.size(); }
+
+		void addNormal(float x, float y, float z);
+		void addDefaultNormals(int numNormals);
+
+		void addIndex(int i);
+		void addSequencialIndices(int numIndices, int initialIndex = 0);
    };
 }
 

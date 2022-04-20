@@ -7,24 +7,28 @@
 
 namespace GEO
 {
-    class DrawVoxelModel : public Draw {
-
-        VoxelModel vm;
+    class DrawVoxelModel {
+        
+        VoxelModel voxelModel;
 
         // Grid 3D de punteros a DrawVoxel
-        std::vector<DrawVoxel> WhiteDraw;
-        std::vector<DrawVoxel> BlackDraw;
-        std::vector<DrawVoxel> GreyDraw;
+        std::vector<DrawVoxel> whiteVoxels;
+        std::vector<DrawVoxel> blackVoxels;
+        std::vector<DrawVoxel> greyVoxels;
+
+        Draw* WhiteDraw;
+        Draw* BlackDraw;
+        Draw* GreyDraw;
 
     public:
 
         DrawVoxelModel(VoxelModel vm);
 
-        DrawVoxelModel(const DrawVoxelModel& dvm) : Draw(), vm(dvm.vm) {}
+        DrawVoxelModel(const DrawVoxelModel& dvm) : voxelModel(dvm.voxelModel) {}
 
-        void drawIt(TypeVoxel type = TypeVoxel::intersect);
+        GEO::Draw* drawIt(TypeVoxel type = TypeVoxel::intersect);
 
-        ~DrawVoxelModel() override;
+        ~DrawVoxelModel() = default;
     };
 
 }

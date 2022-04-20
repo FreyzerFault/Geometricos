@@ -702,4 +702,35 @@ GEO::Draw& GEO::Draw::setColorActivo ( TypeColor col )
    return *this;
 }
 
+void GEO::Draw::addVertices(std::vector<glm::vec3> vertices)
+{
+	_vertices.insert(_vertices.end(), vertices.begin(), vertices.end());
+}
+
+void GEO::Draw::addNormal(float x, float y, float z)
+{
+	_normals.emplace_back(x, y, z);
+}
+
+void GEO::Draw::addDefaultNormals(int numNormals)
+{
+	for (int i = 0; i < numNormals; ++i)
+	{
+		_normals.emplace_back(0,0,1);
+	}
+}
+
+void GEO::Draw::addIndex(int i)
+{
+	_indices.push_back(i);
+}
+
+void GEO::Draw::addSequencialIndices(int numIndices, int initialIndex)
+{
+	for (int i = initialIndex; i < numIndices + initialIndex; ++i)
+	{
+		_indices.push_back(i);
+	}
+}
+
 

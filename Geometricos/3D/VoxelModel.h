@@ -14,9 +14,15 @@ namespace GEO
 		Vec3D gridSize;
 		double voxelSize;
 
+		std::vector<Voxel*> whiteVoxels;
+		std::vector<Voxel*> greyVoxels;
+		std::vector<Voxel*> blackVoxels;
+
 	public:
 		// El constructor es privado porque solo lo puede generar un TriangleModel
 		VoxelModel(TriangleModel& triModel, double voxelSize);
+
+		VoxelModel(const VoxelModel& orig) = default;
 
 		Voxel*** getVoxels() const { return voxelGrid; }
 
@@ -33,5 +39,9 @@ namespace GEO
 		const TriangleModel* getTriModel() const { return triModel; }
 
 		double getVoxelSize() const { return voxelSize; }
+
+		std::vector<Voxel*> getWhiteVoxels() { return whiteVoxels; }
+		std::vector<Voxel*> getGreyVoxels() { return greyVoxels; }
+		std::vector<Voxel*> getBlackVoxels() { return blackVoxels; }
 	};
 }

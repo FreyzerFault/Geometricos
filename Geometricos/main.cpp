@@ -37,7 +37,6 @@ int modeloActivo = -1;
 DrawTests test2D;
 DrawTests test3D;
 
-
 void mostrarAyuda()
 {
 	std::cout << "Ayuda" << std::endl
@@ -414,12 +413,10 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		if (accion == GLFW_PRESS)
 		{
 			// Modelo Voxelizado:
-
-			//test3D.drawModel(vaca);
-
-			vaca.generateVoxelModel(.05);
-
+			vaca.generateVoxelModel(.05f);
+			
 			test3D.drawVoxelModel(*vaca.getVoxelModel(), TypeVoxel::intersect);
+			test3D.drawVoxelModel(*vaca.getVoxelModel(), TypeVoxel::in);
 			
 			refreshWindow(ventana);
 		}
@@ -507,7 +504,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 	case GLFW_KEY_P:
 		if (accion == GLFW_PRESS)
 		{
-			PointCloud3D pc("olivosShort.ply");
+			PointCloud3D pc("olivos.ply");
 
 			test3D.drawPointCloud3D(pc, white);
 

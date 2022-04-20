@@ -10,6 +10,7 @@ namespace GEO
 	class DrawTests
 	{
 		std::vector<Draw*> drawPointers;
+		std::vector<DrawVoxelModel> drawVoxelModels;
 
 	public:
 		// 2D

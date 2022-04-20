@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/vec3.hpp>
+
 #include "Vec3D.h"
 
 namespace GEO
@@ -44,6 +46,8 @@ namespace GEO
 
 
 		AABB& operator=(const AABB& orig) = default;
+
+		std::vector<glm::vec3> getAABBVertices() const;
 	};
 }
 

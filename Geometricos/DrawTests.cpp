@@ -615,6 +615,7 @@ void GEO::DrawTests::clear()
 		}
 	}
 	drawPointers.clear();
+	drawVoxelModels.clear();
 }
 
 void GEO::DrawTests::draw3DModel(const TriangleModel& model)
@@ -630,16 +631,7 @@ void GEO::DrawTests::drawVoxel(const Voxel& voxel)
 
 void GEO::DrawTests::drawVoxelModel(const VoxelModel& voxelModel, TypeVoxel type)
 {
-	const Vec3D gridSize = voxelModel.getGridSize();
-	
-	for (int x = 0; x < gridSize.getX(); ++x)
-		for (int y = 0; y < gridSize.getY(); ++y)
-			for (int z = 0; z < gridSize.getZ(); ++z)
-			{
-				if (voxelModel.getVoxels()[x][y][z].getType() == type)
-				{
-					drawPointers.push_back(new DrawVoxel(voxelModel.getVoxels()[x][y][z]));
-					dynamic_cast<DrawVoxel*>(drawPointers[drawPointers.size() - 1])->drawIt();
-				}
-			}
+	drawVoxelModels.emplace_back(voxelModel);
+
+	drawPointers.push_back(drawVoxelModels.back().drawIt(type));
 }

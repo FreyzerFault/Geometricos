@@ -37,7 +37,7 @@ GEO::VoxelModel::VoxelModel(TriangleModel& triModel, double voxelSize) : triMode
 	// Si se pasa de tamaño le cogemos el ceil para no quedarnos cortos
 	gridSize = Vec3D(std::ceil(extent.getX() / voxelSize), std::ceil(extent.getY() / voxelSize), std::ceil(extent.getZ() / voxelSize));
 
-	std::cout << "VoxelModel creado con " << gridSize.getX() << " * "  << gridSize.getY() << " * " << gridSize.getZ() << " voxeles" << std::endl;
+	std::cout << "Creando con " << gridSize.getX() << " * "  << gridSize.getY() << " * " << gridSize.getZ() << " voxels.." << std::endl;
 
 	// Reservamos espacio para la Malla 3D:
 	voxelGrid = new Voxel**[gridSize.getX()];
@@ -64,10 +64,24 @@ GEO::VoxelModel::VoxelModel(TriangleModel& triModel, double voxelSize) : triMode
 
 				// Comprueba por cada triangulo de la malla si intersecta
 				voxelGrid[x][y][z].checkTris(triModel);
+
+				switch (voxelGrid[x][y][z].getType())
+				{
+				case TypeVoxel::out:
+					whiteVoxels.push_back(&voxelGrid[x][y][z]);
+					break;
+				case TypeVoxel::intersect:
+					greyVoxels.push_back(&voxelGrid[x][y][z]);
+					break;
+				case TypeVoxel::in:
+					blackVoxels.push_back(&voxelGrid[x][y][z]);
+					break;
+				}
 			}
 		}
 	}
 }
+
 
 bool GEO::VoxelModel::pointIntoMesh(const Vec3D& point, bool checkTris, bool useRaycast) const
 {

@@ -20,7 +20,10 @@ void GEO::Voxel::checkTris(const TriangleModel& triModel)
 	for (const Triangle3D& tri : triModel.getTris())
 	{
 		if (AABBtri(tri))
+		{
 			tris.push_back(&tri);
+			break;
+		}
 	}
 
 	// Si intersecta con cualquier triangulo, intersecta con la malla

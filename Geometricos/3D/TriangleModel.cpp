@@ -296,6 +296,12 @@ GEO::VoxelModel* GEO::TriangleModel::generateVoxelModel(double voxelSize)
 	if (voxelModel != nullptr && voxelModel->getVoxelSize() == voxelSize )
 		return voxelModel;
 
+	const clock_t time = clock();
+
 	voxelModel = new VoxelModel(*this, voxelSize);
+	
+	std::cout << "Tiempo de Generacion del VoxelModel: "
+	+ std::to_string((clock() - time) / CLOCKS_PER_SEC) << " seconds" << std::endl;
+
 	return voxelModel;
 }

@@ -1,76 +1,86 @@
 ﻿#include "DrawVoxelModel.h"
 
-GEO::DrawVoxelModel::DrawVoxelModel(VoxelModel vm) : Draw(), vm(std::move(vm)) {
+GEO::DrawVoxelModel::DrawVoxelModel(VoxelModel vm) : voxelModel(std::move(vm)),
+WhiteDraw(new Draw()), BlackDraw(new Draw()), GreyDraw(new Draw()) {
 
-	const Vec3D gridSize = vm.getGridSize();
-
-	// Reservamos espacio para la Malla 3D:
-	WhiteDraw.reserve()[gridSize.getX()];
-	GreyDraw = new DrawVoxel [gridSize.getX()];
-	BlackDraw = new DrawVoxel [gridSize.getX()];
-
-	for (int x = 0; x < gridSize.getX(); ++x)
+	// BLANCOS
+	for (int i = 0; i < voxelModel.getWhiteVoxels().size(); ++i)
 	{
-		WhiteDraw[x] = new DrawVoxel **[gridSize.getY()];
-		GreyDraw[x] = new DrawVoxel **[gridSize.getY()];
-		BlackDraw[x] = new DrawVoxel **[gridSize.getY()];
+		std::vector<Voxel*> voxels = voxelModel.getWhiteVoxels();
 
-		for (int y = 0; y < gridSize.getY(); ++y)
-		{
-			WhiteDraw[x][y] = new DrawVoxel * [gridSize.getZ()];
+		std::vector<glm::vec3> vertices = voxels[i]->getAABBVertices();
+		int numVertices = vertices.size();
 
-			// Creamos los Voxeles
-			for (int z = 0; z < gridSize.getZ(); ++z)
-			{
-				TypeVoxel type = vm.getVoxels()[x][y][z].getType();
-				WhiteDraw[x][y][z] = new DrawVoxel(vm.getVoxels()[x][y][z]);
-				WhiteDraw[x][y][z]->drawIt();
-			}
-		}
+		WhiteDraw->addVertices(vertices);
+
+		WhiteDraw->addDefaultNormals(numVertices);
+
+		// Añade indices seguidos (0,1,2,3,4,...) hasta el numero de vertices,
+		// pero empezando desde el que toca
+		WhiteDraw->addSequencialIndices(numVertices, i * numVertices);
 	}
-}
+	WhiteDraw->buildVAO();
 
-
-
-void GEO::DrawVoxelModel::drawIt(TypeVoxel type)
-{
-	// Dibujar cada uno de los voxeles del modelo
-	setShaderProgram("algeom");
-	setDrawMode(TypeDraw::PLAIN);
+	// GRISES
+	for (int i = 0; i < voxelModel.getGreyVoxels().size(); ++i)
+	{
+		std::vector<Voxel*> voxels = voxelModel.getGreyVoxels();
 		
-	const Vec3D gridSize = vm.getGridSize();
+		std::vector<glm::vec3> vertices = voxels[i]->getAABBVertices();
+		int numVertices = vertices.size();
 
-	// Reservamos espacio para la Malla 3D:
-	WhiteDraw = new DrawVoxel***[gridSize.getX()];
+		GreyDraw->addVertices(vertices);
 
-	for (int x = 0; x < gridSize.getX(); ++x)
+		GreyDraw->addDefaultNormals(numVertices);
+
+		// Añade indices seguidos (0,1,2,3,4,...) hasta el numero de vertices,
+		// pero empezando desde el que toca
+		GreyDraw->addSequencialIndices(numVertices, i * numVertices);
+	}
+	GreyDraw->buildVAO();
+
+	// NEGROS
+	for (int i = 0; i < voxelModel.getBlackVoxels().size(); ++i)
 	{
-		WhiteDraw[x] = new DrawVoxel**[gridSize.getY()];
+		std::vector<Voxel*> voxels = voxelModel.getBlackVoxels();
 
-		for (int y = 0; y < gridSize.getY(); ++y)
-		{
-			WhiteDraw[x][y] = new DrawVoxel*[gridSize.getZ()];
+		std::vector<glm::vec3> vertices = voxels[i]->getAABBVertices();
+		int numVertices = vertices.size();
 
-			// Creamos los Voxeles
-			for (int z = 0; z < gridSize.getZ(); ++z)
-			{
-				if (vm.getVoxels()[x][y][z].getType() == type)
-				{
-					WhiteDraw[x][y][z] = new DrawVoxel(vm.getVoxels()[x][y][z]);
+		BlackDraw->addVertices(vertices);
 
-					WhiteDraw[x][y][z]->drawIt();
-				}
-			}
-		}
+		BlackDraw->addDefaultNormals(numVertices);
+
+		// Añade indices seguidos (0,1,2,3,4,...) hasta el numero de vertices,
+		// pero empezando desde el que toca
+		BlackDraw->addSequencialIndices(numVertices, i * numVertices);
+	}
+	BlackDraw->buildVAO();
+}
+
+
+GEO::Draw* GEO::DrawVoxelModel::drawIt(TypeVoxel type)
+{
+	switch (type)
+	{
+	case TypeVoxel::out:
+		WhiteDraw->setColorActivo(white);
+		WhiteDraw->setShaderProgram ( "algeom" );
+		WhiteDraw->setDrawMode(TypeDraw::WIREFRAME );
+		Scene::getInstance()->addModel ( WhiteDraw );
+		return WhiteDraw;
+	case TypeVoxel::intersect:
+		GreyDraw->setColorActivo(grey);
+		GreyDraw->setShaderProgram ( "algeom" );
+		GreyDraw->setDrawMode(TypeDraw::WIREFRAME );
+		Scene::getInstance()->addModel ( GreyDraw );
+		return GreyDraw;
+	case TypeVoxel::in:
+		BlackDraw->setColorActivo(black);
+		BlackDraw->setShaderProgram ( "algeom" );
+		BlackDraw->setDrawMode(TypeDraw::WIREFRAME );
+		Scene::getInstance()->addModel ( BlackDraw );
+		return BlackDraw;
 	}
 }
 
-GEO::DrawVoxelModel::~DrawVoxelModel()
-{
-	for (int x = 0; x < vm.getGridSize().getX(); ++x)
-		for (int y = 0; y < vm.getGridSize().getY(); ++y)
-			for (int z = 0; z < vm.getGridSize().getZ(); ++z)
-			{
-				delete WhiteDraw[x][y][z];
-			}
-}

@@ -15,11 +15,6 @@ GEO::Vec3D GEO::AABB::getExtent() const
 	return { _max - _min };
 }
 
-
-
-
-
-
 /********************************************************/
 
 /* AABB-triangle overlap test code                      */
@@ -314,6 +309,69 @@ bool GEO::AABB::AABBtri(const Triangle3D& tri) const
 bool GEO::AABB::pointInAABB(const Vec3D& point) const
 {
 	return point < _max && point > _min;
+}
+
+#define minX _min.getX()
+#define minY _min.getY()
+#define minZ _min.getZ()
+#define maxX _max.getX()
+#define maxY _max.getY()
+#define maxZ _max.getZ()
+
+std::vector<glm::vec3> GEO::AABB::getAABBVertices() const
+{
+	std::vector<glm::vec3> vertices;
+	vertices.reserve(3 * 12);
+
+	vertices.emplace_back(minX, minY, minZ);
+	vertices.emplace_back(minX, minY, maxZ);
+	vertices.emplace_back(minX, maxY, maxZ);
+
+	vertices.emplace_back(minX, minY, minZ);
+	vertices.emplace_back(minX, maxY, maxZ);
+	vertices.emplace_back(minX, maxY, minZ);
+
+	vertices.emplace_back(minX, minY, maxZ);
+	vertices.emplace_back(maxX, minY, maxZ);
+	vertices.emplace_back(maxX, maxY, maxZ);
+
+	vertices.emplace_back(minX, minY, maxZ);
+	vertices.emplace_back(maxX, maxY, maxZ);
+	vertices.emplace_back(minX, maxY, maxZ);
+
+	vertices.emplace_back(maxX, minY, maxZ);
+	vertices.emplace_back(maxX, minY, minZ);
+	vertices.emplace_back(maxX, maxY, minZ);
+
+	vertices.emplace_back(maxX, minY, maxZ);
+	vertices.emplace_back(maxX, maxY, minZ);
+	vertices.emplace_back(maxX, maxY, maxZ);
+
+	vertices.emplace_back(maxX, minY, minZ);
+	vertices.emplace_back(minX, minY, minZ);
+	vertices.emplace_back(maxX, maxY, minZ);
+
+	vertices.emplace_back(minX, minY, minZ);
+	vertices.emplace_back(minX, maxY, minZ);
+	vertices.emplace_back(maxX, maxY, minZ);
+
+	vertices.emplace_back(maxX, minY, maxZ);
+	vertices.emplace_back(minX, minY, maxZ);
+	vertices.emplace_back(maxX, minY, minZ);
+
+	vertices.emplace_back(minX, minY, minZ);
+	vertices.emplace_back(maxX, minY, minZ);
+	vertices.emplace_back(minX, minY, maxZ);
+
+	vertices.emplace_back(minX, maxY, maxZ);
+	vertices.emplace_back(maxX, maxY, maxZ);
+	vertices.emplace_back(maxX, maxY, minZ);
+
+	vertices.emplace_back(minX, maxY, maxZ);
+	vertices.emplace_back(maxX, maxY, minZ);
+	vertices.emplace_back(minX, maxY, minZ);
+
+	return vertices;
 }
 
 
