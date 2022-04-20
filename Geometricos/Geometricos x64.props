@@ -12,7 +12,7 @@
       <AdditionalLibraryDirectories>C:\tools\PCL 1.12.1\3rdParty\Boost\lib;C:\tools\PCL 1.12.1\lib;C:\vcpkg\installed\x64-windows\lib\manual-link;C:\vcpkg\installed\x64-windows\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\tools\PCL 1.12.1\include\3rdParty\FLANN\include;C:\tools\PCL 1.12.1\include\3rdParty\Eigen\eigen3;C:\tools\PCL 1.12.1\include\3rdParty\Boost\include\boost-1_78;C:\tools\PCL 1.12.1\include\pcl-1.12;C:\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\tools\PCL 1.12.1\3rdParty\FLANN\include;C:\tools\PCL 1.12.1\3rdParty\Eigen\eigen3;C:\tools\PCL 1.12.1\3rdParty\Boost\include\boost-1_78;C:\tools\PCL 1.12.1\include\pcl-1.12;C:\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup />

@@ -6,6 +6,8 @@
  * @brief Función main y callbacks
  */
 
+#define NOMINMAX
+
 // ReSharper disable CppClangTidyClangDiagnosticImplicitFloatConversion
 // ReSharper disable CppClangTidyConcurrencyMtUnsafe
 // ReSharper disable CppTooWideScope
@@ -413,9 +415,9 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		{
 			// Modelo Voxelizado:
 
-			test3D.drawModel(vaca);
+			//test3D.drawModel(vaca);
 
-			vaca.generateVoxelModel();
+			vaca.generateVoxelModel(.05);
 
 			test3D.drawVoxelModel(*vaca.getVoxelModel(), TypeVoxel::intersect);
 			
@@ -445,7 +447,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 			std::vector<Vec3D> pointsInsideA;
 			std::vector<Vec3D> pointsInsideB;
 			
-			vaca.generateVoxelModel();
+			vaca.generateVoxelModel(.05);
 
 			// Calculo del Tiempo de encontrar puntos dentro de una malla
 			pointsInsideA = test3D.drawPointsInsideModel(*pc, vaca, false);
@@ -505,7 +507,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 	case GLFW_KEY_P:
 		if (accion == GLFW_PRESS)
 		{
-			PointCloud3D pc("ground.ply");
+			PointCloud3D pc("olivosShort.ply");
 
 			test3D.drawPointCloud3D(pc, white);
 

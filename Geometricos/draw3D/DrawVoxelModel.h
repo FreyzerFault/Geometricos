@@ -12,7 +12,9 @@ namespace GEO
         VoxelModel vm;
 
         // Grid 3D de punteros a DrawVoxel
-        DrawVoxel**** dv;
+        std::vector<DrawVoxel> WhiteDraw;
+        std::vector<DrawVoxel> BlackDraw;
+        std::vector<DrawVoxel> GreyDraw;
 
     public:
 

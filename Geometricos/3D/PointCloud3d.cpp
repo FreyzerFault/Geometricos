@@ -49,14 +49,13 @@ GEO::PointCloud3D::PointCloud3D(const std::string& filename)
 		return result;
 	};
 
-	std::string currentLine; 				// Línea actual del fichero.
-	std::ifstream inputStream;				// Flujo de entrada.
-
 	// Path para detectar la extension
 	fs::path filePath(pcPath + filename);
 	
 	if (filePath.extension() == ".txt")
 	{
+		std::ifstream inputStream;
+		std::string currentLine;
 		inputStream.open(filePath);
 
 		if (!inputStream.good())
@@ -83,17 +82,17 @@ GEO::PointCloud3D::PointCloud3D(const std::string& filename)
 	}
 	else if (filePath.extension() == ".ply")
 	{
-		pcl::PointCloud<pcl::PointXYZRGB> pclPC;
+		pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>), cloud_f(new pcl::PointCloud<pcl::PointXYZ>);
 		
-		if (pcl::io::loadPLYFile(filePath.string(), pclPC) == -1)
+		if (pcl::io::loadPLYFile<pcl::PointXYZ>(filePath.string(), *cloud) == -1)
 		{
 			PCL_ERROR(("No se pudo leer el archivo " + filePath.filename().string()).c_str());
 			throw std::runtime_error("No se pudo leer el archivo " + filePath.filename().string());
 		}
 		std::cout << "Se ha cargado una Nube de Puntos con PCL \"" << filename << "\"" << std::endl;
-
-		_points.reserve(pclPC.size());
-		for (pcl::PointXYZRGB& point : pclPC)
+		
+		_points.reserve(cloud->size());
+		for (pcl::PointXYZ& point : *cloud)
 		{
 			_points.emplace_back(point.x, point.y, point.z);
 		}
