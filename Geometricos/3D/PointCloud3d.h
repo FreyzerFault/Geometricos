@@ -12,7 +12,7 @@ namespace GEO
 	{
 	protected:
 		std::vector<Vec3D> _points;
-		std::vector<pcl::PointXYZRGB> _pclPoints;
+		std::vector<pcl::PointXYZ, Eigen::aligned_allocator<pcl::PointXYZ>> _pclPoints;
 		Vec3D _maxPoint, _minPoint;				// AABB.
 		Vec3D _maxPointIndex, _minPointIndex;	// Indices of those vertices which have the boundary coordinates of the mesh.
 		
@@ -68,9 +68,11 @@ namespace GEO
 
 		Vec3D getPoint(int pos) const;
 		std::vector<Vec3D> getPoints() const { return _points; }
+		int getPointsSize() const { return _points.size(); }
 
-		pcl::PointXYZRGB getPCLPoint(int pos) const;
-		std::vector<pcl::PointXYZRGB> getPCLPoints() const { return _pclPoints; }
+		pcl::PointXYZ getPCLPoint(int pos) const;
+		std::vector<pcl::PointXYZ, Eigen::aligned_allocator<pcl::PointXYZ>> getPCLPoints() const { return _pclPoints; }
+		int getPCLPointsSize() const { return _pclPoints.size(); }
 		
 		int size() const { return _points.size(); }
 		

@@ -297,11 +297,11 @@ std::string getOrden(int i)
 	}
 }
 
-void GEO::DrawTests::drawPointCloud3D(const PointCloud3D& pc, TypeColor color)
+GEO::DrawCloud3D* GEO::DrawTests::drawPointCloud3D(const PointCloud3D& pc, TypeColor color)
 {
 	try
 	{
-		drawIt<PointCloud3D, DrawCloud3D>(pc, color);
+		return drawIt<PointCloud3D, DrawCloud3D>(pc, color);
 	}
 	catch (std::exception& e)
 	{

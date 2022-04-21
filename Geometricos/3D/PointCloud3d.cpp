@@ -82,7 +82,8 @@ GEO::PointCloud3D::PointCloud3D(const std::string& filename)
 	}
 	else if (filePath.extension() == ".ply")
 	{
-		pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>), cloud_f(new pcl::PointCloud<pcl::PointXYZ>);
+		const pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
+		pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_f(new pcl::PointCloud<pcl::PointXYZ>);
 		
 		if (pcl::io::loadPLYFile<pcl::PointXYZ>(filePath.string(), *cloud) == -1)
 		{
@@ -92,10 +93,7 @@ GEO::PointCloud3D::PointCloud3D(const std::string& filename)
 		std::cout << "Se ha cargado una Nube de Puntos con PCL \"" << filename << "\"" << std::endl;
 		
 		_points.reserve(cloud->size());
-		for (pcl::PointXYZ& point : *cloud)
-		{
-			_points.emplace_back(point.x, point.y, point.z);
-		}
+		_pclPoints = cloud->points;
 	}
 }
 
@@ -205,7 +203,7 @@ GEO::Vec3D GEO::PointCloud3D::getPoint(int pos) const
 	return {};
 }
 
-pcl::PointXYZRGB GEO::PointCloud3D::getPCLPoint(int pos) const
+pcl::PointXYZ GEO::PointCloud3D::getPCLPoint(int pos) const
 {
 	if (pos >= 0 && (pos < _pclPoints.size())) {
 		return _pclPoints[pos];

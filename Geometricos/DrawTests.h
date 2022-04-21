@@ -23,7 +23,7 @@ namespace GEO
 
 		// 3D
 		void drawPlane();
-		void drawPointCloud3D(const PointCloud3D& pc, TypeColor color);
+		DrawCloud3D* drawPointCloud3D(const PointCloud3D& pc, TypeColor color);
 
 		// Modelos 3D:
 		void drawVaca();
@@ -60,13 +60,13 @@ namespace GEO
 		void clear();
 
 		template <class T, class D>
-		void drawIt(const T& item);
+		D* drawIt(const T& item);
 
 		template <typename T, typename D>
-		void drawIt(const T& item, TypeColor color);
+		D* drawIt(const T& item, TypeColor color);
 
 		template <typename T, typename D>
-		void drawIt(const T& item, TypeColor color, TypeDraw typeDraw);
+		D* drawIt(const T& item, TypeColor color, TypeDraw typeDraw);
 
 		void draw3DModel(const TriangleModel& model);
 
@@ -75,23 +75,26 @@ namespace GEO
 	};
 
 	template <typename T, typename D>
-	void DrawTests::drawIt(const T& item)
+	D* DrawTests::drawIt(const T& item)
 	{
 		drawPointers.push_back(new D(item));
 		dynamic_cast<D*>(drawPointers[drawPointers.size() - 1])->drawIt();
+		return dynamic_cast<D*>(drawPointers[drawPointers.size() - 1]);
 	}
 
 	template <typename T, typename D>
-	void DrawTests::drawIt(const T& item, TypeColor color)
+	D* DrawTests::drawIt(const T& item, TypeColor color)
 	{
 		drawPointers.push_back(new D(item));
 		dynamic_cast<D*>(drawPointers[drawPointers.size() - 1])->drawIt(color);
+		return dynamic_cast<D*>(drawPointers[drawPointers.size() - 1]);
 	}
 
 	template <typename T, typename D>
-	void DrawTests::drawIt(const T& item, TypeColor color, TypeDraw typeDraw)
+	D* DrawTests::drawIt(const T& item, TypeColor color, TypeDraw typeDraw)
 	{
 		drawPointers.push_back(new D(item));
 		dynamic_cast<D*>(drawPointers[drawPointers.size() - 1])->drawIt(color, typeDraw);
+		return dynamic_cast<D*>(drawPointers[drawPointers.size() - 1]);
 	}
 }

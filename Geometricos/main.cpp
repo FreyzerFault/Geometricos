@@ -18,6 +18,10 @@
 #include <gl/glew.h>
 #include <GLFW/glfw3.h>
 
+#include <glm/ext.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/transform.hpp>
+
 #include "InclDraw2D.h"
 #include "InclDraw3D.h"
 #include "InclGeom2D.h"
@@ -504,9 +508,16 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 	case GLFW_KEY_P:
 		if (accion == GLFW_PRESS)
 		{
-			PointCloud3D pc("olivos.ply");
+			PointCloud3D ground("ground.ply");
+			PointCloud3D olivos("olivos.ply");
 
-			test3D.drawPointCloud3D(pc, white);
+			DrawCloud3D* dc = test3D.drawPointCloud3D(ground, grey);
+			Vec3D center = ground.getAABB().getCenter();
+			dc->apply(glm::translate(glm::vec3(-center.getX(), 0, -center.getZ())));
+
+			dc = test3D.drawPointCloud3D(olivos, green);
+			center = olivos.getAABB().getCenter();
+			dc->apply(glm::translate(glm::vec3(-center.getX(), 0, -center.getZ())));
 
 			refreshWindow(ventana);
 		}
@@ -514,7 +525,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 	case GLFW_KEY_A:
 		if (accion == GLFW_PRESS)
 		{
-			PointCloud3D pc(100, 2, 3);
+			const PointCloud3D pc(100, 2, 3);
 
 			test3D.drawPointCloud3D(pc, white);
 
