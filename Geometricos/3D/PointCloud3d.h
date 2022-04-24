@@ -8,13 +8,16 @@
 
 namespace GEO
 {
+	class VoxelGrid;
+
 	class PointCloud3D
 	{
 	protected:
 		std::vector<Vec3D> _points;
-		std::vector<pcl::PointXYZ, Eigen::aligned_allocator<pcl::PointXYZ>> _pclPoints;
 		Vec3D _maxPoint, _minPoint;				// AABB.
 		Vec3D _maxPointIndex, _minPointIndex;	// Indices of those vertices which have the boundary coordinates of the mesh.
+
+		VoxelGrid* voxelGrid = nullptr;
 		
 		// Toma en cuenta un nuevo punto para actualizar el Maximo y Minimo
 		void updateMaxMin(int index);
@@ -36,7 +39,7 @@ namespace GEO
 		PointCloud3D(int size, double radius, const Vec3D& center = Vec3D(0, 0, 0));
 		
 		// K Clusteres con N puntos
-		PointCloud3D(int n, int k, double maxRegion = 10);
+		PointCloud3D(int n, int k, double maxRegion = 10, double maxRadius = 1, double minRadius = .1);
 
 		// Dentro de un AABB
 		PointCloud3D(int size, const AABB& aabb);
@@ -71,16 +74,17 @@ namespace GEO
 		int getPointsSize() const { return _points.size(); }
 
 		pcl::PointXYZ getPCLPoint(int pos) const;
-		std::vector<pcl::PointXYZ, Eigen::aligned_allocator<pcl::PointXYZ>> getPCLPoints() const { return _pclPoints; }
-		int getPCLPointsSize() const { return _pclPoints.size(); }
+		std::vector<pcl::PointXYZ, Eigen::aligned_allocator<pcl::PointXYZ>> getPCLPoints() const;
 		
 		int size() const { return _points.size(); }
 		
 		PointCloud3D& operator=(const PointCloud3D& pointCloud);
 
 		// Guarda la Nube de Puntos en un archivo con sus coordenadas
-		void save(const std::string& filename) const;
-		
+		void save(const std::string& filename, bool usingPCL = false) const;
+
+		// Centroide de la Nube
+		Vec3D getCentroid() const;
 
 		// Punto a mas distancia
 		void getMostDistanced(int& a, int& b) const;
@@ -92,6 +96,32 @@ namespace GEO
 
 		bool isEmpty() const { return _points.empty(); }
 
+		// ============================ K - MEANS ==============================
+		struct KmeansData
+		{
+			std::vector<GEO::PointCloud3D> clusters;
+			std::vector<GEO::Vec3D> centroids;
+			std::vector<GEO::Vec3D> lastCentroids;
+			int iteration;
+
+			KmeansData(int k) : clusters(k), centroids(k), lastCentroids(centroids), iteration(0){}
+
+			void getRandomCentroids(int k, const std::vector<GEO::Vec3D>& points);
+			void updateClusters(const std::vector<GEO::Vec3D>& points);
+			void updateCentroids();
+			bool differentCentroids(double error = 0.000001) const;
+		};
+
+		KmeansData kmeans_naive(int k, double error = 0.000001) const;
+		KmeansData kmeans_grid(int k, double error = 0.000001);
+		KmeansData kmeans_pcl(int k) const;
+
+		// Progresivos = 1 iteracion por llamada
+		KmeansData& kmeans_naive_progressive(int k, KmeansData& data) const;
+		KmeansData& kmeans_grid_progressive(int k, KmeansData& data) const;
+
+		void generateVoxelGrid(double voxelSize = .1);
+		VoxelGrid* getGrid() const { return voxelGrid; }
 	};
 
 }

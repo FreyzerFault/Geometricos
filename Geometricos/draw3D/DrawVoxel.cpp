@@ -9,6 +9,13 @@ void GEO::DrawVoxel::drawIt() {
 
 	setShaderProgram("algeom");
 	setDrawMode(TypeDraw::WIREFRAME);
-	colorAct = voxel.getColor();
+	if (voxel.getType() != TypeVoxel::NP)
+		colorAct = voxel.getColor();
 	Scene::getInstance()->addModel(this);
+}
+
+void GEO::DrawVoxel::drawIt(TypeColor color)
+{
+	setColorActivo(color);
+	drawIt();
 }

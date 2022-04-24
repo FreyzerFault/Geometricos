@@ -1,13 +1,18 @@
-#include <cmath>
+#include "PointCloud3D.h"
+#include "BasicGeom.h"
+#include "VoxelGrid.h"
+
 #include <cinttypes>
-#include <sstream>
+#include <cmath>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
-#include <filesystem>
-#include <glm/ext/scalar_constants.hpp>
+#include <sstream>
 #include <vector>
-#include "BasicGeom.h"
-#include "PointCloud3D.h"
+#include <glm/ext/scalar_constants.hpp>
+
+#include "Voxel.h"
+#include "pcl/ml/kmeans.h"
 
 
 using namespace GEO::BasicGeom;
@@ -93,7 +98,10 @@ GEO::PointCloud3D::PointCloud3D(const std::string& filename)
 		std::cout << "Se ha cargado una Nube de Puntos con PCL \"" << filename << "\"" << std::endl;
 		
 		_points.reserve(cloud->size());
-		_pclPoints = cloud->points;
+		for (pcl::PointXYZ& point : cloud->points)
+		{
+			_points.emplace_back(point.x, point.y, point.z);
+		}
 	}
 }
 
@@ -136,6 +144,7 @@ GEO::PointCloud3D::PointCloud3D(int size, double radius, const Vec3D& center)
 }
 
 GEO::PointCloud3D::PointCloud3D(int size, const AABB& aabb)
+	: _maxPoint(menosINFINITO, menosINFINITO, menosINFINITO), _minPoint(INFINITO, INFINITO, INFINITO)
 {
 
 	_points = std::vector<Vec3D>();
@@ -156,7 +165,8 @@ GEO::PointCloud3D::PointCloud3D(int size, const AABB& aabb)
 	}
 }
 
-GEO::PointCloud3D::PointCloud3D(int n, int k, double maxRegion)
+GEO::PointCloud3D::PointCloud3D(int n, int k, double maxRegion, double maxRadius, double minRadius)
+	: _maxPoint(menosINFINITO, menosINFINITO, menosINFINITO), _minPoint(INFINITO, INFINITO, INFINITO)
 {
 	if (k > n)
 		throw std::runtime_error ("Se intenta crear una Nube de Puntos con K clusteres > N puntos/cluster");
@@ -166,13 +176,13 @@ GEO::PointCloud3D::PointCloud3D(int n, int k, double maxRegion)
 	for (int i = 0; i < k; ++i)
 	{
 		// Centro del cluster:
-		const double x = rand() / (double)RAND_MAX * maxRegion;
-		const double y = rand() / (double)RAND_MAX * maxRegion;
-		const double z = rand() / (double)RAND_MAX * maxRegion;
+		const double x = rand() / (double)RAND_MAX * maxRegion - maxRegion / 2;
+		const double y = rand() / (double)RAND_MAX * maxRegion - maxRegion / 2;
+		const double z = rand() / (double)RAND_MAX * maxRegion - maxRegion / 2;
 		Vec3D center(x,y,z);
 
 		// Radio [1,2]:
-		const double radius = rand() / (double)RAND_MAX * 1 + 1;
+		const double radius = rand() / (double)RAND_MAX * maxRadius + minRadius;
 
 		// Creamos la Nube de Puntos
 		PointCloud3D pc(n, radius, center);
@@ -180,6 +190,10 @@ GEO::PointCloud3D::PointCloud3D(int n, int k, double maxRegion)
 		// Concatenamos los puntos generados a los anteriores
 		std::vector<Vec3D> points = pc.getPoints();
 		_points.insert(_points.end(), points.begin(), points.end());
+	}
+	for (int i = 0; i < _points.size(); ++i)
+	{
+		updateMaxMin(i);
 	}
 }
 
@@ -205,10 +219,22 @@ GEO::Vec3D GEO::PointCloud3D::getPoint(int pos) const
 
 pcl::PointXYZ GEO::PointCloud3D::getPCLPoint(int pos) const
 {
-	if (pos >= 0 && (pos < _pclPoints.size())) {
-		return _pclPoints[pos];
+	if (pos >= 0 && (pos < _points.size())) {
+		return _points[pos].toPointXYZ();
 	}
 	return {};
+}
+
+std::vector<pcl::PointXYZ, Eigen::aligned_allocator<pcl::PointXYZ>> GEO::PointCloud3D::getPCLPoints() const
+{
+	std::vector<pcl::PointXYZ, Eigen::aligned_allocator<pcl::PointXYZ>> points;
+
+	for (const Vec3D& point : _points)
+	{
+		points.emplace_back(point.getX(), point.getY(), point.getZ());
+	}
+
+	return points;
 }
 
 GEO::PointCloud3D& GEO::PointCloud3D::operator=(const PointCloud3D & pointCloud)
@@ -229,19 +255,44 @@ struct Comma final : std::numpunct<char>
 	char do_decimal_point() const override { return ','; }
 };
 
-void GEO::PointCloud3D::save(const std::string & filename) const
+void GEO::PointCloud3D::save(const std::string & filename, bool usingPCL) const
 {
-	std::ofstream file(pcPath + filename + ".txt");
-	file.imbue(std::locale(std::locale::classic(), new Comma));
-	if (!file.good())
-		std::cout << "No se ha podido guardar una Nube de Puntos porque no se pudo abrir el archivo " + filename << std::endl;;
-
-	for (const auto& p : _points)
+	if (usingPCL)
 	{
-		file << std::to_string(p.getX()) << ";" << std::to_string(p.getY()) << ";" << std::to_string(p.getZ()) << std::endl;
-	}
+		pcl::PLYWriter writer;
 
-	file.close();
+		// Convierte la Nube a una Nube de PCL
+		auto points = getPCLPoints();
+		pcl::PointCloud<pcl::PointXYZ> cloudData;
+		cloudData.insert(cloudData.begin(), points.begin(), points.end());
+
+		writer.write(pcPath + filename + ".ply", cloudData);
+	}
+	else
+	{
+		std::ofstream file(pcPath + filename + ".txt");
+		file.imbue(std::locale(std::locale::classic(), new Comma));
+		if (!file.good())
+			std::cout << "No se ha podido guardar una Nube de Puntos porque no se pudo abrir el archivo " + filename << std::endl;;
+
+		for (const auto& p : _points)
+		{
+			file << std::to_string(p.getX()) << ";" << std::to_string(p.getY()) << ";" << std::to_string(p.getZ()) << std::endl;
+		}
+
+		file.close();
+	}
+}
+
+GEO::Vec3D GEO::PointCloud3D::getCentroid() const
+{
+	Vec3D centroid(0,0,0);
+	for (auto& p : _points)
+	{
+		centroid = centroid + p;
+	}
+	
+	return centroid / _points.size();
 }
 
 void GEO::PointCloud3D::updateMaxMin(int index)
@@ -336,4 +387,206 @@ GEO::Vec3D GEO::PointCloud3D::getRandomPoint() const
 {
 	const int randomIndex = trunc((double)rand() / RAND_MAX * (_points.size() - 1));
 	return _points[randomIndex];
+}
+
+void GEO::PointCloud3D::generateVoxelGrid(double voxelSize)
+{
+	// Solo lo genera si no esta ya generada
+	if (voxelGrid != nullptr && BasicGeom::equal(voxelGrid->getVoxelSize(), voxelSize))
+		return;
+
+	voxelGrid = new VoxelGrid(voxelSize, *this);
+}
+
+
+void GEO::PointCloud3D::KmeansData::getRandomCentroids(int k, const std::vector<GEO::Vec3D>& points)
+{
+	std::set<int> pointSelected;
+	for (int i = 0; i < k; ++i)
+	{
+		// Random (que no se repita)
+		int index = -1;
+		do
+		{
+			pointSelected.insert(index);
+			index = round((double)rand() / (RAND_MAX) * points.size());
+		}
+		while (pointSelected.find(index) != pointSelected.end());
+
+		centroids[i] = points[index];
+	}
+}
+
+void GEO::PointCloud3D::KmeansData::updateClusters(const std::vector<GEO::Vec3D>& points)
+{
+	for (auto && cluster : clusters)
+	{
+		cluster.clear();
+	}
+
+	for (auto && point : points)
+	{
+		double minDist = INFINITO;
+		int bestCluster = 0;
+
+		for (int i = 0; i < centroids.size(); ++i)
+		{
+			const double dist = point.distance(centroids[i]);
+
+			if (dist < minDist)
+			{
+				minDist = dist;
+				bestCluster = i;
+			}
+		}
+
+		clusters[bestCluster].addPoint(point);
+	}
+}
+
+void GEO::PointCloud3D::KmeansData::updateCentroids()
+{
+	for (int i = 0; i < centroids.size(); ++i)
+		if (clusters[i].size() != 0)
+			centroids[i] = clusters[i].getCentroid();
+}
+
+bool GEO::PointCloud3D::KmeansData::differentCentroids(double error) const
+{
+	for (int i = 0; i < centroids.size(); ++i)
+	{
+		if (centroids[i].distance(lastCentroids[i]) > error)
+			return true;
+	}
+	return false;
+}
+
+GEO::PointCloud3D::KmeansData GEO::PointCloud3D::kmeans_naive(int k, double error) const
+{
+	KmeansData data(k);
+	data.getRandomCentroids(k, _points);
+
+	// Repetimos el proceso hasta que en una iteracion no se modifiquen los centroides mas alla de un error
+	do
+	{
+		// Guardamos la lista de centroides de cada iteracion para comparar con la nueva
+		data.lastCentroids = data.centroids;
+
+		// Añadimos el punto al cluster cuyo centroide este mas cerca:
+		data.updateClusters(_points);
+
+		// Actualizamos Centroides:
+		data.updateCentroids();
+
+		data.iteration++;
+
+	} while (data.differentCentroids(error));
+
+	return data;
+}
+
+GEO::PointCloud3D::KmeansData GEO::PointCloud3D::kmeans_grid(int k, double error)
+{
+	KmeansData data(k);
+	generateVoxelGrid();
+
+	// Inicializamos los centroides a puntos centrales de los voxeles mas poblados:
+	const auto voxels = voxelGrid->voxelsMasPoblados(k);
+	for (int i = 0; i < k; ++i)
+		data.centroids[i] = voxels[i].first->getCenter();
+
+	// Repetimos el proceso hasta que en una iteracion no se modifiquen los centroides mas alla de un error
+	do
+	{
+		// Guardamos la lista de centroides de cada iteracion para comparar con la nueva
+		data.lastCentroids = data.centroids;
+
+		// Añadimos el punto al cluster cuyo centroide este mas cerca:
+		data.updateClusters(_points);
+
+		// Actualizamos Centroides:
+		data.updateCentroids();
+
+		data.iteration++;
+
+	} while (data.differentCentroids(error));
+
+	return data;
+}
+
+
+GEO::PointCloud3D::KmeansData GEO::PointCloud3D::kmeans_pcl(int k) const
+{
+	KmeansData data(k);
+
+	pcl::Kmeans km(_points.size(), 3);
+	km.setClusterSize(k);
+	for (const Vec3D& point : _points)
+	{
+		pcl::Kmeans::Point p;
+		p.push_back(point.getX());
+		p.push_back(point.getY());
+		p.push_back(point.getZ());
+
+		km.addDataPoint(p);
+	}
+
+	// Calculo del K-Means
+	km.kMeans();
+
+	const pcl::Kmeans::Centroids& centroids = km.get_centroids();
+
+	for (int i = 0; i < k; ++i)
+	{
+		data.centroids[i] = {centroids[i][0], centroids[i][1], centroids[i][2]};
+	}
+
+	// Calculamos para cada punto de la nube cual es su centroide mas cercano
+	// y lo metemos en su nube correspondiente
+	data.updateClusters(_points);
+
+	return data;
+}
+
+GEO::PointCloud3D::KmeansData& GEO::PointCloud3D::kmeans_naive_progressive(int k, KmeansData& data) const
+{
+	// Guardamos la lista de centroides de cada iteracion para comparar con la nueva
+	data.lastCentroids = data.centroids;
+
+	if (data.iteration == 0)
+		// Inicializamos a Centroides random
+		data.getRandomCentroids(k, _points);
+	else
+		// Recalculamos Centroides:
+		data.updateCentroids();
+
+	// Añadimos el punto al cluster cuyo centroide este mas cerca:
+	data.updateClusters(_points);
+
+	data.iteration++;
+
+	return data;
+}
+
+GEO::PointCloud3D::KmeansData& GEO::PointCloud3D::kmeans_grid_progressive(int k, KmeansData& data) const
+{
+	if (data.iteration == 0)
+	{
+		// Inicializamos los centroides a puntos centrales de los voxeles mas poblados:
+		data.centroids.clear();
+		const auto voxels = voxelGrid->voxelsMasPoblados(k);
+		for (auto& [voxel, pobl] : voxels)
+			data.centroids.emplace_back(voxel->getCenter());
+	}
+	else
+		// Recalculamos Centroides:
+		data.updateCentroids();
+
+	// Añadimos el punto al cluster cuyo centroide este mas cerca:
+	data.updateClusters(_points);
+
+
+	data.iteration++;
+
+	return data;
 }

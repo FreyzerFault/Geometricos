@@ -2,6 +2,13 @@
 
 #include "TriangleModel.h"
 
+GEO::Voxel::Voxel(const Vec3D& min, const Vec3D& max, VoxelGrid* voxelGrid)
+	: AABB(min, max), voxelGrid(voxelGrid)
+{
+	if (voxelGrid)
+		gridCoord = voxelGrid->getVoxelCoords(*this);
+}
+
 bool GEO::Voxel::remove(const Vec3D& p)
 {
 	for (auto it = points.begin(); it != points.end(); ++it)
@@ -39,6 +46,22 @@ void GEO::Voxel::checkTris(const TriangleModel& triModel)
 	}
 }
 
+int GEO::Voxel::poblacionCercana() const
+{
+	int poblacion = 0;
+	constexpr int neighbourhoodSize = 3;
+	for (int x = gridCoord.getX(); x < gridCoord.getX() + neighbourhoodSize; ++x)
+	for (int y = gridCoord.getY(); y < gridCoord.getY() + neighbourhoodSize; ++y)
+	for (int z = gridCoord.getZ(); z < gridCoord.getZ() + neighbourhoodSize; ++z)
+	{
+		Voxel* voxel = voxelGrid->getVoxel(x,y,z);
+		if (voxel != nullptr)
+			poblacion += voxelGrid->getVoxel(x,y,z)->poblacion();
+	}
+	return poblacion;
+}
+
+
 GEO::TypeColor GEO::Voxel::getColor() const
 {
 	switch (type)
@@ -55,7 +78,7 @@ GEO::TypeColor GEO::Voxel::getColor() const
 	
 }
 
-bool GEO::Voxel::contains(const Vec3D p) const
+bool GEO::Voxel::contains(const Vec3D& p) const
 {
 	for (const Vec3D& point : points)
 	{

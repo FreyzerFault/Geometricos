@@ -22,6 +22,9 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
 
+#include <chrono>
+#include <thread>
+
 #include "InclDraw2D.h"
 #include "InclDraw3D.h"
 #include "InclGeom2D.h"
@@ -29,6 +32,25 @@
 #include "Scene.h"
 #include "DrawTests.h"
 #include "DebugLogging.h"
+
+using system_clock = std::chrono::system_clock;
+
+std::chrono::time_point<system_clock> t0;
+float deltaTime;
+int min;
+int sec;
+int ms;
+
+
+#define TIME(func,string)\
+	t0 = system_clock::now();\
+	(func);\
+	deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(system_clock::now() - t0).count();\
+	min = std::floor(deltaTime / 60000);\
+	sec = std::floor(deltaTime / 1000 - min * 60);\
+	ms = deltaTime - sec * 1000 - min * 60;\
+	std::cout << "Tiempo en " << (string) << ": "\
+	<< ((min == 0) ? "" : std::to_string(min) + ":") << std::to_string(sec) << ":" << std::to_string(ms) << std::endl
 
 using namespace GEO;
 
@@ -60,9 +82,9 @@ void mostrarAyuda()
 		<< "i -> Point Into Mesh (puntos de menos en VoxelModel respecto a TriangleModel)" << std::endl
 		<< std::endl
 		<< "Practica 5:" << std::endl
-		<< "o -> PointCloud Clusters" << std::endl
-		<< "p -> PointCloud PCL Import" << std::endl
-		<< "a -> PointCloud Clusters K-Means" << std::endl
+		<< "K-MEANS Naive, Grid, PCL" << std::endl
+		<< "o -> PointCloud 20 Clusters aleatorios" << std::endl
+		<< "p -> PointCloud PCL Import Olivos y Ground" << std::endl
 		<< "================" << std::endl
 		<< "1 -> PLANTA" << std::endl
 		<< "2 -> ALZADO" << std::endl
@@ -99,7 +121,7 @@ void callbackTamFB(GLFWwindow* ventana, int ancho, int alto)
 
 
 // Implementado después de la función main
-void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
+void callbackKey(GLFWwindow* window, int tecla, int scancode, int accion,
 				 int modificadores);
 
 
@@ -160,6 +182,9 @@ void callbackMouseWheel(GLFWwindow* ventana, double incX, double incY)
 
 int main(int argc, char** argv)
 {
+	// SEED:
+	std::srand(system_clock::now().time_since_epoch().count());
+
 	// Para que salga por consola los caracteres especiales (ñ)
 	setlocale(LC_ALL, "spanish");
 
@@ -241,8 +266,12 @@ void resetScene()
 
 static TriangleModel vaca("vaca");
 
+static int k = 20;
+static PointCloud3D::KmeansData kmeansNaiveData(k);
+static PointCloud3D::KmeansData kmeansVoxelData(k);
+static PointCloud3D::KmeansData kmeansPCLData(k);
 
-void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
+void callbackKey(GLFWwindow* window, int tecla, int scancode, int accion,
 				 int modificadores)
 {
 	GLfloat factor = 0;
@@ -252,14 +281,14 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 	case GLFW_KEY_ESCAPE:
 		if (accion == GLFW_PRESS)
 		{
-			glfwSetWindowShouldClose(ventana, GLFW_TRUE);
+			glfwSetWindowShouldClose(window, GLFW_TRUE);
 		}
 		break;
 	case GLFW_KEY_DELETE:
 		if (accion == GLFW_PRESS)
 		{
 			resetScene();
-			refreshWindow(ventana);
+			refreshWindow(window);
 		}
 		break;
 
@@ -333,7 +362,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		{
 			test3D.drawMostDistancedPoints();
 			
-			refreshWindow(ventana);
+			refreshWindow(window);
 		}
 		break;
 
@@ -343,7 +372,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		{
 			test3D.drawPlane();
 			
-			refreshWindow(ventana);
+			refreshWindow(window);
 		}
 		break;
 
@@ -356,7 +385,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 			test3D.drawModel(vaca);
 			test3D.drawMaxMinTriangles(vaca);
 
-			refreshWindow(ventana);
+			refreshWindow(window);
 		}
 		break;
 		// =============================== MODELOS 3D y su AABB + Puntos dentro de la malla ===============================
@@ -372,7 +401,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 
 			std::vector<Vec3D> pointsInside = test3D.drawPointsInsideModel(pc, vaca, false);
 			
-			refreshWindow(ventana);
+			refreshWindow(window);
 		}
 		break;
 		// =============================== MODELOS 3D y sus Triangulos mas alejados ===============================
@@ -408,7 +437,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 
 				test3D.drawPointCloudProjection(projectionPlane, model.getCloud());
 			}
-			refreshWindow(ventana);
+			refreshWindow(window);
 		}
 		break;
 
@@ -422,7 +451,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 			test3D.drawVoxelModel(*vaca.getVoxelModel(), TypeVoxel::intersect);
 			test3D.drawVoxelModel(*vaca.getVoxelModel(), TypeVoxel::in);
 			
-			refreshWindow(ventana);
+			refreshWindow(window);
 		}
 		break;
 	case GLFW_KEY_U:
@@ -449,12 +478,13 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 			std::vector<Vec3D> pointsInsideB;
 			
 			vaca.generateVoxelModel(.05);
-
+			
 			// Calculo del Tiempo de encontrar puntos dentro de una malla
 			pointsInsideA = test3D.drawPointsInsideModel(*pc, vaca, false);
 
 			// Calculo del Tiempo de encontrar puntos dentro de una malla con VOXELES
 			pointsInsideB = test3D.drawPointsInsideModel(*pc, vaca, true);
+			
 
 			// Error acumulado del segundo metodo
 			double sampleA = pointsInsideA.size();
@@ -463,7 +493,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 
 			std::cout << "Error en PointInMesh del VoxelModel: " << error * 100 << "%" << std::endl;
 
-			refreshWindow(ventana);
+			refreshWindow(window);
 		}
 		break;
 	case GLFW_KEY_I:
@@ -491,18 +521,49 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 			test3D.drawPointsInsideModelDiff(*pc, vaca);
 			
 			
-			refreshWindow(ventana);
+			refreshWindow(window);
 		}
 		break;
 	case GLFW_KEY_O:
 		if (accion == GLFW_PRESS)
 		{
-			std::srand(clock());
-			PointCloud3D pc(1000, 5, 5);
+			double error = 0.001;
+			
+			static PointCloud3D pc(1000, k, 3, .4, .2);
 
-			test3D.drawPointCloud3D(pc, white);
+			pc.generateVoxelGrid(.3);
+			
+			if (modificadores == GLFW_MOD_SHIFT)
+			{
+				test3D.kMeansAnimation(pc, k, error, window);
+				break;
+			}
+						
+			// NAIVE
+			TIME( kmeansNaiveData = pc.kmeans_naive(k, error), "K-Means Naive");
 
-			refreshWindow(ventana);
+			std::cout << "K-Means Naive completado. Iteraciones: " << kmeansNaiveData.iteration << std::endl;
+			std::cout << std::endl;
+			
+			// Usando VOXELES
+			TIME(kmeansVoxelData = pc.kmeans_grid(k, error), "K-Means Grid");
+			
+			std::cout << "K-Means Grid completado. Iteraciones: " << kmeansVoxelData.iteration << std::endl;
+			std::cout << std::endl;
+
+			// Usando PCL
+			TIME(kmeansPCLData = pc.kmeans_pcl(k), "K-Means PCL");
+
+
+			// Drawcalls
+			for (int i = 0; i < k; ++i)
+			{
+				test3D.drawPointCloud3D(kmeansPCLData.clusters[i], colors[i % colors.size()]);
+			}
+
+			pc.save("clusters", true);
+
+			refreshWindow(window);
 		}
 		break;
 	case GLFW_KEY_P:
@@ -510,19 +571,47 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		{
 			PointCloud3D ground("ground.ply");
 			PointCloud3D olivos("olivos.ply");
+			Vec3D center = olivos.getAABB().getCenter();
+
+			int numOlivos = 87;
+			
+			PointCloud3D::KmeansData olivosKmeansData(87);
+
+			// Naive
+			TIME(olivosKmeansData = olivos.kmeans_naive(numOlivos), "K-Means Naive para Olivos");
+			
+			std::cout << "K-Means Naive completado. Iteraciones: " << kmeansVoxelData.iteration << std::endl;
+			std::cout << std::endl;
+
+			// Grid
+			TIME(olivosKmeansData = olivos.kmeans_grid(numOlivos), "K-Means Grid para Olivos");
+			
+			std::cout << "K-Means Grid completado. Iteraciones: " << kmeansVoxelData.iteration << std::endl;
+			std::cout << std::endl;
+
+			// PCL
+			TIME(olivosKmeansData = olivos.kmeans_pcl(numOlivos), "K-Means PCL para Olivos");
+
+			for (int i = 0; i < numOlivos; ++i)
+			{
+				DrawCloud3D* dc = test3D.drawPointCloud3D(olivosKmeansData.clusters[i], colors[i % colors.size()]);
+				dc->apply(glm::translate(glm::vec3(-center.getX(), -center.getY(), -center.getZ())));
+			}
 
 			DrawCloud3D* dc = test3D.drawPointCloud3D(ground, grey);
-			Vec3D center = ground.getAABB().getCenter();
-			dc->apply(glm::translate(glm::vec3(-center.getX(), 0, -center.getZ())));
+			dc->apply(glm::translate(glm::vec3(-center.getX(), -center.getY(), -center.getZ())));
+			
 
-			dc = test3D.drawPointCloud3D(olivos, green);
-			center = olivos.getAABB().getCenter();
-			dc->apply(glm::translate(glm::vec3(-center.getX(), 0, -center.getZ())));
-
-			refreshWindow(ventana);
+			refreshWindow(window);
 		}
 		break;
 	case GLFW_KEY_A:
+		if (accion == GLFW_PRESS)
+		{
+
+		}
+		break;
+	case GLFW_KEY_S:
 		if (accion == GLFW_PRESS)
 		{
 			const PointCloud3D pc(100, 2, 3);
@@ -531,7 +620,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 
 			// K-MEANS
 
-			refreshWindow(ventana);
+			refreshWindow(window);
 		}
 		break;
 
@@ -544,7 +633,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 
 			test3D.drawVoxelModel(*vaca.getVoxelModel(), TypeVoxel::intersect);
 			
-			refreshWindow(ventana);
+			refreshWindow(window);
 		}
 		break;
 	case GLFW_KEY_B:
@@ -557,7 +646,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 			test3D.drawVoxelModel(*vaca.getVoxelModel(), TypeVoxel::intersect);
 			test3D.drawVoxelModel(*vaca.getVoxelModel(), TypeVoxel::in);
 			
-			refreshWindow(ventana);
+			refreshWindow(window);
 		}
 		break;
 	case GLFW_KEY_C:
@@ -565,7 +654,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		{
 			test3D.drawCuenco();
 			
-			refreshWindow(ventana);
+			refreshWindow(window);
 		}
 		break;
 
@@ -575,7 +664,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		{
 			Scene::getInstance()->setView(TypeView::PLANT);
 
-			refreshWindow(ventana);
+			refreshWindow(window);
 		}
 		break;
 	case GLFW_KEY_2:
@@ -583,7 +672,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		{
 			Scene::getInstance()->setView(TypeView::ELEVATION);
 
-			refreshWindow(ventana);
+			refreshWindow(window);
 		}
 		break;
 	case GLFW_KEY_3:
@@ -591,7 +680,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		{
 			Scene::getInstance()->setView(TypeView::PROFILE);
 
-			refreshWindow(ventana);
+			refreshWindow(window);
 		}
 		break;
 	case GLFW_KEY_4:
@@ -599,7 +688,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 		{
 			Scene::getInstance()->setView(TypeView::ISOMETRIC);
 
-			refreshWindow(ventana);
+			refreshWindow(window);
 		}
 		break;
 	case GLFW_KEY_H:
@@ -633,7 +722,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 			}
 		}
 
-		refreshWindow(ventana);
+		refreshWindow(window);
 		break;
 	case GLFW_KEY_UP:
 		factor = 1;
@@ -661,7 +750,7 @@ void callbackKey(GLFWwindow* ventana, int tecla, int scancode, int accion,
 				break;
 			}
 		}
-		refreshWindow(ventana);
+		refreshWindow(window);
 		break;
 	default: ;
 	}

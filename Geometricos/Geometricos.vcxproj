@@ -31,6 +31,7 @@
     <ClInclude Include="2D\Vec2D.h" />
     <ClInclude Include="2D\Vertex.h" />
     <ClInclude Include="3D\AABB.h" />
+    <ClInclude Include="3D\VoxelGrid.h" />
     <ClInclude Include="draw3D\DrawVoxel.h" />
     <ClInclude Include="3D\Edge3D.h" />
     <ClInclude Include="3D\Line3D.h" />
@@ -60,6 +61,7 @@
     <ClInclude Include="draw3D\DrawTriangle3D.h" />
     <ClInclude Include="draw3D\DrawTriangleModel.h" />
     <ClInclude Include="draw3D\DrawVec3D.h" />
+    <ClInclude Include="draw3D\DrawVoxelGrid.h" />
     <ClInclude Include="draw3D\DrawVoxelModel.h" />
     <ClInclude Include="InclDraw2D.h" />
     <ClInclude Include="InclDraw3D.h" />
@@ -86,6 +88,7 @@
     <ClCompile Include="2D\Vec2D.cpp" />
     <ClCompile Include="2D\Vertex.cpp" />
     <ClCompile Include="3D\AABB.cpp" />
+    <ClCompile Include="3D\VoxelGrid.cpp" />
     <ClCompile Include="draw3D\DrawVoxel.cpp" />
     <ClCompile Include="3D\Edge3D.cpp" />
     <ClCompile Include="3D\Line3D.cpp" />
@@ -114,6 +117,7 @@
     <ClCompile Include="draw3D\DrawTriangle3D.cpp" />
     <ClCompile Include="draw3D\DrawTriangleModel.cpp" />
     <ClCompile Include="draw3D\DrawVec3D.cpp" />
+    <ClCompile Include="draw3D\DrawVoxelGrid.cpp" />
     <ClCompile Include="draw3D\DrawVoxelModel.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="DrawTests.cpp" />

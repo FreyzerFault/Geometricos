@@ -1,5 +1,8 @@
 #pragma once
 
+#include <gl/glew.h>
+#include <GLFW/glfw3.h>
+
 #include "InclGeom2D.h"
 #include "InclGeom3D.h"
 #include "InclDraw2D.h"
@@ -59,6 +62,8 @@ namespace GEO
 
 		void clear();
 
+		void reloadWindow(GLFWwindow* window);
+
 		template <class T, class D>
 		D* drawIt(const T& item);
 
@@ -70,8 +75,11 @@ namespace GEO
 
 		void draw3DModel(const TriangleModel& model);
 
-		void drawVoxel(const Voxel& voxel);
+		void drawVoxel(const Voxel& voxel, TypeColor color);
 		void drawVoxelModel(const VoxelModel& voxelModel, TypeVoxel type = TypeVoxel::intersect);
+		void drawVoxelGrid(const VoxelGrid& grid, TypeColor color);
+
+		void kMeansAnimation(PointCloud3D& pc, int k, double error, GLFWwindow* window);
 	};
 
 	template <typename T, typename D>

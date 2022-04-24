@@ -1,5 +1,8 @@
 #include "DrawTests.h"
 
+#include <chrono>
+#include <thread>
+
 #include "DebugLogging.h"
 
 static float getDeltaTime(float t0)
@@ -618,15 +621,29 @@ void GEO::DrawTests::clear()
 	drawVoxelModels.clear();
 }
 
+void GEO::DrawTests::reloadWindow(GLFWwindow* window)
+{	
+	try
+	{
+		Scene::getInstance()->refresh();
+	}
+	catch (std::runtime_error& e)
+	{
+		outputException(e, "refreshWindow");
+	}
+
+	glfwSwapBuffers(window);
+}
+
 void GEO::DrawTests::draw3DModel(const TriangleModel& model)
 {
 	drawPointers.push_back(new DrawTriangleModel(model));
 	dynamic_cast<DrawTriangleModel*>(drawPointers[drawPointers.size() - 1])->drawIt(TypeDraw::PLAIN);
 }
 
-void GEO::DrawTests::drawVoxel(const Voxel& voxel)
+void GEO::DrawTests::drawVoxel(const Voxel& voxel, TypeColor color)
 {
-	drawIt<Voxel, DrawVoxel>(voxel);
+	drawIt<Voxel, DrawVoxel>(voxel, color);
 }
 
 void GEO::DrawTests::drawVoxelModel(const VoxelModel& voxelModel, TypeVoxel type)
@@ -634,4 +651,57 @@ void GEO::DrawTests::drawVoxelModel(const VoxelModel& voxelModel, TypeVoxel type
 	drawVoxelModels.emplace_back(voxelModel);
 
 	drawPointers.push_back(drawVoxelModels.back().drawIt(type));
+}
+
+void GEO::DrawTests::drawVoxelGrid(const VoxelGrid& grid, TypeColor color)
+{
+	drawIt<VoxelGrid, DrawVoxelGrid>(grid, color);
+}
+
+void GEO::DrawTests::kMeansAnimation(PointCloud3D& pc, int k, double error, GLFWwindow* window)
+{
+	static PointCloud3D::KmeansData kmeansNaiveData(k);
+	static PointCloud3D::KmeansData kmeansVoxelData(k);
+	static PointCloud3D::KmeansData kmeansPCLData(k);
+
+	glDisable(GL_BLEND);
+
+	if (kmeansNaiveData.iteration == 0)
+	{
+		kmeansNaiveData = pc.kmeans_naive_progressive(k, kmeansNaiveData);
+
+		clear();
+		for (int i = 0; i < k; ++i)
+		{
+			drawPointCloud3D(kmeansNaiveData.clusters[i], colors[i % colors.size()]);
+		}
+		
+		reloadWindow(window);
+	}
+	else
+	{
+		while (kmeansNaiveData.differentCentroids(error))
+		{
+			kmeansNaiveData = pc.kmeans_naive_progressive(k, kmeansNaiveData);
+			
+			clear();
+			for (int i = 0; i < k; ++i)
+			{
+				drawPointCloud3D(kmeansNaiveData.clusters[i], colors[i % colors.size()]);
+			}
+			for (int i = 0; i < 20; ++i)
+			{
+				Scene::getInstance()->moveCamera(Movements::ORBIT, 0, 2);
+				std::this_thread::sleep_for(std::chrono::milliseconds(30));
+
+				reloadWindow(window);
+			}
+		}
+		
+		std::cout << "K-Means Naive completado. Iteraciones: " << kmeansNaiveData.iteration << std::endl;
+		std::cout << std::endl;
+
+		// Reset kmeans
+		kmeansNaiveData.iteration = 0;
+	}
 }

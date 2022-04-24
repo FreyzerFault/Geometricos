@@ -12,4 +12,5 @@
 #include "Vec3D.h"
 #include "TriangleModel.h"
 #include "Voxel.h"
+#include "VoxelGrid.h"
 #include "VoxelModel.h"

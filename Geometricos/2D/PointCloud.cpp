@@ -7,9 +7,6 @@
 
 GEO::PointCloud::PointCloud(int size, double max_x, double max_y)
 {
-	// Semilla aleatoria por cada Nube de puntos creada
-	srand(time(nullptr));
-
 	for (int i = 0; i < size; ++i)
 	{
 		// 2 numeros random [0,1] %

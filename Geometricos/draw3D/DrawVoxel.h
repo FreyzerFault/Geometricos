@@ -12,6 +12,7 @@ namespace GEO
 		DrawVoxel(const Voxel& voxel);
 
 		void drawIt();
+		void drawIt(TypeColor color);
 		~DrawVoxel() override = default;
 	};
 }

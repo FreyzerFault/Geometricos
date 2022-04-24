@@ -6,6 +6,8 @@
 
 #include "BasicGeom.h"
 
+#include "pcl/point_types.h"
+
 
 namespace GEO
 {
@@ -91,6 +93,10 @@ namespace GEO
 
 		virtual std::string toString() const;
 		virtual void out() const;
+
+		pcl::PointXYZ toPointXYZ() const { return {(float)getX(), (float)getY(), (float)getZ()}; }
+
+		Vec3D ceil() const { return {std::ceil(getX()), std::ceil(getY()), std::ceil(getZ())}; }
 	};
 }
 

@@ -29,18 +29,39 @@ namespace GEO
 	};
 
 	// Colores
-	const TypeColor magenta(1.0, 0.0, 1.0);
-	const TypeColor green(0.0, 1.0, 0.0);
-	const TypeColor blue(0.0, 0.0, 1.0);
-	const TypeColor red(1.0, 0.0, 0.0);
-	const TypeColor cyan(0.0, 1.0, 1.0);
-	const TypeColor yellow(1.0, 1.0, 0.0);
-	const TypeColor white(1.0, 1.0, 1.0);
-	const TypeColor black(0.0, 0.0, 0.0);
+	const TypeColor green(0, 1, 0);
+	const TypeColor blue(0, 0, 1);
+	const TypeColor red(1, 0, 0);
+
+	const TypeColor magenta(1, 0, 1);
+	const TypeColor cyan(0, 1, 1);
+	const TypeColor yellow(1, 1, 0);
+
+	const TypeColor orange(1, .5f, 0);
+	const TypeColor lime(.5f, 1, 0);
+	const TypeColor turquesa(0, 1, .5f);
+	const TypeColor lightblue(0, .5f, 1);
+	const TypeColor purple(.5f, 0, 1);
+	const TypeColor pink(1, 0, .5f);
+
+	const TypeColor maroon(.5f, 0, 0);
+	const TypeColor olive(.5f, .5f, 0);
+	const TypeColor darkgreen(0, .1f, 0);
+	const TypeColor darkpurple(.5f, 0, .5f);
+	const TypeColor teal(0, .5f, .5f);
+	const TypeColor navy(0, 0, .5f);
+
+	const TypeColor white(1, 1, 1);
+	const TypeColor black(0, 0, 0);
 	const TypeColor grey(.5f, .5f, .5f);
+	const TypeColor darkgrey(.2f, .2f, .2f);
+	const TypeColor silver(.8f, .8f, .8f);
+
+	const TypeColor brown(.6f, .3f, 0.05f);
 	
 	static std::vector<TypeColor> colors {
-		red, blue, green, magenta, yellow, cyan
+		red, blue, green, magenta, yellow, cyan, orange, lime, turquesa,
+		lightblue, purple, pink, maroon, olive, darkgreen, darkpurple, teal, navy, darkgrey, grey, silver
 	};
 
    enum class TypeModel
@@ -84,7 +105,7 @@ namespace GEO
 		Material _material;   ///< Propiedades del material del modelo
 		ShaderProgram* _program = nullptr;   ///< Shader program a utilizar
 		glm::mat4 _tModeling = glm::mat4 ( 1 );   ///< Transformación de modelado
-		TypeColor colorAct; 
+		TypeColor colorAct;
 
    public:
 		void buildVAO ();

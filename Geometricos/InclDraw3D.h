@@ -12,3 +12,4 @@
 #include "DrawTriangleModel.h"
 #include "DrawVoxel.h"
 #include "DrawVoxelModel.h"
+#include "DrawVoxelGrid.h"

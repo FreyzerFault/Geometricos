@@ -267,7 +267,7 @@ void GEO::Draw::render ( glm::mat4 matrizV, glm::mat4 matrizVP, Light& l )
 			
 			
 			glEnable(GL_PROGRAM_POINT_SIZE_EXT);
-			glPointSize(4);
+			glPointSize(2);
 			glDrawElements ( GL_POINTS, _indices.size (), GL_UNSIGNED_INT, nullptr );
 			break;       
 			
