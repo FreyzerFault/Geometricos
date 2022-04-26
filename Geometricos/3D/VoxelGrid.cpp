@@ -67,7 +67,7 @@ std::vector<std::pair<GEO::Voxel*, int>> GEO::VoxelGrid::voxelsMasPoblados(int n
 		bool voxelNear = false;
 		for (auto && [bestVoxel, pobl] : bestVoxels)
 		{
-			if (voxel->getCenter().distance(bestVoxel->getCenter()) < voxelSize * 2)
+			if (voxel->getCenter().distance(bestVoxel->getCenter()) < voxelSize * 1)
 			{
 				voxelNear = true;
 				break;

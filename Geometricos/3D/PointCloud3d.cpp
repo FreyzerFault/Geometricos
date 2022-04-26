@@ -12,8 +12,18 @@
 #include <glm/ext/scalar_constants.hpp>
 
 #include "Voxel.h"
-#include "pcl/ml/kmeans.h"
-
+#include <pcl/ModelCoefficients.h>
+#include <pcl/ml/kmeans.h>
+#include <pcl/point_types.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/filters/extract_indices.h>
+#include <pcl/filters/voxel_grid.h>
+#include <pcl/features/normal_3d.h>
+#include <pcl/search/kdtree.h>
+#include <pcl/sample_consensus/method_types.h>
+#include <pcl/sample_consensus/model_types.h>
+#include <pcl/segmentation/sac_segmentation.h>
+#include <pcl/segmentation/extract_clusters.h>
 
 using namespace GEO::BasicGeom;
 
@@ -100,7 +110,7 @@ GEO::PointCloud3D::PointCloud3D(const std::string& filename)
 		_points.reserve(cloud->size());
 		for (pcl::PointXYZ& point : cloud->points)
 		{
-			_points.emplace_back(point.x, point.y, point.z);
+			addPoint({ point.x, point.y, point.z });
 		}
 	}
 }
@@ -545,6 +555,61 @@ GEO::PointCloud3D::KmeansData GEO::PointCloud3D::kmeans_pcl(int k) const
 	// y lo metemos en su nube correspondiente
 	data.updateClusters(_points);
 
+	return data;
+}
+
+GEO::PointCloud3D::KmeansData GEO::PointCloud3D::kmeans_pcl_kdtree(int k) const
+{
+	const pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
+
+	for (const Vec3D& point : _points)
+	{
+		cloud->emplace_back(point.getX(), point.getY(), point.getZ());
+	}
+
+	pcl::search::KdTree<pcl::PointXYZ>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZ>);
+	tree->setInputCloud(cloud);
+
+	std::vector<pcl::PointIndices> cluster_indices;
+	pcl::EuclideanClusterExtraction<pcl::PointXYZ> ec;
+	ec.setClusterTolerance(0.02); // 2cm
+	ec.setMinClusterSize(2);
+	ec.setMaxClusterSize(25000);
+	ec.setSearchMethod(tree);
+	ec.setInputCloud(cloud);
+	ec.extract(cluster_indices);
+	
+	pcl::PCDWriter writer;
+
+	int j = 0;
+	for (std::vector<pcl::PointIndices>::const_iterator it = cluster_indices.begin(); it != cluster_indices.end(); ++it)
+	{
+		const pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_cluster(new pcl::PointCloud<pcl::PointXYZ>);
+
+		for (const auto& idx : it->indices)
+		      cloud_cluster->push_back((*cloud)[idx]);
+
+		cloud_cluster->width = cloud_cluster->size();
+		cloud_cluster->height = 1;
+		cloud_cluster->is_dense = true;
+		
+		//std::cout << "PointCloud representing the Cluster: " << cloud_cluster->size() << " data points." << std::endl;
+
+		//std::stringstream ss;
+		//ss << "cloud_cluster_" << j << ".pcd";
+		//
+		//writer.write<pcl::PointXYZ>(ss.str(), *cloud_cluster, false);
+		//j++;
+	}
+
+	// Conversion a Vec3D
+	KmeansData data(cluster_indices.size());
+	for (int i = 0; i < cluster_indices.size(); ++i)
+	{
+		for (const auto& idx : cluster_indices.at(i).indices)
+			data.clusters[i].addPoint({(*cloud)[idx].x, (*cloud)[idx].y, (*cloud)[idx].z});
+	}
+	
 	return data;
 }
 

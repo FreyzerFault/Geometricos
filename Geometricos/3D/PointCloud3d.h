@@ -115,6 +115,7 @@ namespace GEO
 		KmeansData kmeans_naive(int k, double error = 0.000001) const;
 		KmeansData kmeans_grid(int k, double error = 0.000001);
 		KmeansData kmeans_pcl(int k) const;
+		KmeansData kmeans_pcl_kdtree(int k) const;
 
 		// Progresivos = 1 iteracion por llamada
 		KmeansData& kmeans_naive_progressive(int k, KmeansData& data) const;

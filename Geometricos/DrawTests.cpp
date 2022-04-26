@@ -668,7 +668,7 @@ void GEO::DrawTests::kMeansAnimation(PointCloud3D& pc, int k, double error, GLFW
 
 	if (kmeansNaiveData.iteration == 0)
 	{
-		kmeansNaiveData = pc.kmeans_naive_progressive(k, kmeansNaiveData);
+		kmeansNaiveData = pc.kmeans_grid_progressive(k, kmeansNaiveData);
 
 		clear();
 		for (int i = 0; i < k; ++i)
@@ -689,7 +689,7 @@ void GEO::DrawTests::kMeansAnimation(PointCloud3D& pc, int k, double error, GLFW
 			{
 				drawPointCloud3D(kmeansNaiveData.clusters[i], colors[i % colors.size()]);
 			}
-			for (int i = 0; i < 20; ++i)
+			for (int i = 0; i < 5; ++i)
 			{
 				Scene::getInstance()->moveCamera(Movements::ORBIT, 0, 2);
 				std::this_thread::sleep_for(std::chrono::milliseconds(30));

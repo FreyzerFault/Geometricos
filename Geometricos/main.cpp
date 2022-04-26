@@ -569,7 +569,7 @@ void callbackKey(GLFWwindow* window, int tecla, int scancode, int accion,
 	case GLFW_KEY_P:
 		if (accion == GLFW_PRESS)
 		{
-			PointCloud3D ground("ground.ply");
+			//PointCloud3D ground("ground.ply");
 			PointCloud3D olivos("olivos.ply");
 			Vec3D center = olivos.getAABB().getCenter();
 
@@ -577,29 +577,33 @@ void callbackKey(GLFWwindow* window, int tecla, int scancode, int accion,
 			
 			PointCloud3D::KmeansData olivosKmeansData(87);
 
-			// Naive
-			TIME(olivosKmeansData = olivos.kmeans_naive(numOlivos), "K-Means Naive para Olivos");
-			
-			std::cout << "K-Means Naive completado. Iteraciones: " << kmeansVoxelData.iteration << std::endl;
-			std::cout << std::endl;
+			//// Naive
+			//TIME(olivosKmeansData = olivos.kmeans_naive(numOlivos), "K-Means Naive para Olivos");
+			//
+			//std::cout << "K-Means Naive completado. Iteraciones: " << kmeansVoxelData.iteration << std::endl;
+			//std::cout << std::endl;
 
-			// Grid
-			TIME(olivosKmeansData = olivos.kmeans_grid(numOlivos), "K-Means Grid para Olivos");
-			
-			std::cout << "K-Means Grid completado. Iteraciones: " << kmeansVoxelData.iteration << std::endl;
-			std::cout << std::endl;
+			//// Grid
+			//TIME(olivosKmeansData = olivos.kmeans_grid(numOlivos), "K-Means Grid para Olivos");
+			//
+			//std::cout << "K-Means Grid completado. Iteraciones: " << kmeansVoxelData.iteration << std::endl;
+			//std::cout << std::endl;
 
 			// PCL
-			TIME(olivosKmeansData = olivos.kmeans_pcl(numOlivos), "K-Means PCL para Olivos");
+			TIME(olivosKmeansData = olivos.kmeans_pcl_kdtree(numOlivos), "K-Means PCL para Olivos");
 
-			for (int i = 0; i < numOlivos; ++i)
+			for (int i = 0; i < olivosKmeansData.clusters.size(); ++i)
 			{
 				DrawCloud3D* dc = test3D.drawPointCloud3D(olivosKmeansData.clusters[i], colors[i % colors.size()]);
 				dc->apply(glm::translate(glm::vec3(-center.getX(), -center.getY(), -center.getZ())));
+				dc->apply(glm::scale(glm::vec3(.05, .05, .05)));
+				dc->apply(glm::rotate(glm::pi<float>() / 4.5f, glm::vec3(0.f, 0.f, 1.f)));
 			}
 
-			DrawCloud3D* dc = test3D.drawPointCloud3D(ground, grey);
-			dc->apply(glm::translate(glm::vec3(-center.getX(), -center.getY(), -center.getZ())));
+			//DrawCloud3D* dc = test3D.drawPointCloud3D(ground, grey);
+			//dc->apply(glm::translate(glm::vec3(-center.getX(), -center.getY(), -center.getZ())));
+			//dc->apply(glm::scale(glm::vec3(.05, .05, .05)));
+			//dc->apply(glm::rotate(glm::pi<float>() / 4.5f, glm::vec3(0.f, 0.f, 1.f)));
 			
 
 			refreshWindow(window);
