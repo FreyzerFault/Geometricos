@@ -658,36 +658,40 @@ void GEO::DrawTests::drawVoxelGrid(const VoxelGrid& grid, TypeColor color)
 	drawIt<VoxelGrid, DrawVoxelGrid>(grid, color);
 }
 
-void GEO::DrawTests::kMeansAnimation(PointCloud3D& pc, int k, double error, GLFWwindow* window)
+void GEO::DrawTests::kMeansAnimation(const PointCloud3D& pc, int k, double error, GLFWwindow* window, PointCloud3D::TypeKmeans type)
 {
-	static PointCloud3D::KmeansData kmeansNaiveData(k);
-	static PointCloud3D::KmeansData kmeansVoxelData(k);
-	static PointCloud3D::KmeansData kmeansPCLData(k);
+	if (type != PointCloud3D::naive && type != PointCloud3D::grid)
+	{
+		std::cout << "Animacion no implementada" << std::endl;
+		return;
+	}
+
+	static PointCloud3D::KmeansData kmeansData(k);
 
 	glDisable(GL_BLEND);
 
-	if (kmeansNaiveData.iteration == 0)
+	if (kmeansData.iteration == 0)
 	{
-		kmeansNaiveData = pc.kmeans_grid_progressive(k, kmeansNaiveData);
+		kmeansData = pc.kmeans_progressive(k, kmeansData, type);
 
 		clear();
 		for (int i = 0; i < k; ++i)
 		{
-			drawPointCloud3D(kmeansNaiveData.clusters[i], colors[i % colors.size()]);
+			drawPointCloud3D(kmeansData.clusters[i], colors[i % colors.size()]);
 		}
 		
 		reloadWindow(window);
 	}
 	else
 	{
-		while (kmeansNaiveData.differentCentroids(error))
+		while (kmeansData.differentCentroids(error))
 		{
-			kmeansNaiveData = pc.kmeans_naive_progressive(k, kmeansNaiveData);
+			kmeansData = pc.kmeans_progressive(k, kmeansData, type);
 			
 			clear();
 			for (int i = 0; i < k; ++i)
 			{
-				drawPointCloud3D(kmeansNaiveData.clusters[i], colors[i % colors.size()]);
+				drawPointCloud3D(kmeansData.clusters[i], colors[i % colors.size()]);
 			}
 			for (int i = 0; i < 5; ++i)
 			{
@@ -698,10 +702,12 @@ void GEO::DrawTests::kMeansAnimation(PointCloud3D& pc, int k, double error, GLFW
 			}
 		}
 		
-		std::cout << "K-Means Naive completado. Iteraciones: " << kmeansNaiveData.iteration << std::endl;
+		std::cout << "K-Means "
+		<< (type == PointCloud3D::TypeKmeans::naive ? "Naive" : "Grid")
+		<< " completado. Iteraciones: " << kmeansData.iteration << std::endl;
 		std::cout << std::endl;
 
 		// Reset kmeans
-		kmeansNaiveData.iteration = 0;
+		kmeansData.iteration = 0;
 	}
 }

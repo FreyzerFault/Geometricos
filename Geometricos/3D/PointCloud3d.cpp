@@ -471,59 +471,62 @@ bool GEO::PointCloud3D::KmeansData::differentCentroids(double error) const
 	return false;
 }
 
-GEO::PointCloud3D::KmeansData GEO::PointCloud3D::kmeans_naive(int k, double error) const
+GEO::PointCloud3D::KmeansData GEO::PointCloud3D::kmeans(int k, TypeKmeans type, double error) const
 {
 	KmeansData data(k);
-	data.getRandomCentroids(k, _points);
 
-	// Repetimos el proceso hasta que en una iteracion no se modifiquen los centroides mas alla de un error
-	do
+	switch (type)
 	{
-		// Guardamos la lista de centroides de cada iteracion para comparar con la nueva
-		data.lastCentroids = data.centroids;
+	case naive:
+		data.getRandomCentroids(k, _points);
+		break;
 
-		// Añadimos el punto al cluster cuyo centroide este mas cerca:
-		data.updateClusters(_points);
+	case grid:
+		//generateVoxelGrid();
+		if (voxelGrid)
+		{
+			// Inicializamos los centroides a puntos centrales de los voxeles mas poblados:
+			const std::vector<std::pair<Voxel*, int>> voxels = voxelGrid->voxelsMasPoblados(k);
+			for (int i = 0; i < k; ++i)
+				data.centroids[i] = voxels[i].first->getCenter();
+		}
+		else
+		{
+			std::cout << "No se genero el VoxelGrid para hacer el Kmeans con Grid" << std::endl;
+		}
 
-		// Actualizamos Centroides:
-		data.updateCentroids();
+		break;
 
-		data.iteration++;
+	case pcl:
+		data = kmeans_pcl(k);
+		break;
 
-	} while (data.differentCentroids(error));
+	case pcl_kdtree:
+		data = kmeans_pcl_kdtree(k);
+		break;
+	}
+
+	if (type == grid || type == naive)
+	{
+		// Repetimos el proceso hasta que en una iteracion no se m{odifiquen los centroides mas alla de un error
+		do
+		{
+			// Guardamos la lista de centroides de cada iteracion para comparar con la nueva
+			data.lastCentroids = data.centroids;
+
+			// Añadimos el punto al cluster cuyo centroide este mas cerca:
+			data.updateClusters(_points);
+
+			// Actualizamos Centroides:
+			data.updateCentroids();
+
+			data.iteration++;
+
+		} while (data.differentCentroids(error));
+	}
 
 	return data;
 }
-
-GEO::PointCloud3D::KmeansData GEO::PointCloud3D::kmeans_grid(int k, double error)
-{
-	KmeansData data(k);
-	generateVoxelGrid();
-
-	// Inicializamos los centroides a puntos centrales de los voxeles mas poblados:
-	const auto voxels = voxelGrid->voxelsMasPoblados(k);
-	for (int i = 0; i < k; ++i)
-		data.centroids[i] = voxels[i].first->getCenter();
-
-	// Repetimos el proceso hasta que en una iteracion no se modifiquen los centroides mas alla de un error
-	do
-	{
-		// Guardamos la lista de centroides de cada iteracion para comparar con la nueva
-		data.lastCentroids = data.centroids;
-
-		// Añadimos el punto al cluster cuyo centroide este mas cerca:
-		data.updateClusters(_points);
-
-		// Actualizamos Centroides:
-		data.updateCentroids();
-
-		data.iteration++;
-
-	} while (data.differentCentroids(error));
-
-	return data;
-}
-
 
 GEO::PointCloud3D::KmeansData GEO::PointCloud3D::kmeans_pcl(int k) const
 {
@@ -613,35 +616,31 @@ GEO::PointCloud3D::KmeansData GEO::PointCloud3D::kmeans_pcl_kdtree(int k) const
 	return data;
 }
 
-GEO::PointCloud3D::KmeansData& GEO::PointCloud3D::kmeans_naive_progressive(int k, KmeansData& data) const
+GEO::PointCloud3D::KmeansData& GEO::PointCloud3D::kmeans_progressive(int k, KmeansData& data, TypeKmeans type) const
 {
+	if (type != naive && type != grid)
+	{
+		std::cout << "Animacion no implementada" << std::endl;
+		return data;
+	}
+
 	// Guardamos la lista de centroides de cada iteracion para comparar con la nueva
 	data.lastCentroids = data.centroids;
 
 	if (data.iteration == 0)
-		// Inicializamos a Centroides random
-		data.getRandomCentroids(k, _points);
-	else
-		// Recalculamos Centroides:
-		data.updateCentroids();
-
-	// Añadimos el punto al cluster cuyo centroide este mas cerca:
-	data.updateClusters(_points);
-
-	data.iteration++;
-
-	return data;
-}
-
-GEO::PointCloud3D::KmeansData& GEO::PointCloud3D::kmeans_grid_progressive(int k, KmeansData& data) const
-{
-	if (data.iteration == 0)
 	{
-		// Inicializamos los centroides a puntos centrales de los voxeles mas poblados:
-		data.centroids.clear();
-		const auto voxels = voxelGrid->voxelsMasPoblados(k);
-		for (auto& [voxel, pobl] : voxels)
-			data.centroids.emplace_back(voxel->getCenter());
+		// Inicializacion dependiendo de si es Naive o Grid
+		if (type == naive)
+			// Inicializamos a Centroides random
+			data.getRandomCentroids(k, _points);
+		else if (type == grid)
+		{
+			// Inicializamos los centroides a puntos centrales de los voxeles mas poblados:
+			data.centroids.clear();
+			const auto voxels = voxelGrid->voxelsMasPoblados(k);
+			for (auto& [voxel, pobl] : voxels)
+				data.centroids.emplace_back(voxel->getCenter());
+			}
 	}
 	else
 		// Recalculamos Centroides:
@@ -649,7 +648,6 @@ GEO::PointCloud3D::KmeansData& GEO::PointCloud3D::kmeans_grid_progressive(int k,
 
 	// Añadimos el punto al cluster cuyo centroide este mas cerca:
 	data.updateClusters(_points);
-
 
 	data.iteration++;
 

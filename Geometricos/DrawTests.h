@@ -79,7 +79,7 @@ namespace GEO
 		void drawVoxelModel(const VoxelModel& voxelModel, TypeVoxel type = TypeVoxel::intersect);
 		void drawVoxelGrid(const VoxelGrid& grid, TypeColor color);
 
-		void kMeansAnimation(PointCloud3D& pc, int k, double error, GLFWwindow* window);
+		void kMeansAnimation(const PointCloud3D& pc, int k, double error, GLFWwindow* window, PointCloud3D::TypeKmeans type);
 	};
 
 	template <typename T, typename D>
