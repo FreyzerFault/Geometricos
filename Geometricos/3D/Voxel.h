@@ -48,7 +48,7 @@ namespace GEO
 
 		// Numero de puntos dentro del voxel
 		int poblacion() const { return points.size(); }
-		int poblacionCercana() const; // Todos los vecinos + self
+		int poblacionCercana(int neighbourhoodRange = 1) const; // Todos los vecinos + self
 
 		// Tipo de voxel: in / out / intersect
 		TypeVoxel getType() const { return type; }

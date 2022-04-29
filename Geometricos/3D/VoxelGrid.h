@@ -22,7 +22,7 @@ namespace GEO
 		VoxelGrid(double voxelSize, const AABB& aabb);
 		VoxelGrid(double voxelSize, const PointCloud3D& cloud);
 
-		std::vector<std::pair<Voxel*, int>> voxelsMasPoblados(int numVoxels = 1) const;
+		std::vector<Voxel*> voxelsMasPoblados(int numVoxels = 1, double centroidMinDistance = 0.5) const;
 
 		Voxel* addPoint(const Vec3D& point) const;
 		void addPoints(const std::vector<Vec3D>& points) const;

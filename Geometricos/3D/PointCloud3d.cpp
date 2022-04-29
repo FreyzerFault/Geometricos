@@ -486,9 +486,9 @@ GEO::PointCloud3D::KmeansData GEO::PointCloud3D::kmeans(int k, TypeKmeans type, 
 		if (voxelGrid)
 		{
 			// Inicializamos los centroides a puntos centrales de los voxeles mas poblados:
-			const std::vector<std::pair<Voxel*, int>> voxels = voxelGrid->voxelsMasPoblados(k);
+			const std::vector<Voxel*> voxels = voxelGrid->voxelsMasPoblados(k);
 			for (int i = 0; i < k; ++i)
-				data.centroids[i] = voxels[i].first->getCenter();
+				data.centroids[i] = voxels[i]->getCenter();
 		}
 		else
 		{
@@ -570,18 +570,23 @@ GEO::PointCloud3D::KmeansData GEO::PointCloud3D::kmeans_pcl_kdtree(int k) const
 		cloud->emplace_back(point.getX(), point.getY(), point.getZ());
 	}
 
+	// Creacion del Kdtree
 	pcl::search::KdTree<pcl::PointXYZ>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZ>);
 	tree->setInputCloud(cloud);
 
+	// Set Parametros
 	std::vector<pcl::PointIndices> cluster_indices;
 	pcl::EuclideanClusterExtraction<pcl::PointXYZ> ec;
-	ec.setClusterTolerance(0.02); // 2cm
-	ec.setMinClusterSize(2);
-	ec.setMaxClusterSize(25000);
+	ec.setClusterTolerance(0.2); // 2cm
+	ec.setMinClusterSize(100);
+	//ec.setMaxClusterSize(5000);
 	ec.setSearchMethod(tree);
 	ec.setInputCloud(cloud);
+
+	// K-Means:
 	ec.extract(cluster_indices);
-	
+
+	// Writer de los clusters
 	pcl::PCDWriter writer;
 
 	int j = 0;
@@ -596,13 +601,13 @@ GEO::PointCloud3D::KmeansData GEO::PointCloud3D::kmeans_pcl_kdtree(int k) const
 		cloud_cluster->height = 1;
 		cloud_cluster->is_dense = true;
 		
-		//std::cout << "PointCloud representing the Cluster: " << cloud_cluster->size() << " data points." << std::endl;
+		std::cout << "PointCloud representing the Cluster: " << cloud_cluster->size() << " data points." << std::endl;
 
-		//std::stringstream ss;
-		//ss << "cloud_cluster_" << j << ".pcd";
-		//
-		//writer.write<pcl::PointXYZ>(ss.str(), *cloud_cluster, false);
-		//j++;
+		/*std::stringstream ss;
+		ss << "cloud_cluster_" << j << ".pcd";
+		
+		writer.write<pcl::PointXYZ>(ss.str(), *cloud_cluster, false);
+		j++;*/
 	}
 
 	// Conversion a Vec3D
@@ -638,7 +643,7 @@ GEO::PointCloud3D::KmeansData& GEO::PointCloud3D::kmeans_progressive(int k, Kmea
 			// Inicializamos los centroides a puntos centrales de los voxeles mas poblados:
 			data.centroids.clear();
 			const auto voxels = voxelGrid->voxelsMasPoblados(k);
-			for (auto& [voxel, pobl] : voxels)
+			for (const auto& voxel : voxels)
 				data.centroids.emplace_back(voxel->getCenter());
 			}
 	}

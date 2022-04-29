@@ -46,17 +46,28 @@ void GEO::Voxel::checkTris(const TriangleModel& triModel)
 	}
 }
 
-int GEO::Voxel::poblacionCercana() const
+int GEO::Voxel::poblacionCercana(int neighbourhoodRange) const
 {
-	int poblacion = 0;
-	constexpr int neighbourhoodSize = 3;
-	for (int x = gridCoord.getX(); x < gridCoord.getX() + neighbourhoodSize; ++x)
-	for (int y = gridCoord.getY(); y < gridCoord.getY() + neighbourhoodSize; ++y)
-	for (int z = gridCoord.getZ(); z < gridCoord.getZ() + neighbourhoodSize; ++z)
+	double poblacion = 0;
+	for (int x = gridCoord.getX() - neighbourhoodRange; x < gridCoord.getX() + neighbourhoodRange; ++x)
+	for (int y = gridCoord.getY() - neighbourhoodRange; y < gridCoord.getY() + neighbourhoodRange; ++y)
+	for (int z = gridCoord.getZ() - neighbourhoodRange; z < gridCoord.getZ() + neighbourhoodRange; ++z)
 	{
 		Voxel* voxel = voxelGrid->getVoxel(x,y,z);
 		if (voxel != nullptr)
-			poblacion += voxelGrid->getVoxel(x,y,z)->poblacion();
+		{
+			// Heuristica para ponderar la poblacion dandole un peso menor cuanto mas lejos este del centro
+			double neighbourFactor = 2;
+			
+			if (x != gridCoord.getX())
+				neighbourFactor /= abs(x - gridCoord.getX());
+			if (y != gridCoord.getY())
+				neighbourFactor /= abs(y - gridCoord.getY());
+			if (z != gridCoord.getZ())
+				neighbourFactor /= abs(z - gridCoord.getZ());
+			
+			poblacion += voxelGrid->getVoxel(x,y,z)->poblacion() * neighbourFactor;
+		}
 	}
 	return poblacion;
 }

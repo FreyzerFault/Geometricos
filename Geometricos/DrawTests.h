@@ -33,7 +33,7 @@ namespace GEO
 		void drawCuenco();
 		void drawDado();
 
-		void drawModel(const TriangleModel& model);
+		void drawModel(const TriangleModel& model, TypeColor color = black);
 
 		// Ejercicios
 		// Puntos mas distanciados en una nube

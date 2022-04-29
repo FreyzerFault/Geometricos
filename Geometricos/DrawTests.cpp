@@ -304,6 +304,7 @@ GEO::DrawCloud3D* GEO::DrawTests::drawPointCloud3D(const PointCloud3D& pc, TypeC
 {
 	try
 	{
+		glDisable(GL_BLEND);
 		return drawIt<PointCloud3D, DrawCloud3D>(pc, color);
 	}
 	catch (std::exception& e)
@@ -375,9 +376,9 @@ void GEO::DrawTests::drawDado()
 	}
 }
 
-void GEO::DrawTests::drawModel(const TriangleModel& model)
+void GEO::DrawTests::drawModel(const TriangleModel& model, TypeColor color)
 {
-	drawIt<TriangleModel, DrawTriangleModel>(model, black);
+	drawIt<TriangleModel, DrawTriangleModel>(model, color);
 }
 
 void GEO::DrawTests::drawMostDistancedPoints()

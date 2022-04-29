@@ -1,12 +1,15 @@
 ﻿#include "VoxelGrid.h"
 
+#include <map>
+
 #include "PointCloud3D.h"
 #include "Voxel.h"
 
 GEO::VoxelGrid::VoxelGrid(const Vec3D& gridSize, double voxelSize, const Vec3D& origin)
 	: gridSize(gridSize), voxelSize(voxelSize), aabb(origin, origin + gridSize * voxelSize)
 {
-	std::cout << "Creando VoxelGrid con " << gridSize.getX() << " * "  << gridSize.getY() << " * " << gridSize.getZ() << " voxels..." << std::endl;
+	std::cout << "Creando VoxelGrid con " << gridSize.getX() << " * "
+	<< gridSize.getY() << " * " << gridSize.getZ() << " voxels..." << std::endl;
 
 	// Reservamos espacio para la Malla 3D:
 	grid = new Voxel**[gridSize.getX()];
@@ -48,62 +51,41 @@ GEO::VoxelGrid::VoxelGrid(double voxelSize, const PointCloud3D& cloud)
 	addPoints(cloud.getPoints());
 }
 
-std::vector<std::pair<GEO::Voxel*, int>> GEO::VoxelGrid::voxelsMasPoblados(int numVoxels) const
+std::vector<GEO::Voxel*> GEO::VoxelGrid::voxelsMasPoblados(int numVoxels, double centroidMinDistance) const
 {
-	std::vector<std::pair<Voxel*, int>> bestVoxels;
-	bestVoxels.reserve(numVoxels);
-
-	int minPoblacion = BasicGeom::INFINITO;
-	int minIndex = 0;
+	// Primero calculo las poblaciones de todos los voxeles
+	// En un multimap se ordenaran segun su poblacion descendientemente
+	std::multimap<double, Voxel*, std::greater<>> voxels;
 
 	for (int x = 0; x < gridSize.getX(); ++x)
 	for (int y = 0; y < gridSize.getY(); ++y)
 	for (int z = 0; z < gridSize.getZ(); ++z)
 	{
 		Voxel* voxel = &grid[x][y][z];
-		// Una heuristica sera cuan de cerca este el voxel de los demas seleccionados
-		// Si es mayor a 3 voxeles, lo ignoramos
-		// Como minimo cada voxel seleccionado estara a 3 voxeles de distancia de los demas
-		bool voxelNear = false;
-		for (auto && [bestVoxel, pobl] : bestVoxels)
+
+		voxels.insert(std::make_pair(voxel->poblacionCercana(), voxel));
+	}
+
+	// Añado los n primeros que necesite
+	std::vector<Voxel*> bestVoxels;
+	bestVoxels.reserve(numVoxels);
+	for (const auto& [poblacion, voxel] : voxels)
+	{
+		bestVoxels.push_back(voxel);
+		
+		for (int i = 0; i < bestVoxels.size()-1; ++i)
 		{
-			if (voxel->getCenter().distance(bestVoxel->getCenter()) < voxelSize * 1)
+			// Limito la distancia a la que estan los voxeles elegidos
+			// Si no esta lo suficientemente alejado no lo añade
+			if (bestVoxels[i]->getCenter().distance(voxel->getCenter()) < centroidMinDistance)
 			{
-				voxelNear = true;
+				bestVoxels.pop_back();
 				break;
 			}
 		}
-		if (voxelNear)
+
+		if (bestVoxels.size() == numVoxels)
 			break;
-		
-		const double poblacion = voxel->poblacionCercana();
-
-		// Primero rellenamos el vector con los primeros voxeles
-		if (bestVoxels.size() < numVoxels)
-		{
-			bestVoxels.emplace_back(voxel, poblacion);
-
-			if (poblacion < minPoblacion)
-			{
-				minPoblacion = poblacion;
-				minIndex = numVoxels - 1;
-			}
-		}
-		// Cuando este lleno, si tiene una poblacion mayor que el Minimo hasta ahora
-		// Sustituimos el que tenga menos poblacion
-		else if (poblacion > minPoblacion)
-		{
-			bestVoxels[minIndex] = std::make_pair(voxel, poblacion);
-
-			// Buscamos el nuevo minimo
-			for (int i = 0; i < bestVoxels.size(); i++)
-				if (bestVoxels[i].second < minPoblacion)
-				{
-					minPoblacion = bestVoxels[i].second;
-					minIndex = i;
-					break;
-				}
-		}
 	}
 	return bestVoxels;
 }

@@ -25,7 +25,8 @@ int getMCM(int a, int b)
 }
 
 
-GEO::VoxelModel::VoxelModel(TriangleModel& triModel, double voxelSize) : VoxelGrid(voxelSize, triModel.getAABB()), triModel(&triModel)
+GEO::VoxelModel::VoxelModel(TriangleModel& triModel, double voxelSize)
+	: VoxelGrid(voxelSize, triModel.getAABB()), triModel(&triModel)
 {
 	// Primero le generamos los Tris porque no son necesarios hasta ahora para agilizar calculos
 	triModel.generateTris();

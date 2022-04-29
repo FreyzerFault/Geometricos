@@ -106,6 +106,7 @@ namespace GEO
 			int iteration;
 
 			KmeansData(int k) : clusters(k), centroids(k), lastCentroids(centroids), iteration(0){}
+			KmeansData() = default;
 
 			void getRandomCentroids(int k, const std::vector<GEO::Vec3D>& points);
 			void updateClusters(const std::vector<GEO::Vec3D>& points);

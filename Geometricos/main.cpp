@@ -270,13 +270,13 @@ void resetScene()
 	test3D.clear();
 }
 
-//static TriangleModel vaca("vaca");
+static TriangleModel vaca("vaca");
 
 static double error = 0.001;
 static int k = 20;
 static PointCloud3D::KmeansData kmeansData(k);
 
-bool drawGround = false;
+bool drawGround = true;
 
 void callbackKey(GLFWwindow* window, int tecla, int scancode, int accion,
 				 int modificadores)
@@ -298,8 +298,7 @@ void callbackKey(GLFWwindow* window, int tecla, int scancode, int accion,
 				test3D.kMeansAnimation(pc, k, error, window, PointCloud3D::naive);
 				break;
 			}
-
-			// NAIVE
+			
 			TIME( kmeansData = pc.kmeans(k, PointCloud3D::naive,error), "K-Means Naive");
 
 			std::cout << "K-Means Naive completado. Iteraciones: " << kmeansData.iteration << std::endl;
@@ -354,10 +353,10 @@ void callbackKey(GLFWwindow* window, int tecla, int scancode, int accion,
 			// PointCloud Random
 			PointCloud3D pc(1000, k, 3, .4, .2);
 			
-			TIME(kmeansData = pc.kmeans(k, PointCloud3D::pcl, error), "K-Means PCL");
+			TIME(kmeansData = pc.kmeans(k, PointCloud3D::pcl_kdtree, error), "K-Means PCL");
 			
 			// Drawcalls
-			for (int i = 0; i < k; ++i)
+			for (int i = 0; i < kmeansData.clusters.size(); ++i)
 			{
 				test3D.drawPointCloud3D(kmeansData.clusters[i], colors[i % colors.size()]);
 			}
@@ -377,13 +376,12 @@ void callbackKey(GLFWwindow* window, int tecla, int scancode, int accion,
 			int numOlivos = 87;
 			
 			PointCloud3D::KmeansData olivosKmeansData(87);
-
-			// Naive
+			
 			TIME(olivosKmeansData = olivos.kmeans(numOlivos, PointCloud3D::naive), "K-Means Naive para Olivos");
 			
 			std::cout << "K-Means Naive completado. Iteraciones: " << olivosKmeansData.iteration << std::endl;
 			std::cout << std::endl;
-
+			
 			for (int i = 0; i < olivosKmeansData.clusters.size(); ++i)
 			{
 				DrawCloud3D* dc = test3D.drawPointCloud3D(olivosKmeansData.clusters[i], colors[i % colors.size()]);
@@ -417,12 +415,13 @@ void callbackKey(GLFWwindow* window, int tecla, int scancode, int accion,
 			
 			PointCloud3D::KmeansData olivosKmeansData(87);
 
-			// Grid
+			olivos.generateVoxelGrid(1);
+
 			TIME(olivosKmeansData = olivos.kmeans(numOlivos, PointCloud3D::grid), "K-Means Grid para Olivos");
 			
 			std::cout << "K-Means Grid completado. Iteraciones: " << olivosKmeansData.iteration << std::endl;
 			std::cout << std::endl;
-
+			
 			for (int i = 0; i < olivosKmeansData.clusters.size(); ++i)
 			{
 				DrawCloud3D* dc = test3D.drawPointCloud3D(olivosKmeansData.clusters[i], colors[i % colors.size()]);
@@ -453,14 +452,13 @@ void callbackKey(GLFWwindow* window, int tecla, int scancode, int accion,
 
 			int numOlivos = 87;
 			
-			PointCloud3D::KmeansData olivosKmeansData(87);
-
-			// PCL
-			TIME(olivosKmeansData = olivos.kmeans(numOlivos, PointCloud3D::pcl), "K-Means PCL para Olivos");
+			PointCloud3D::KmeansData olivosKmeansData;
 			
-			std::cout << "K-Means PCL completado. Iteraciones: " << olivosKmeansData.iteration << std::endl;
+			TIME(olivosKmeansData = olivos.kmeans(numOlivos, PointCloud3D::pcl_kdtree), "K-Means PCL para Olivos");
+			
+			std::cout << "K-Means PCL completado. Clusters: " << olivosKmeansData.clusters.size() << std::endl;
 			std::cout << std::endl;
-
+			
 			for (int i = 0; i < olivosKmeansData.clusters.size(); ++i)
 			{
 				DrawCloud3D* dc = test3D.drawPointCloud3D(olivosKmeansData.clusters[i], colors[i % colors.size()]);
@@ -525,7 +523,7 @@ void callbackKey(GLFWwindow* window, int tecla, int scancode, int accion,
 
 		// ============================ PRACTICA 3: PointInMesh + Projection =================================
 	//					MODELOS 3D y su AABB + Puntos dentro de la malla
-	//case GLFW_KEY_R:
+	//case GLFW_KEY_A:
 	//	if (accion == GLFW_PRESS)
 	//	{
 	//		// Colorea los triangulos maximos y minimos en cada coordenada del modelo
@@ -533,29 +531,27 @@ void callbackKey(GLFWwindow* window, int tecla, int scancode, int accion,
 
 	//		test3D.drawAABB(vaca);
 	//		
-	//		PointCloud3D pc(50,  vaca.getAABB());
+	//		PointCloud3D pc(1000,  vaca.getAABB());
 
 	//		std::vector<Vec3D> pointsInside = test3D.drawPointsInsideModel(pc, vaca, false);
 	//		
 	//		refreshWindow(window);
 	//	}
 	//	break;
-	//						Proyeccion de una Malla en un Plano
-	//case GLFW_KEY_T:
+	////					Proyeccion de una Malla en un Plano
+	//case GLFW_KEY_S:
 	//	if (accion == GLFW_PRESS)
 	//	{
-	//		const TriangleModel model("cuenco");
-	//		test3D.drawModel(model);
-	//		test3D.drawMaxMinTriangles(model);
+	//		test3D.drawModel(vaca);
 
 	//		// 50 puntos random dentro del AABB
-	//		PointCloud3D pc(50, model.getAABB());
+	//		PointCloud3D pc(50, vaca.getAABB());
 
 	//		// Puntos dentro del modelo
 	//		std::vector<Vec3D> pointsInside;
 	//		for (const Vec3D& point : pc.getPoints())
 	//		{
-	//			if (model.pointIntoMesh(point))
+	//			if (vaca.pointIntoMesh(point))
 	//				pointsInside.push_back(point);
 
 	//			// Maximo 3 puntos
@@ -571,7 +567,7 @@ void callbackKey(GLFWwindow* window, int tecla, int scancode, int accion,
 	//			// Con 3 puntos de dentro creamos un plano
 	//			Plane projectionPlane = test3D.drawPlane(pointsInside[0], pointsInside[1], pointsInside[2]);
 
-	//			test3D.drawPointCloudProjection(projectionPlane, model.getCloud());
+	//			test3D.drawPointCloudProjection(projectionPlane, vaca.getCloud());
 	//		}
 	//		refreshWindow(window);
 	//	}
@@ -582,8 +578,10 @@ void callbackKey(GLFWwindow* window, int tecla, int scancode, int accion,
 	//	if (accion == GLFW_PRESS)
 	//	{
 	//		// Modelo Voxelizado:
-	//		vaca.generateVoxelModel(.05f);
-	//		
+	//		vaca.generateVoxelModel(.05);
+
+	//		test3D.drawModel(vaca, red);
+
 	//		test3D.drawVoxelModel(*vaca.getVoxelModel(), TypeVoxel::intersect);
 	//		test3D.drawVoxelModel(*vaca.getVoxelModel(), TypeVoxel::in);
 	//		
