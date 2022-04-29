@@ -1,12 +1,5 @@
-﻿/**
- * @file main.cpp
- *
- * @author algarcia|lidia
- *
- * @brief Función main y callbacks
- */
-
-#define NOMINMAX
+﻿#define NOMINMAX
+#define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
 
 // ReSharper disable CppClangTidyClangDiagnosticImplicitFloatConversion
 // ReSharper disable CppClangTidyConcurrencyMtUnsafe
