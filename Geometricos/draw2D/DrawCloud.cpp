@@ -2,7 +2,7 @@
 #include "DrawCloud.h"
 
 
-GEO::DrawCloud::DrawCloud (const PointCloud &t): Draw(), dt (t){
+GEO::DrawCloud::DrawCloud (const PointCloud2D &t): Draw(), dt (t){
 	const auto& points = dt.getPoints();
 	for (int i = 0; i < points.size(); ++i)
 	{

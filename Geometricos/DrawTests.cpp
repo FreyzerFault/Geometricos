@@ -86,14 +86,13 @@ void GEO::DrawTests::drawLines2D()
 	}
 }
 
-void GEO::DrawTests::drawPointCloud2D()
+void GEO::DrawTests::drawPointCloud2D(const PointCloud2D& pc)
 {
 	try
 	{
-		const PointCloud pc(50, 5, 5);
-		drawIt<PointCloud, DrawCloud>(pc, red);
+		drawIt<PointCloud2D, DrawCloud>(pc, red);
 
-		pc.save("PointCloud");
+		pc.save("PointCloud2D");
 	}
 	catch (std::exception& e)
 	{
@@ -110,13 +109,13 @@ void GEO::DrawTests::drawBezier2D()
 		Point c(-2.0, -1.0);
 		Point d(0.0, -2.0);
 
-		PointCloud pc;
+		PointCloud2D pc;
 		pc.addPoint(a);
 		pc.addPoint(b);
 		pc.addPoint(c);
 		pc.addPoint(d);
 		
-		drawIt<PointCloud, DrawCloud>(pc, red);
+		drawIt<PointCloud2D, DrawCloud>(pc, red);
 
 		Bezier bezier;
 		bezier.addPoint(a);
@@ -694,7 +693,9 @@ void GEO::DrawTests::kMeansAnimation(const PointCloud3D& pc, int k, double error
 			{
 				drawPointCloud3D(kmeansData.clusters[i], colors[i % colors.size()]);
 			}
-			for (int i = 0; i < 5; ++i)
+
+			constexpr int orbitCount = 2;
+			for (int i = 0; i < orbitCount; ++i)
 			{
 				Scene::getInstance()->moveCamera(Movements::ORBIT, 0, 2);
 				std::this_thread::sleep_for(std::chrono::milliseconds(30));

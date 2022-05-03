@@ -3,9 +3,9 @@
 #include <string>
 #include <iostream>
 #include <random>
-#include "PointCloud.h"
+#include "PointCloud2D.h"
 
-GEO::PointCloud::PointCloud(int size, double max_x, double max_y)
+GEO::PointCloud2D::PointCloud2D(int size, double max_x, double max_y)
 {
 	for (int i = 0; i < size; ++i)
 	{
@@ -21,9 +21,9 @@ GEO::PointCloud::PointCloud(int size, double max_x, double max_y)
 	}
 }
 
-GEO::PointCloud::PointCloud(const std::string& filename)
+GEO::PointCloud2D::PointCloud2D(const std::string& filename)
 {
-	static std::string folderName = "PointCloud/";
+	static std::string folderName = "PointCloud2D/";
 	std::ifstream is(folderName + filename + ".txt");
 	if (!is.good())
 		std::cout << "Archivo " + folderName + filename + " no se pudo abrir para crear la Nube de Puntos" << std::endl;
@@ -47,17 +47,17 @@ GEO::PointCloud::PointCloud(const std::string& filename)
 	is.close();
 }
 
-void GEO::PointCloud::addPoint(Point& p)
+void GEO::PointCloud2D::addPoint(Point& p)
 {
 	_points.push_back(p);
 }
 
-void GEO::PointCloud::addPoint(double x, double y)
+void GEO::PointCloud2D::addPoint(double x, double y)
 {
 	_points.emplace_back(x, y);
 }
 
-GEO::Point GEO::PointCloud::centralPoint() const
+GEO::Point GEO::PointCloud2D::centralPoint() const
 {
 	Point* central = nullptr;
 	double minAcumDistances = BasicGeom::INFINITO;
@@ -82,7 +82,7 @@ GEO::Point GEO::PointCloud::centralPoint() const
 	return {};
 }
 
-void GEO::PointCloud::getEdges(Point& minPoint_x, Point& minPoint_y, Point& maxPoint_x, Point& maxPoint_y) const
+void GEO::PointCloud2D::getEdges(Point& minPoint_x, Point& minPoint_y, Point& maxPoint_x, Point& maxPoint_y) const
 {
 	if (_points.empty())
 		return;
@@ -104,7 +104,7 @@ void GEO::PointCloud::getEdges(Point& minPoint_x, Point& minPoint_y, Point& maxP
 	}
 }
 
-void GEO::PointCloud::deletePoint(int index)
+void GEO::PointCloud2D::deletePoint(int index)
 {
 	if (index < _points.size())
 	{
@@ -113,7 +113,7 @@ void GEO::PointCloud::deletePoint(int index)
 }
 
 
-GEO::Point GEO::PointCloud::getPoint(int position)
+GEO::Point GEO::PointCloud2D::getPoint(int position)
 {
 	if ((position >= 0) && (position < _points.size())) 
 	{
@@ -123,7 +123,7 @@ GEO::Point GEO::PointCloud::getPoint(int position)
 	return {};
 }
 
-GEO::PointCloud & GEO::PointCloud::operator=(const PointCloud& pointCloud)
+GEO::PointCloud2D & GEO::PointCloud2D::operator=(const PointCloud2D& pointCloud)
 {
 	if (this != &pointCloud)
 	{
@@ -133,9 +133,9 @@ GEO::PointCloud & GEO::PointCloud::operator=(const PointCloud& pointCloud)
 	return *this;
 }
 
-void GEO::PointCloud::save(const std::string& filename) const
+void GEO::PointCloud2D::save(const std::string& filename) const
 {
-	static std::string folderName = "PointCloud/";
+	static std::string folderName = "PointCloud2D/";
 	std::ofstream os(folderName + filename + ".txt");
 	if (!os.good())
 		std::cout << "Archivo " + folderName + filename + " no se pudo abrir para guardar la Nube de Puntos" << std::endl;

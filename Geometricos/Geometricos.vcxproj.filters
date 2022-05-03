@@ -33,7 +33,7 @@
     <ClInclude Include="2D\Point.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="2D\PointCloud.h">
+    <ClInclude Include="2D\PointCloud2D.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="2D\Polygon.h">
@@ -180,6 +180,18 @@
     <ClInclude Include="draw3D\DrawVoxelGrid.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="2D\TDelaunay.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="draw2D\DrawTDelaunay.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\ConvexHull3D.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="draw3D\DrawConvexHull3D.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -197,7 +209,7 @@
     <ClCompile Include="2D\Point.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="2D\PointCloud.cpp">
+    <ClCompile Include="2D\PointCloud2D.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="2D\Polygon.cpp">
@@ -330,6 +342,18 @@
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="draw3D\DrawVoxelGrid.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="2D\TDelaunay.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="draw2D\DrawTDelaunay.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\ConvexHull3D.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="draw3D\DrawConvexHull3D.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>

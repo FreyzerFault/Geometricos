@@ -1,10 +1,3 @@
-/* 
- * File:   DrawPoint.cpp
- * Author: lidia
- * 
- * Created on 14 de enero de 2021, 15:02
- */
-
 #include "DrawPoint.h"
 #include "Scene.h"
 

@@ -20,7 +20,7 @@ namespace GEO
 		void drawPolygon2D();
 		void drawTriangle2D();
 		void drawLines2D();
-		void drawPointCloud2D();
+		void drawPointCloud2D(const PointCloud2D& pc = PointCloud2D(50, 5, 5));
 		void drawBezier2D();
 		void drawLineIntersections2D();
 

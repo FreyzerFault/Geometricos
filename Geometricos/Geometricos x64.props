@@ -8,7 +8,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>
-      <AdditionalDependencies>pcl_common.lib;pcl_features.lib;pcl_io.lib;pcl_io_ply.lib;pcl_kdtree.lib;pcl_ml.lib;pcl_octree.lib;pcl_keypoints.lib;pcl_search.lib;pcl_filters.lib;pcl_surface.lib;pcl_segmentation.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>pcl_common.lib;pcl_features.lib;pcl_io.lib;pcl_io_ply.lib;pcl_kdtree.lib;pcl_ml.lib;pcl_octree.lib;pcl_keypoints.lib;pcl_search.lib;pcl_filters.lib;pcl_surface.lib;pcl_segmentation.lib;mpfr.lib;gmp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\vcpkg\installed\x64-windows\lib\manual-link;C:\vcpkg\installed\x64-windows\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ClCompile>

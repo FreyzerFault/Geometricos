@@ -8,3 +8,4 @@
 #include "DrawSegment.h"
 #include "DrawTriangle.h"
 #include "DrawBezier.h"
+#include "DrawTDelaunay.h"

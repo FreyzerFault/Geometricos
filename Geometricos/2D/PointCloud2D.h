@@ -6,21 +6,21 @@
 
 namespace GEO
 {
-	class PointCloud
+	class PointCloud2D
 	{
 	protected:
 		std::vector<Point> _points;
 
 	public:
-		PointCloud() = default;
+		PointCloud2D() = default;
 
 		// Random puntos en un area de [-(max_x,max_y), (max_x,max_y)]
-		PointCloud(int size, double max_x, double max_y);
+		PointCloud2D(int size, double max_x, double max_y);
 
 		// Carga la nube de un fichero con las coordenadas de cada punto
-		PointCloud(const std::string& filename);
+		PointCloud2D(const std::string& filename);
 		
-		~PointCloud() = default;
+		~PointCloud2D() = default;
 
 		// Añade un Punto
 		void addPoint(Point& p);
@@ -40,12 +40,12 @@ namespace GEO
 
 		Point getPoint(int position);
 
-		std::vector<Point> getPoints() { return _points; }
+		const std::vector<Point>& getPoints() const { return _points; }
 
 		// Guarda las coordenadas de cada punto en un archivo
 		void save(const std::string& filename) const;
 
-		PointCloud& operator=(const PointCloud& pointCloud);
+		PointCloud2D& operator=(const PointCloud2D& pointCloud);
 	};
 	
 }

@@ -10,7 +10,7 @@
 #define DRAWPOINTCLOUD_H
 
 #include "Scene.h"
-#include "PointCloud.h"
+#include "PointCloud2D.h"
 #include "Draw.h"
 
 
@@ -18,11 +18,11 @@ namespace GEO
 {
 	class DrawCloud: public Draw {
 	    
-	    PointCloud dt;
+	    PointCloud2D dt;
 	    
 	    public:
 	        
-	    DrawCloud (const PointCloud &t); 
+	    DrawCloud (const PointCloud2D &t); 
 	    
 	    DrawCloud (const DrawCloud &ddt): dt (ddt.dt) , Draw() {}
 	    

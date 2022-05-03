@@ -29,21 +29,21 @@
 using system_clock = std::chrono::system_clock;
 
 std::chrono::time_point<system_clock> t0;
-float deltaTime;
-int min;
-int sec;
-int ms;
+static float deltaTime;
+static int minutes;
+static int secs;
+static int ms;
 
 
 #define TIME(func,string)\
 	t0 = system_clock::now();\
 	(func);\
 	deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(system_clock::now() - t0).count();\
-	min = std::floor(deltaTime / 60000);\
-	sec = std::floor(deltaTime / 1000 - min * 60);\
-	ms = deltaTime - sec * 1000 - min * 60;\
+	minutes = std::floor(deltaTime / 60000);\
+	secs = std::floor(deltaTime / 1000 - minutes * 60);\
+	ms = deltaTime - secs * 1000 - minutes * 60;\
 	std::cout << "Tiempo en " << (string) << ": "\
-	<< ((min == 0) ? "" : std::to_string(min) + ":") << std::to_string(sec) << ":" << std::to_string(ms) << std::endl
+	<< ((minutes == 0) ? "" : std::to_string(minutes) + ":") << std::to_string(secs) << ":" << std::to_string(ms) << std::endl
 
 using namespace GEO;
 
@@ -280,10 +280,11 @@ void callbackKey(GLFWwindow* window, int tecla, int scancode, int accion,
 	{
 		// ============================ PRACTICA 5: K-Means =================================
 		//					NAIVE
+		/*
 	case GLFW_KEY_Q:
 		if (accion == GLFW_PRESS)
 		{
-			// PointCloud Random
+			// PointCloud2D Random
 			PointCloud3D pc(1000, k, 3, .4, .2);
 			
 			if (modificadores == GLFW_MOD_SHIFT)
@@ -312,7 +313,7 @@ void callbackKey(GLFWwindow* window, int tecla, int scancode, int accion,
 	case GLFW_KEY_W:
 		if (accion == GLFW_PRESS)
 		{
-			// PointCloud Random
+			// PointCloud2D Random
 			PointCloud3D pc(1000, k, 3, .4, .2);
 
 			pc.generateVoxelGrid(.3);
@@ -343,7 +344,7 @@ void callbackKey(GLFWwindow* window, int tecla, int scancode, int accion,
 	case GLFW_KEY_E:
 		if (accion == GLFW_PRESS)
 		{
-			// PointCloud Random
+			// PointCloud2D Random
 			PointCloud3D pc(1000, k, 3, .4, .2);
 			
 			TIME(kmeansData = pc.kmeans(k, PointCloud3D::pcl_kdtree, error), "K-Means PCL");
@@ -474,183 +475,212 @@ void callbackKey(GLFWwindow* window, int tecla, int scancode, int accion,
 			refreshWindow(window);
 		}
 		break;
-
+		*/
 		// ============================ PRACTICA 6: =================================
+		//							TRIANGULACION de DELAUNAY
+	case GLFW_KEY_Q:
+		if (accion == GLFW_PRESS)
+		{
+			const PointCloud2D pc(100, -1, 1);
+			TDelaunay delaunay(pc);
 
+
+
+			test2D.drawPointCloud2D(pc);
+
+			refreshWindow(window);
+		}
+		break;
 
 		
 		// ============================ PRACTICA 2: PointCloud3D + TriangleMesh =================================
 
 		//							POINT CLOUDS y Puntos de mas distantes
-	//case GLFW_KEY_Q:
-	//	if (accion == GLFW_PRESS)
-	//	{
-	//		test3D.drawMostDistancedPoints();
-	//		
-	//		refreshWindow(window);
-	//	}
-	//	break;
+	/*
+	case GLFW_KEY_Q:
+		if (accion == GLFW_PRESS)
+		{
+			test3D.drawMostDistancedPoints();
+			
+			refreshWindow(window);
+		}
+		break;
+	*/
 
 		//							PLANOS y Intersecciones
-	//case GLFW_KEY_W:
-	//	if (accion == GLFW_PRESS)
-	//	{
-	//		test3D.drawPlane();
-	//		
-	//		refreshWindow(window);
-	//	}
-	//	break;
+	/*
+	case GLFW_KEY_W:
+		if (accion == GLFW_PRESS)
+		{
+			test3D.drawPlane();
+			
+			refreshWindow(window);
+		}
+		break;
+	*/
 		
 		//						MODELOS 3D y sus Triangulos mas alejados
-	//case GLFW_KEY_E:
-	//	if (accion == GLFW_PRESS)
-	//	{
-	//		// Colorea los triangulos maximos y minimos en cada coordenada del modelo
-	//		const TriangleModel vaca("vaca");
-	//		test3D.drawModel(vaca);
-	//		test3D.drawMaxMinTriangles(vaca);
-
-	//		refreshWindow(window);
-	//	}
-	//	break;
+	/*
+	case GLFW_KEY_E:
+		if (accion == GLFW_PRESS)
+		{
+			// Colorea los triangulos maximos y minimos en cada coordenada del modelo
+			const TriangleModel vaca("vaca");
+			test3D.drawModel(vaca);
+			test3D.drawMaxMinTriangles(vaca); 
+			refreshWindow(window);
+		}
+		break;
+	*/
 
 		// ============================ PRACTICA 3: PointInMesh + Projection =================================
+
 	//					MODELOS 3D y su AABB + Puntos dentro de la malla
-	//case GLFW_KEY_A:
-	//	if (accion == GLFW_PRESS)
-	//	{
-	//		// Colorea los triangulos maximos y minimos en cada coordenada del modelo
-	//		test3D.drawModel(vaca);
+	/*
+	case GLFW_KEY_A:
+		if (accion == GLFW_PRESS)
+		{
+			// Colorea los triangulos maximos y minimos en cada coordenada del modelo
+			test3D.drawModel(vaca);
 
-	//		test3D.drawAABB(vaca);
-	//		
-	//		PointCloud3D pc(1000,  vaca.getAABB());
+			test3D.drawAABB(vaca);
+			
+			PointCloud3D pc(1000,  vaca.getAABB());
 
-	//		std::vector<Vec3D> pointsInside = test3D.drawPointsInsideModel(pc, vaca, false);
-	//		
-	//		refreshWindow(window);
-	//	}
-	//	break;
-	////					Proyeccion de una Malla en un Plano
-	//case GLFW_KEY_S:
-	//	if (accion == GLFW_PRESS)
-	//	{
-	//		test3D.drawModel(vaca);
+			std::vector<Vec3D> pointsInside = test3D.drawPointsInsideModel(pc, vaca, false);
+			
+			refreshWindow(window);
+		}
+		break;
+	*/
+	//					Proyeccion de una Malla en un Plano
+	/*
+	case GLFW_KEY_S:
+		if (accion == GLFW_PRESS)
+		{
+			test3D.drawModel(vaca);
 
-	//		// 50 puntos random dentro del AABB
-	//		PointCloud3D pc(50, vaca.getAABB());
+			// 50 puntos random dentro del AABB
+			PointCloud3D pc(50, vaca.getAABB());
 
-	//		// Puntos dentro del modelo
-	//		std::vector<Vec3D> pointsInside;
-	//		for (const Vec3D& point : pc.getPoints())
-	//		{
-	//			if (vaca.pointIntoMesh(point))
-	//				pointsInside.push_back(point);
+			// Puntos dentro del modelo
+			std::vector<Vec3D> pointsInside;
+			for (const Vec3D& point : pc.getPoints())
+			{
+				if (vaca.pointIntoMesh(point))
+					pointsInside.push_back(point);
 
-	//			// Maximo 3 puntos
-	//			if (pointsInside.size() == 3)
-	//				break;
-	//		}
-	//		
-	//		if (pointsInside.size() < 3)
-	//			std::cout << "No hay suficientes puntos dentro del modelo para crear un plano (" +
-	//			std::to_string(pointsInside.size()) + " / 3) " << std::endl;
-	//		else
-	//		{
-	//			// Con 3 puntos de dentro creamos un plano
-	//			Plane projectionPlane = test3D.drawPlane(pointsInside[0], pointsInside[1], pointsInside[2]);
+				// Maximo 3 puntos
+				if (pointsInside.size() == 3)
+					break;
+			}
+			
+			if (pointsInside.size() < 3)
+				std::cout << "No hay suficientes puntos dentro del modelo para crear un plano (" +
+				std::to_string(pointsInside.size()) + " / 3) " << std::endl;
+			else
+			{
+				// Con 3 puntos de dentro creamos un plano
+				Plane projectionPlane = test3D.drawPlane(pointsInside[0], pointsInside[1], pointsInside[2]);
 
-	//			test3D.drawPointCloudProjection(projectionPlane, vaca.getCloud());
-	//		}
-	//		refreshWindow(window);
-	//	}
-	//	break;
+				test3D.drawPointCloudProjection(projectionPlane, vaca.getCloud());
+			}
+			refreshWindow(window);
+		}
+		break;
+	*/
 
 	//	// =============================== PRACTICA 4: VOXELIZACION ===============================
-	//case GLFW_KEY_Y:
-	//	if (accion == GLFW_PRESS)
-	//	{
-	//		// Modelo Voxelizado:
-	//		vaca.generateVoxelModel(.05);
+	/*
+	case GLFW_KEY_Y:
+		if (accion == GLFW_PRESS)
+		{
+			// Modelo Voxelizado:
+			vaca.generateVoxelModel(.05);
 
-	//		test3D.drawModel(vaca, red);
+			test3D.drawModel(vaca, red);
 
-	//		test3D.drawVoxelModel(*vaca.getVoxelModel(), TypeVoxel::intersect);
-	//		test3D.drawVoxelModel(*vaca.getVoxelModel(), TypeVoxel::in);
-	//		
-	//		refreshWindow(window);
-	//	}
-	//	break;
-	//case GLFW_KEY_U:
-	//	if (accion == GLFW_PRESS)
-	//	{
-	//		// Calcula los puntos de una Nube de Puntos que caen dentro del modelo
-	//		// Usando el TriangleModel y el VoxelModel y calcula cuanto tarda cada uno
+			test3D.drawVoxelModel(*vaca.getVoxelModel(), TypeVoxel::intersect);
+			test3D.drawVoxelModel(*vaca.getVoxelModel(), TypeVoxel::in);
+			
+			refreshWindow(window);
+		}
+		break;
+	*/
+	/*
+	case GLFW_KEY_U:
+		if (accion == GLFW_PRESS)
+		{
+			// Calcula los puntos de una Nube de Puntos que caen dentro del modelo
+			// Usando el TriangleModel y el VoxelModel y calcula cuanto tarda cada uno
 
-	//		test3D.drawModel(vaca);
+			test3D.drawModel(vaca);
 
-	//		// Generamos la nube de Puntos desde fichero
-	//		int numPuntos = 1000;
-	//		std::string pcFileName = std::to_string(numPuntos) + "PointsCuenco.txt";
-	//		auto* pc = new PointCloud3D(pcFileName);
+			// Generamos la nube de Puntos desde fichero
+			int numPuntos = 1000;
+			std::string pcFileName = std::to_string(numPuntos) + "PointsCuenco.txt";
+			auto* pc = new PointCloud3D(pcFileName);
 
-	//		// Si no esta el fichero guardado la generamos de 0 y lo guardamos
-	//		if (pc->isEmpty())
-	//		{
-	//			pc = new PointCloud3D(numPuntos, vaca.getAABB());
-	//			pc->save(pcFileName);
-	//		}
-	//		
-	//		std::vector<Vec3D> pointsInsideA;
-	//		std::vector<Vec3D> pointsInsideB;
-	//		
-	//		vaca.generateVoxelModel(.05);
-	//		
-	//		// Calculo del Tiempo de encontrar puntos dentro de una malla
-	//		pointsInsideA = test3D.drawPointsInsideModel(*pc, vaca, false);
+			// Si no esta el fichero guardado la generamos de 0 y lo guardamos
+			if (pc->isEmpty())
+			{
+				pc = new PointCloud3D(numPuntos, vaca.getAABB());
+				pc->save(pcFileName);
+			}
+			
+			std::vector<Vec3D> pointsInsideA;
+			std::vector<Vec3D> pointsInsideB;
+			
+			vaca.generateVoxelModel(.05);
+			
+			// Calculo del Tiempo de encontrar puntos dentro de una malla
+			pointsInsideA = test3D.drawPointsInsideModel(*pc, vaca, false);
 
-	//		// Calculo del Tiempo de encontrar puntos dentro de una malla con VOXELES
-	//		pointsInsideB = test3D.drawPointsInsideModel(*pc, vaca, true);
-	//		
+			// Calculo del Tiempo de encontrar puntos dentro de una malla con VOXELES
+			pointsInsideB = test3D.drawPointsInsideModel(*pc, vaca, true);
+			
 
-	//		// Error acumulado del segundo metodo
-	//		double sampleA = pointsInsideA.size();
-	//		double sampleB = pointsInsideB.size();
-	//		double error = (sampleB - sampleA) / std::max(sampleA, sampleB);
+			// Error acumulado del segundo metodo
+			double sampleA = pointsInsideA.size();
+			double sampleB = pointsInsideB.size();
+			double error = (sampleB - sampleA) / std::max(sampleA, sampleB);
 
-	//		std::cout << "Error en PointInMesh del VoxelModel: " << error * 100 << "%" << std::endl;
+			std::cout << "Error en PointInMesh del VoxelModel: " << error * 100 << "%" << std::endl;
 
-	//		refreshWindow(window);
-	//	}
-	//	break;
-	//case GLFW_KEY_I:
-	//	if (accion == GLFW_PRESS)
-	//	{
-	//		// Calcula el error que hay entre el metodo PointInMesh usando TriangleModel vs VoxelModel
-	//		// Y dibuja los puntos que difieren entre ambos metodos
+			refreshWindow(window);
+		}
+		break;
+	*/
+	/*
+	case GLFW_KEY_I:
+		if (accion == GLFW_PRESS)
+		{
+			// Calcula el error que hay entre el metodo PointInMesh usando TriangleModel vs VoxelModel
+			// Y dibuja los puntos que difieren entre ambos metodos
 
-	//		test3D.drawModel(vaca);
+			test3D.drawModel(vaca);
 
-	//		vaca.generateVoxelModel();
+			vaca.generateVoxelModel();
 
-	//		// Generamos la nube de Puntos desde fichero
-	//		int numPuntos = 1000;
-	//		std::string pcFileName = std::to_string(numPuntos) + "PointsCuenco";
-	//		auto* pc = new PointCloud3D(pcFileName);
+			// Generamos la nube de Puntos desde fichero
+			int numPuntos = 1000;
+			std::string pcFileName = std::to_string(numPuntos) + "PointsCuenco";
+			auto* pc = new PointCloud3D(pcFileName);
 
-	//		// Si no esta el fichero guardado la generamos de 0 y lo guardamos
-	//		if (pc->isEmpty())
-	//		{
-	//			pc = new PointCloud3D(numPuntos, vaca.getAABB());
-	//			pc->save(pcFileName);
-	//		}
+			// Si no esta el fichero guardado la generamos de 0 y lo guardamos
+			if (pc->isEmpty())
+			{
+				pc = new PointCloud3D(numPuntos, vaca.getAABB());
+				pc->save(pcFileName);
+			}
 
-	//		test3D.drawPointsInsideModelDiff(*pc, vaca);
-	//		
-	//		
-	//		refreshWindow(window);
-	//	}
-	//	break;
+			test3D.drawPointsInsideModelDiff(*pc, vaca);
+			
+			
+			refreshWindow(window);
+		}
+		break;
+	*/
 
 	case GLFW_KEY_1:
 		if (accion == GLFW_PRESS)
