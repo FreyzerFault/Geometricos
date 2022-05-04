@@ -86,11 +86,11 @@ void GEO::DrawTests::drawLines2D()
 	}
 }
 
-void GEO::DrawTests::drawPointCloud2D(const PointCloud2D& pc)
+void GEO::DrawTests::drawPointCloud2D(const PointCloud2D& pc, TypeColor color)
 {
 	try
 	{
-		drawIt<PointCloud2D, DrawCloud>(pc, red);
+		drawIt<PointCloud2D, DrawCloud>(pc, color);
 
 		pc.save("PointCloud2D");
 	}
@@ -712,4 +712,12 @@ void GEO::DrawTests::kMeansAnimation(const PointCloud3D& pc, int k, double error
 		// Reset kmeans
 		kmeansData.iteration = 0;
 	}
+}
+
+void GEO::DrawTests::drawTDelaunay(const TDelaunay& delaunay, TypeColor triColor, TypeColor lineColor)
+{
+	const DrawTDelaunay draw(delaunay);
+	const std::pair<Draw*, Draw*> draws = draw.drawIt(triColor, lineColor);
+	drawPointers.push_back(draws.first);
+	drawPointers.push_back(draws.second);
 }

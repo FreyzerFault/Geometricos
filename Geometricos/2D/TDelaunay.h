@@ -9,6 +9,7 @@
 #include <CGAL/Triangulation_face_base_with_info_2.h>
 
 #include "PointCloud2D.h"
+#include "Triangle.h"
 
 namespace CGAL
 {
@@ -16,33 +17,29 @@ namespace CGAL
 	typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 	typedef CGAL::Projection_traits_xy_3<K> Gt;
 	typedef CGAL::Delaunay_triangulation_2<Gt> Delaunay;
-
-	// Triangulation Faces
-	typedef CGAL::Triangulation_vertex_base_2<K> Vb;
-	typedef CGAL::Triangulation_face_base_with_info_2<CGAL::IO::Color, K> Fb;
-	typedef CGAL::Triangulation_data_structure_2<Vb, Fb> Tds;
-	typedef CGAL::Triangulation_2<K, Tds> Triangulation;
-
-	typedef K::Point_3 Point;
-
-	typedef Triangulation::Face_handle Face_handle;
-	typedef Triangulation::Point  TriPoint;
+	typedef Delaunay::Edge_iterator Edge_iterator;
+	typedef Delaunay::Point Point;
+	typedef Delaunay::Face_handle Face_handle;
+	typedef Delaunay::Vertex_handle Vertex_handle;
 }
 
 namespace GEO
 {
 	class TDelaunay
 	{
-		// Uso smart pointer para inicializarlo de forma tardia
-		std::shared_ptr<CGAL::Delaunay> delaunay;
+		CGAL::Delaunay triangulation;
+
+		std::vector<Triangle> tris;
 
 	public:
 		TDelaunay() = default;
 		TDelaunay(const std::string& path);
 		TDelaunay(const PointCloud2D& pointCloud);
 
-		TDelaunay(const TDelaunay& orig) : delaunay(orig.delaunay) {}
+		TDelaunay(const TDelaunay& orig) : triangulation(orig.triangulation) {}
 
-		void getFaces();
+		void updateTris();
+
+		const std::vector<Triangle>& getFaces() const;
 	};
 }

@@ -20,7 +20,7 @@ namespace GEO
 		void drawPolygon2D();
 		void drawTriangle2D();
 		void drawLines2D();
-		void drawPointCloud2D(const PointCloud2D& pc = PointCloud2D(50, 5, 5));
+		void drawPointCloud2D(const PointCloud2D& pc = PointCloud2D(50, 5, 5), TypeColor color = red);
 		void drawBezier2D();
 		void drawLineIntersections2D();
 
@@ -80,6 +80,8 @@ namespace GEO
 		void drawVoxelGrid(const VoxelGrid& grid, TypeColor color);
 
 		void kMeansAnimation(const PointCloud3D& pc, int k, double error, GLFWwindow* window, PointCloud3D::TypeKmeans type);
+
+		void drawTDelaunay(const TDelaunay& delaunay, TypeColor triColor, TypeColor lineColor);
 	};
 
 	template <typename T, typename D>

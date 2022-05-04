@@ -481,12 +481,13 @@ void callbackKey(GLFWwindow* window, int tecla, int scancode, int accion,
 	case GLFW_KEY_Q:
 		if (accion == GLFW_PRESS)
 		{
-			const PointCloud2D pc(100, -1, 1);
-			TDelaunay delaunay(pc);
+			const PointCloud2D pc(100, -3, 3);
+			const TDelaunay delaunay(pc);
 
+			//glDisable(GL_BLEND);
 
-
-			test2D.drawPointCloud2D(pc);
+			test2D.drawTDelaunay(delaunay, grey, red);
+			test2D.drawPointCloud2D(pc, white);
 
 			refreshWindow(window);
 		}

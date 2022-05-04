@@ -15,8 +15,8 @@ namespace GEO
 		
 		Triangle(const Triangle& t) = default;
 		
-		Vec2D getA() { return a; }
-		Vec2D getB() { return b; }
-		Vec2D getC() { return c; }
+		Vec2D getA() const { return a; }
+		Vec2D getB() const { return b; }
+		Vec2D getC() const { return c; }
 	};
 }
