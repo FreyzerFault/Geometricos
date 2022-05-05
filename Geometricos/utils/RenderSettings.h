@@ -89,6 +89,10 @@ namespace GEO
         Light& setIa(glm::vec3 Ia);
         glm::vec3 getIa() const;
         Light& operator= (const Light& orig);
+        float getGamma() const { return _gamma; }
+        float getS() const { return _s; }
+        Light& setGamma(float gamma);
+        Light& setS(float s);
     };
 
 
@@ -111,10 +115,10 @@ namespace GEO
         Material& setDiffuse(glm::vec4 d);
         Material& setSpecular(glm::vec4 e);
         Material& setExpBright(GLfloat s);
-        glm::vec4 getAmbient();
-        glm::vec4 getDiffuse();
-        glm::vec4 getSpecular();
-        GLfloat getExpBright();
+        glm::vec4 getAmbient() const { return _ambient; }
+        glm::vec4 getDiffuse() const { return _diffuse; }
+        glm::vec4 getSpecular() const { return _specular; }
+        GLfloat getExpBright() const { return _bright; }
         Material& operator= (const Material& orig);
     };
 

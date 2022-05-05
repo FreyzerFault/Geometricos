@@ -13,21 +13,22 @@
 
 namespace CGAL
 {
-	// Kernel, traits for Delaunay
-	typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
-	typedef CGAL::Projection_traits_xy_3<K> Gt;
-	typedef CGAL::Delaunay_triangulation_2<Gt> Delaunay;
-	typedef Delaunay::Edge_iterator Edge_iterator;
-	typedef Delaunay::Point Point;
-	typedef Delaunay::Face_handle Face_handle;
-	typedef Delaunay::Vertex_handle Vertex_handle;
 }
 
 namespace GEO
 {
 	class TDelaunay
 	{
-		CGAL::Delaunay triangulation;
+		// Kernel, traits for Delaunay
+		typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
+		typedef CGAL::Projection_traits_xy_3<K> Gt;
+		typedef CGAL::Delaunay_triangulation_2<Gt> Delaunay;
+		typedef Delaunay::Edge_iterator Edge_iterator;
+		typedef Delaunay::Point Point;
+		typedef Delaunay::Face_handle Face_handle;
+		typedef Delaunay::Vertex_handle Vertex_handle;
+
+		Delaunay triangulation;
 
 		std::vector<Triangle> tris;
 
@@ -40,6 +41,6 @@ namespace GEO
 
 		void updateTris();
 
-		const std::vector<Triangle>& getFaces() const;
+		const std::vector<Triangle>& getFaces() const { return tris; }
 	};
 }

@@ -721,3 +721,11 @@ void GEO::DrawTests::drawTDelaunay(const TDelaunay& delaunay, TypeColor triColor
 	drawPointers.push_back(draws.first);
 	drawPointers.push_back(draws.second);
 }
+
+void GEO::DrawTests::drawConvexHull(const ConvexHull3D& convexHull, TypeColor triColor, TypeColor lineColor)
+{
+	const DrawConvexHull3D draw(convexHull);
+	const std::pair<Draw*, Draw*> draws = draw.drawIt(triColor, lineColor);
+	drawPointers.push_back(draws.first);
+	drawPointers.push_back(draws.second);
+}

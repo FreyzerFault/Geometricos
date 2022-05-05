@@ -81,7 +81,8 @@ namespace GEO
 
 		void kMeansAnimation(const PointCloud3D& pc, int k, double error, GLFWwindow* window, PointCloud3D::TypeKmeans type);
 
-		void drawTDelaunay(const TDelaunay& delaunay, TypeColor triColor, TypeColor lineColor);
+		void drawTDelaunay(const TDelaunay& delaunay, TypeColor triColor = black, TypeColor lineColor = red);
+		void drawConvexHull(const ConvexHull3D& convexHull, TypeColor triColor = black, TypeColor lineColor = red);
 	};
 
 	template <typename T, typename D>

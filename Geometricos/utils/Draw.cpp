@@ -15,6 +15,11 @@
 #include "Draw.h"
 #include "RenderSettings.h"
 
+static std::runtime_error errMsg(std::runtime_error& e, const std::string& func)
+{
+	return std::runtime_error(func + " -> " + e.what());
+}
+
 /**
  * Constructor de la clase. Carga la geometría y el VAO para OpenGL.
  * Este constructor crea geometrías simples, de las definidas en la clase
@@ -24,10 +29,9 @@
  * @throw std::invalid_argument Si el tipo no es correcto
  */
 
-GEO::Draw::Draw (){
-	
+GEO::Draw::Draw()
+{
 }
-
 
 
 /**
@@ -40,25 +44,25 @@ GEO::Draw::Draw (){
  * @throw std::invalid_argument Si el tipo no es correcto
  * @throw std::runtime_error Si hay algún problema en la carga del archivo
  */
-GEO::Draw::Draw ( const TypeModel& type, std::string pathFile )
+GEO::Draw::Draw(const TypeModel& type, std::string pathFile)
 {
-   switch ( type )
-   {
-	  case TypeModel::OBJ:
-		 try
-		 {
-			loadFile ( pathFile );
-		 }
-		 catch ( std::runtime_error& e )
-		 {
-			std::string mensaje = "Model -> ";
-			throw std::runtime_error ( mensaje + e.what () );
-		 }
-		 break;
-	  default:
-		 throw std::invalid_argument ( "Model: tipo incorrecto" );
-		 break;
-   }
+	switch (type)
+	{
+	case TypeModel::OBJ:
+		try
+		{
+			loadFile(pathFile);
+		}
+		catch (std::runtime_error& e)
+		{
+			const std::string mensaje = "Model -> ";
+			throw std::runtime_error(mensaje + e.what());
+		}
+		break;
+	default:
+		throw std::invalid_argument("Model: tipo incorrecto");
+		break;
+	}
 }
 
 
@@ -69,20 +73,20 @@ GEO::Draw::Draw ( const TypeModel& type, std::string pathFile )
  *       program asociado, también crea una copia de éste
  * @post Se crea un nuevo VAO para el modelo
  */
-GEO::Draw::Draw ( const Draw& orig ): _vertices ( orig._vertices ),
-									  _normals ( orig._normals ),
-									  //_cTextura ( orig._cTextura ),
-									  _indices ( orig._indices ),
-									  _mode ( orig._mode ),
-									  _material ( orig._material ),
-									  _tModeling ( orig._tModeling )
+GEO::Draw::Draw(const Draw& orig): _vertices(orig._vertices),
+								   _normals(orig._normals),
+								   //_cTextura ( orig._cTextura ),
+								   _indices(orig._indices),
+								   _mode(orig._mode),
+								   _material(orig._material),
+								   _tModeling(orig._tModeling)
 {
-   if ( orig._program != nullptr )
-   {
-	  _program = new ShaderProgram ( *(orig._program) );
-   }
+	if (orig._program != nullptr)
+	{
+		_program = new ShaderProgram(*(orig._program));
+	}
 
-   buildVAO ();
+	buildVAO();
 }
 
 
@@ -91,24 +95,23 @@ GEO::Draw::Draw ( const Draw& orig ): _vertices ( orig._vertices ),
  * Borra el VAO, y si hay un shader program asociado al modelo, también lo
  * destruye
  */
-GEO::Draw::~Draw ( )
+GEO::Draw::~Draw()
 {
-   glDeleteBuffers ( 1, &_idVBO );
-   glDeleteBuffers ( 1, &_idIBO );
-   glDeleteBuffers ( 1, &_idVBOnorm );
-   if ( _idVBOcTex != 0 )
-   {
-	  glDeleteBuffers ( 1, &_idVBOcTex );
-   }
-   glDeleteVertexArrays ( 1, &_idVAO );
+	glDeleteBuffers(1, &_idVBO);
+	glDeleteBuffers(1, &_idIBO);
+	glDeleteBuffers(1, &_idVBOnorm);
+	if (_idVBOcTex != 0)
+	{
+		glDeleteBuffers(1, &_idVBOcTex);
+	}
+	glDeleteVertexArrays(1, &_idVAO);
 
-   if ( _program != nullptr )
-   {
-	  delete _program;
-	  _program = nullptr;
-   }
+	if (_program != nullptr)
+	{
+		delete _program;
+		_program = nullptr;
+	}
 }
-
 
 
 /**
@@ -116,36 +119,36 @@ GEO::Draw::~Draw ( )
  * Los VBOs se crean en formato no entrelazado. Si hay coordenadas de textura
  * en el modelo, también crea un VBO con ellas
  */
-void GEO::Draw::buildVAO ( )
+void GEO::Draw::buildVAO()
 {
-   // Crea el VAO y lo activa
-   glGenVertexArrays ( 1, &_idVAO );
-   glBindVertexArray ( _idVAO );
+	// Crea el VAO y lo activa
+	glGenVertexArrays(1, &_idVAO);
+	glBindVertexArray(_idVAO);
 
-   // VBO para vértices
-   glGenBuffers ( 1, &_idVBO );
-   glBindBuffer ( GL_ARRAY_BUFFER, _idVBO );
-   glBufferData ( GL_ARRAY_BUFFER, _vertices.size () * sizeof ( glm::vec3 ),
-				  _vertices.data (), GL_STATIC_DRAW );
-   glVertexAttribPointer ( 0, 3, GL_FLOAT, GL_FALSE, sizeof ( glm::vec3 ),
-						   nullptr );
-   glEnableVertexAttribArray ( 0 );
+	// VBO para vértices
+	glGenBuffers(1, &_idVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, _idVBO);
+	glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(glm::vec3),
+				 _vertices.data(), GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3),
+						  nullptr);
+	glEnableVertexAttribArray(0);
 
-   // VBO para normales
-   glGenBuffers ( 1, &_idVBOnorm );
-   glBindBuffer ( GL_ARRAY_BUFFER, _idVBOnorm );
-   glBufferData ( GL_ARRAY_BUFFER, _normals.size () * sizeof ( glm::vec3 ),
-				  _normals.data (), GL_STATIC_DRAW );
-   glVertexAttribPointer ( 1, 3, GL_FLOAT, GL_FALSE, sizeof ( glm::vec3 ),
-						   nullptr );
-   glEnableVertexAttribArray ( 1 );
+	// VBO para normales
+	glGenBuffers(1, &_idVBOnorm);
+	glBindBuffer(GL_ARRAY_BUFFER, _idVBOnorm);
+	glBufferData(GL_ARRAY_BUFFER, _normals.size() * sizeof(glm::vec3),
+				 _normals.data(), GL_STATIC_DRAW);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3),
+						  nullptr);
+	glEnableVertexAttribArray(1);
 
 
-   // IBO
-   glGenBuffers ( 1, &_idIBO );
-   glBindBuffer ( GL_ELEMENT_ARRAY_BUFFER, _idIBO );
-   glBufferData ( GL_ELEMENT_ARRAY_BUFFER, _indices.size () * sizeof(GLuint),
-				  _indices.data (), GL_STATIC_DRAW );
+	// IBO
+	glGenBuffers(1, &_idIBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _idIBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indices.size() * sizeof(GLuint),
+				 _indices.data(), GL_STATIC_DRAW);
 }
 
 
@@ -153,7 +156,7 @@ void GEO::Draw::buildVAO ( )
 /**
  * Carga un nuevo shader program para el modelo, leyendo los shaders desde
  * archivos
- * @param nombre Nombre base para los archivos. A este nombre se le añadirán
+ * @param name Nombre base para los archivos. A este nombre se le añadirán
  *               sufijos (por ejemplo "-vs.glsl") para vertex shader y fragment
  *               shader
  * @return Una referencia al propio modelo, para permitir el encadenamiento de
@@ -161,157 +164,126 @@ void GEO::Draw::buildVAO ( )
  * @throw std::runtime_error Si hay algún error cargando los shaders
  * @post Si el modelo tenía un shader asignado previamente, lo destruye
  */
-GEO::Draw& GEO::Draw::setShaderProgram ( const std::string& nombre )
+GEO::Draw& GEO::Draw::setShaderProgram(const std::string& name)
 {
-   if ( _program != nullptr )
-   {
-	  delete _program;
-   }
+	delete _program;
 
-   try
-   {
-	  _program = new ShaderProgram ( nombre );
-   }
-   catch ( std::runtime_error& e )
-   {
-	  std::string message = "Draw::setShaderProgram -> ";
-	  throw std::runtime_error ( message + e.what () );
-   }
+	try
+	{
+		_program = new ShaderProgram(name);
+	}
+	catch (std::runtime_error& e)
+	{
+		throw errMsg(e, "Draw::setShaderProgram");
+	}
 
-   return *this;
+	return *this;
+}
+
+void GEO::Draw::render(glm::mat4 matrixVP) const
+{
+	if (!_program)
+	{
+		throw std::runtime_error("Draw::render: el modelo no tiene un"
+			" shader program asignado");
+	}
+
+	try
+	{
+		_program->activate();
+		_program->setUniform("matrizMVP", matrixVP * _tModeling);
+		glBindVertexArray(_idVAO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _idIBO);
+
+		_program->setUniform("micolor", _mode == TypeDraw::TRANSPARENCY ? glm::vec4(colorAct.getVec3(), 0.3f) : colorAct.getVec4());
+		_program->selectRoutine(GL_FRAGMENT_SHADER, "colorElegido",
+								"colorBasico");
+		_program->selectRoutine(GL_FRAGMENT_SHADER, "colorCalculado",
+								"unlit");
+		_program->applyRoutines(GL_FRAGMENT_SHADER);
+
+		glEnable(GL_BLEND);
+
+		switch (_mode)
+		{
+		case TypeDraw::WIREFRAME:
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, nullptr);
+			break;
+		case TypeDraw::LINE:
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glDrawElements(GL_LINE_STRIP, _indices.size(), GL_UNSIGNED_INT, nullptr);
+			break;
+		case TypeDraw::POLYGON:
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glDrawElements(GL_LINE_LOOP, _indices.size(), GL_UNSIGNED_INT, nullptr);
+			break;
+		case TypeDraw::POINT:
+			glDisable(GL_BLEND);
+
+			glEnable(GL_PROGRAM_POINT_SIZE_EXT);
+			glPointSize(2);
+			glDrawElements(GL_POINTS, _indices.size(), GL_UNSIGNED_INT, nullptr);
+			break;
+		case TypeDraw::TRANSPARENCY:
+		case TypeDraw::PLAIN:
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, nullptr);
+			break;
+		default:
+			break;
+		}
+	}
+	catch (std::runtime_error& e)
+	{
+		throw errMsg(e, "Draw::render(matrixMVP)");
+	}
 }
 
 
 /**
  * Método para dibujar el modelo
- * @param matrizV Matriz de visión que hay que aplicar al modelo
- * @param matrizVP Composición de las matrices de proyección y visión que hay
+ * @param matrixV Matriz de visión que hay que aplicar al modelo
+ * @param matrixVP Composición de las matrices de proyección y visión que hay
  *        que aplicar al modelo
  * @param l Luz con la que se ilumina el modelo
  * @throw std::runtime_error Si hay algún error
  */
 
 
-void GEO::Draw::render ( glm::mat4 matrizV, glm::mat4 matrizVP, Light& l )
+void GEO::Draw::renderLit(glm::mat4 matrixV, glm::mat4 matrixVP, const Light& l) const
 {
-   if ( _program == nullptr )
-   {
-	  throw std::runtime_error ( "Draw::render: el modelo no tiene un"
-								 " shader program asignado" );
-   }
+	if (_program == nullptr)
+	{
+		throw std::runtime_error("Draw::render: el modelo no tiene un"
+			" shader program asignado");
+	}
 
-   try
-   {
-	  glm::mat4 mModVisP = matrizVP * _tModeling;
-	  glm::mat4 mModVis = matrizV * _tModeling;
-	  glm::mat4 mModVisIT = glm::transpose ( glm::inverse ( mModVis ) );
-	  glm::mat4 mVisIT = glm::transpose ( glm::inverse ( matrizV ) );
-	  _program->activate ();
-	  _program->setUniform ( "matrizMVP", mModVisP )
-				.setUniform ( "matrizMV", mModVis )
-				.setUniform ( "matrizMVit", mModVisIT );
-	  glBindVertexArray ( _idVAO );
-	  glBindBuffer ( GL_ELEMENT_ARRAY_BUFFER, _idIBO );
+	try
+	{
+		const glm::mat4 mModVisP = matrixVP * _tModeling;
+		const glm::mat4 mModVis = matrixV * _tModeling;
+		const glm::mat4 mModVisIT = transpose(inverse(mModVis));
+		const glm::mat4 mVisIT = transpose(inverse(matrixV));
+		_program->activate();
+		_program->setUniform("matrizMVP", mModVisP)
+				.setUniform("matrizMV", mModVis)
+				.setUniform("matrizMVit", mModVisIT);
+		glBindVertexArray(_idVAO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _idIBO);
+		
 
-	  glm::vec4 color; 
-	  switch ( _mode )
-	  {
-		 case TypeDraw::WIREFRAME:
-			 color  =  colorAct.getVec4();
-			_program->setUniform ( "micolor", color );
-			_program->selectRoutine ( GL_FRAGMENT_SHADER, "colorElegido",
-										"colorMaterial" );
-			_program->selectRoutine ( GL_FRAGMENT_SHADER, "colorCalculado",
-										"colorMio" );
-			_program->applyRoutines ( GL_FRAGMENT_SHADER );
-			
-			glPolygonMode ( GL_FRONT_AND_BACK, GL_LINE );
-			glDrawElements ( GL_TRIANGLES, _indices.size (), GL_UNSIGNED_INT, nullptr );
-			break;
-		 
-		 case TypeDraw::LINE:
-			 color  =  colorAct.getVec4();
-			_program->setUniform ( "micolor", color );
-			_program->selectRoutine ( GL_FRAGMENT_SHADER, "colorElegido",
-										"colorMaterial" );
-			_program->selectRoutine ( GL_FRAGMENT_SHADER, "colorCalculado",
-										"colorMio" );
-			_program->applyRoutines ( GL_FRAGMENT_SHADER );
-			
-			glPolygonMode ( GL_FRONT_AND_BACK, GL_LINE );
-			glDrawElements ( GL_LINE_STRIP, _indices.size (), GL_UNSIGNED_INT, nullptr );
-			break;
-		  
-		case TypeDraw::POLYGON:
-			 color  =  colorAct.getVec4();
-			_program->setUniform ( "micolor", color );
-			_program->selectRoutine ( GL_FRAGMENT_SHADER, "colorElegido",
-										"colorMaterial" );
-			_program->selectRoutine ( GL_FRAGMENT_SHADER, "colorCalculado",
-										"colorMio" );
-			_program->applyRoutines ( GL_FRAGMENT_SHADER );
-			
-			glPolygonMode ( GL_FRONT_AND_BACK, GL_LINE );
-			glDrawElements ( GL_LINE_LOOP, _indices.size (), GL_UNSIGNED_INT, nullptr );
-			break;    
-			
-			
-		 case TypeDraw::POINT:
-			glDisable ( GL_BLEND );
-
-			 color  =  colorAct.getVec4();
-			_program->setUniform ( "micolor", color );
-			_program->selectRoutine ( GL_FRAGMENT_SHADER, "colorElegido",
-										"colorMaterial" );
-			_program->selectRoutine ( GL_FRAGMENT_SHADER, "colorCalculado",
-										"colorMio" );
-			_program->applyRoutines ( GL_FRAGMENT_SHADER );
-			
-			
-			glEnable(GL_PROGRAM_POINT_SIZE_EXT);
-			glPointSize(2);
-			glDrawElements ( GL_POINTS, _indices.size (), GL_UNSIGNED_INT, nullptr );
-			break;       
-			
-
-		 case TypeDraw::PLAIN:
-			  color = glm::vec4(colorAct.getVec4());
-			  _program->setUniform("micolor", color);
-			  _program->selectRoutine(GL_FRAGMENT_SHADER, "colorElegido",
-				  "colorMaterial");
-			  _program->selectRoutine(GL_FRAGMENT_SHADER, "colorCalculado",
-				  "colorMio");
-				setShader ( l, matrizV, mVisIT );
-			glPolygonMode ( GL_FRONT_AND_BACK, GL_FILL );
-			glDrawElements ( GL_TRIANGLES, _indices.size (), GL_UNSIGNED_INT, nullptr );
-			break;
-
-		  case TypeDraw::TRANSPARENCY:
-			  color = glm::vec4(colorAct.getVec3(), 0.2f);
-			  _program->setUniform("micolor", color);
-			  _program->selectRoutine(GL_FRAGMENT_SHADER, "colorElegido",
-				  "colorMaterial");
-			  _program->selectRoutine(GL_FRAGMENT_SHADER, "colorCalculado",
-				  "colorMio");
-			  _program->applyRoutines(GL_FRAGMENT_SHADER);
-
-				//setShader ( l, matrizV, mVisIT );
-			  
-			  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-			  glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, nullptr);
-			  break;
-	  }
-
-	  
-   }
-   catch ( std::runtime_error& e )
-   {
-	   const std::string mensaje = "Draw::render -> ";
-	  throw std::runtime_error ( mensaje + e.what () );
-   }
+		// Iluminacion
+		setShader(l, matrixV, mVisIT);
+		glEnable(GL_BLEND);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, nullptr);
+	}
+	catch (std::runtime_error& e)
+	{
+		throw errMsg(e, "Draw::render(matrixV, matrixVP, l)");
+	}
 }
-
-
 
 
 /**
@@ -323,230 +295,89 @@ void GEO::Draw::render ( glm::mat4 matrizV, glm::mat4 matrizVP, Light& l )
  *        rendering
  * @throw std::runtime_error
  */
-void GEO::Draw::setShader ( Light& l, glm::mat4 matrizV, glm::mat4 mvIT )
+void GEO::Draw::setShader(const Light& l, glm::mat4 matrizV, glm::mat4 mvIT) const
 {
-   TypeLight aux = l.getType ();
-   try
-   {
-	  switch ( aux )
-	  {
-		 case TypeLight::AMBIENT:
-			_program->selectRoutine ( GL_FRAGMENT_SHADER, "colorCalculado",
-										"luzAmbiente" );
-			_program->applyRoutines ( GL_FRAGMENT_SHADER );
-			_program->setUniform ( "materialId", _material.getAmbient () );
-			_program->setUniform ( "luzIa", l.getIa () );
+	const TypeLight aux = l.getType();
+	try
+	{
+		switch (aux)
+		{
+		case TypeLight::AMBIENT:
+			_program->selectRoutine(GL_FRAGMENT_SHADER, "colorElegido",
+								"colorAmbiente");
+			_program->selectRoutine(GL_FRAGMENT_SHADER, "colorCalculado",
+									"luzAmbiente");
+			_program->applyRoutines(GL_FRAGMENT_SHADER);
+			_program->setUniform("materialId", _material.getAmbient());
+			_program->setUniform("luzIa", l.getIa());
 			break;
-		 case TypeLight::PUNCTUAL:
-		 {
-			_program->selectRoutine ( GL_FRAGMENT_SHADER, "colorCalculado",
-										"luzPuntual" );
-			_program->applyRoutines ( GL_FRAGMENT_SHADER );
-			glm::vec3 pos = matrizV * glm::vec4 ( l.getPosition (), 1 );
-			_program->setUniform ( "luzPos", pos )
-					  .setUniform ( "luzId", l.getId () )
-					  .setUniform ( "luzIs", l.getIs () )
-					  .setUniform ( "materialId", _material.getDiffuse () )
-					  .setUniform ( "materialIs", _material.getSpecular () )
-					  .setUniform ( "materialExp", _material.getExpBright () );
-			break;
-		 }
-		 case TypeLight::DIRECTIONAL:
-		 {
-			_program->selectRoutine ( GL_FRAGMENT_SHADER, "colorCalculado",
-										"luzDireccional" );
-			_program->applyRoutines ( GL_FRAGMENT_SHADER );
-			glm::vec3 dir = mvIT * glm::vec4 ( l.getDirection (), 0 );
-			dir = glm::normalize ( dir );
-			_program->setUniform ( "luzDir", dir )
-					  .setUniform ( "luzId", l.getId () )
-					  .setUniform ( "luzIs", l.getIs () )
-					  .setUniform ( "materialId", _material.getDiffuse () )
-					  .setUniform ( "materialIs", _material.getSpecular () )
-					  .setUniform ( "materialExp", _material.getExpBright () );
-			break;
-		 }
-		 case TypeLight::SPOT:
-		 {
-			_program->selectRoutine ( GL_FRAGMENT_SHADER, "colorCalculado",
-										"luzFoco" );
-			_program->applyRoutines ( GL_FRAGMENT_SHADER );
-			glm::vec3 dir = mvIT * glm::vec4 ( l.getDirection (), 0 );
-			dir = glm::normalize ( dir );
-			glm::vec3 pos = matrizV * glm::vec4 ( l.getPosition (), 1 );
-			_program->setUniform ( "luzPos", pos )
-					  .setUniform ( "luzDir", dir )
-					  .setUniform ( "luzId", l.getId () )
-					  .setUniform ( "luzIs", l.getIs () )
-					  .setUniform ( "materialId", _material.getDiffuse () )
-					  .setUniform ( "materialIs", _material.getSpecular () )
-					  .setUniform ( "materialExp", _material.getExpBright () );
-			break;
-		 }
-	  }
-   }
-   catch ( std::runtime_error& e )
-   {
-	  std::string mensaje = "Draw::ajustarShader -> ";
-	  throw std::runtime_error ( mensaje + e.what () );
-   }
+		case TypeLight::PUNCTUAL:
+			{
+				_program->selectRoutine(GL_FRAGMENT_SHADER, "colorElegido",
+									"colorMaterial");
+				_program->selectRoutine(GL_FRAGMENT_SHADER, "colorCalculado",
+										"luzPuntual");
+				_program->applyRoutines(GL_FRAGMENT_SHADER);
+				const glm::vec3 pos = matrizV * glm::vec4(l.getPosition(), 1);
+				_program->setUniform("luzPos", pos)
+						.setUniform("luzId", l.getId())
+						.setUniform("luzIs", l.getIs())
+						.setUniform("materialId", _material.getDiffuse())
+						.setUniform("materialIs", _material.getSpecular())
+						.setUniform("materialExp", _material.getExpBright());
+				break;
+			}
+		case TypeLight::DIRECTIONAL:
+			{
+				_program->selectRoutine(GL_FRAGMENT_SHADER, "colorElegido",
+									"colorMaterial");
+				_program->selectRoutine(GL_FRAGMENT_SHADER, "colorCalculado",
+										"luzDireccional");
+				_program->applyRoutines(GL_FRAGMENT_SHADER);
+				glm::vec3 dir = mvIT * glm::vec4(l.getDirection(), 0);
+				dir = normalize(dir);
+				_program->setUniform("luzDir", dir)
+						.setUniform("luzId", l.getId())
+						.setUniform("luzIs", l.getIs())
+						.setUniform("materialId", _material.getDiffuse())
+						.setUniform("materialIs", _material.getSpecular())
+						.setUniform("materialExp", _material.getExpBright());
+				break;
+			}
+		case TypeLight::SPOT:
+			{
+				_program->selectRoutine(GL_FRAGMENT_SHADER, "colorElegido",
+									"colorMaterial");
+				_program->selectRoutine(GL_FRAGMENT_SHADER, "colorCalculado",
+										"luzFoco");
+				_program->applyRoutines(GL_FRAGMENT_SHADER);
+				glm::vec3 dir = mvIT * glm::vec4(l.getDirection(), 0);
+				dir = normalize(dir);
+				const glm::vec3 pos = matrizV * glm::vec4(l.getPosition(), 1);
+				_program->setUniform("luzPos", pos)
+						.setUniform("luzDir", dir)
+						.setUniform("luzId", l.getId())
+						.setUniform("luzIs", l.getIs())
+						.setUniform("materialId", _material.getDiffuse())
+						.setUniform("materialIs", _material.getSpecular())
+						.setUniform("materialExp", _material.getExpBright())
+						.setUniform("luzGamma", l.getGamma())
+						.setUniform("luzS", l.getS());
+				break;
+			}
+		}
+	}
+	catch (std::runtime_error& e)
+	{
+		throw errMsg(e, "Draw::ajustarShader");
+	}
 }
 
-
-/**
- * Método para fijar cómo se va a dibujar el modelo
- * @param m Modo de dibujado (alambre, sólido, texturizado...)
- * @return Una referencia al propio modelo, para permitir el encadenamiento de
- *         llamadas
- * @post El modo de visualización TEXTURA sólo se activa si el modelo tiene
- *       realmente asignada una textura
- */
-GEO::Draw& GEO::Draw::setDrawMode ( TypeDraw m )
-{
-   switch ( m )
-   {
-	  case TypeDraw::POINT:  
-	  case TypeDraw::WIREFRAME:
-	  case TypeDraw::PLAIN:
-	  case TypeDraw::LINE:
-	  case TypeDraw::POLYGON:
-		  
-		 _mode = m;
-   }
-
-   return *this;
-}
-
-
-/**
- * Método para asignar un material al modelo
- * @param m Propiedades del material a aplicar
- * @pre Se asume que m es un material válido
- * @return Una referencia al propio objeto, para permitir el encadenamiento de
- *         llamadas
- * @post Se copia la información de m en el material del modelo. No se mantiene
- *       ninguna vinculación con m
- */
-GEO::Draw& GEO::Draw::setMaterial ( const Material& m )
-{
-   _material = m;
-   return *this;
-}
-
-
-/**
- * Método para asignar el color ambiente del modelo
- * @param a Color a asignar en formato RGBA. Los valores de las componentes
- *        están en el rango [0,1]
- * @pre Se asume que las componentes del color tienen valores correctos
- * @return Una referencia al propio objeto
- */
-GEO::Draw& GEO::Draw::setAmbient ( glm::vec4 a )
-{
-   _material.setAmbient ( a );
-   return *this;
-}
-
-
-/**
- * Método para asignar el color ambiente del modelo
- * @param a Color a asignar en formato RGB. Los valores de las componentes de
- *          color están en el rango [0,1]. Se asume que el valor de alfa es 1
- * @pre Se asume que las componentes de color tienen valores correctos
- * @return Una referencia al propio objeto
- */
-GEO::Draw& GEO::Draw::setAmbient ( glm::vec3 a )
-{
-   _material.setAmbient ( glm::vec4 ( a, 1 ) );
-   return *this;
-}
-
-
-/**
- * Método para asignar el color difuso del modelo
- * @param d Color a asignar en formato RGBA. Los valores de las componentes de
- *          color están en el rango [0,1]
- * @pre Se asume que las componentes de color tienen valores correctos
- * @return Una referencia al propio objeto
- */
-GEO::Draw& GEO::Draw::setDiffuse ( glm::vec4 d )
-{
-   _material.setDiffuse ( d );
-   return *this;
-}
-
-
-/**
- * Método para asignar el color difuso del modelo
- * @param d Color a asignar en formato RGB. Los valores de las componentes de
- *          color están en el rango [0,1]. Se asume que el valor de alfa es 1
- * @pre Se asume que las componentes de color tienen valores correctos
- * @return Una referencia al propio objeto
- */
-GEO::Draw& GEO::Draw::setDiffuse ( glm::vec3 d )
-{
-   _material.setDiffuse ( glm::vec4 ( d, 1 ) );
-   return *this;
-}
-
-
-/**
- * Método para asignar el color especular del modelo
- * @param e Color a asignar en formato RGBA. Los valores de las componentes de
- *          color están en el rango [0,1]
- * @pre Se asume que las componentes de color tienen valores correctos
- * @return Una referencia al propio objeto
- */
-GEO::Draw& GEO::Draw::setSpecular ( glm::vec4 e )
-{
-   _material.setSpecular ( e );
-   return *this;
-}
-
-
-/**
- * Método para asignar el color especular del modelo
- * @param e Color a asignar en formato RGB. Los valores de las componentes de
- *          color están en el rango [0,1]. Se asume que el valor de alfa es 1
- * @pre Se asume que las componentes de color tienen valores correctos
- * @return Una referencia al propio objeto
- */
-GEO::Draw& GEO::Draw::setEspecular ( glm::vec3 e )
-{
-   _material.setSpecular ( glm::vec4 ( e, 1 ) );
-   return *this;
-}
-
-
-/**
- * Método para asignar el exponente para el cálculo de los brillos
- * @param s El nuevo valor de exponente a aplicar
- * @return Una referencia al propio objeto
- */
-GEO::Draw& GEO::Draw::setExpBright ( GLfloat s )
-{
-   _material.setExpBright ( s );
-   return *this;
-}
-
-
-/**
- * Método para aplicar una transformación al modelo
- * @param t Matriz de transformación a aplicar
- * @pre Se asume que t es una matriz de transformación válida
- * @post t se acumula a las transformaciones que previamente pudiera tener el
- *       modelo
- * @return Una referencia al propio objeto
- */
-GEO::Draw& GEO::Draw::apply ( glm::mat4 t )
-{
-   _tModeling = t * _tModeling;
-   return *this;
-}
 
 
 /**
  * Carga la geometría de un archivo
+ * @param pathfile
  * @param rutaArchivo Ubicación donde se encuentra el archivo con la geometría.
  *        La información ha de estar en un formato soportado por Assimp para
  *        que pueda cargarse.
@@ -556,31 +387,31 @@ GEO::Draw& GEO::Draw::apply ( glm::mat4 t )
  *       carga
  * @post Una vez cargada la geometría, se genera el VAO para dibujar el modelo
  */
-GEO::Draw& GEO::Draw::loadFile ( std::string pathfile )
+GEO::Draw& GEO::Draw::loadFile(const std::string pathfile)
 {
-   cleaning ();
+	cleaning();
 
-   Assimp::Importer importer;
-   const aiScene* scene = importer.ReadFile ( pathfile,
-												   aiProcess_JoinIdenticalVertices
-												 | aiProcess_Triangulate
-												 | aiProcess_GenSmoothNormals);
-//                                                 | aiProcess_GenNormals);
+	Assimp::Importer importer;
+	const aiScene* scene = importer.ReadFile(pathfile,
+											 aiProcess_JoinIdenticalVertices
+											 | aiProcess_Triangulate
+											 | aiProcess_GenSmoothNormals);
+	//                                                 | aiProcess_GenNormals);
 
-   // Carga to lo que haya en el archivo como un único modelo
-   if ( !scene || !scene->mRootNode
-		|| ( scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE ) )
-   {
-	  std::string mensaje = "Draw::cargarArchivo: error cargando el archivo "
-							+ pathfile + " -> " + importer.GetErrorString ();
-	  throw std::runtime_error ( mensaje );
-   }
+	// Carga to lo que haya en el archivo como un único modelo
+	if (!scene || !scene->mRootNode
+		|| (scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE))
+	{
+		const std::string mensaje = "Draw::cargarArchivo: error cargando el archivo "
+			+ pathfile + " -> " + importer.GetErrorString();
+		throw std::runtime_error(mensaje);
+	}
 
-   processNodeAssimp ( scene->mRootNode, scene );
+	processNodeAssimp(scene->mRootNode, scene);
 
-   buildVAO ();
+	buildVAO();
 
-   return *this;
+	return *this;
 }
 
 
@@ -592,18 +423,18 @@ GEO::Draw& GEO::Draw::loadFile ( std::string pathfile )
  * @note Al procesar el nodo de manera recursiva, no se garantiza que se llegue
  *       a un desbordamiento de pila
  */
-void GEO::Draw::processNodeAssimp ( aiNode* node, const aiScene* scene )
+void GEO::Draw::processNodeAssimp(aiNode* node, const aiScene* scene)
 {
-   for ( int i = 0; i < node->mNumMeshes; i++ )
-   {
-	  aiMesh* malla = scene->mMeshes[node->mMeshes[i]];
-	  processMeshAssimp ( malla, scene );
-   }
+	for (int i = 0; i < node->mNumMeshes; i++)
+	{
+		aiMesh* malla = scene->mMeshes[node->mMeshes[i]];
+		processMeshAssimp(malla, scene);
+	}
 
-   for ( int i = 0; i < node->mNumChildren; i++ )
-   {
-	  processNodeAssimp ( node->mChildren[i], scene );
-   }
+	for (int i = 0; i < node->mNumChildren; i++)
+	{
+		processNodeAssimp(node->mChildren[i], scene);
+	}
 }
 
 
@@ -614,100 +445,64 @@ void GEO::Draw::processNodeAssimp ( aiNode* node, const aiScene* scene )
  * @param escena Escena de Assimp con todo el contenido cargado del archivo
  * @post Carga vértices, normales, coordenadas de textura (si hubiera) e índices
  */
-void GEO::Draw::processMeshAssimp (  aiMesh* mesh, const aiScene* scene )
+void GEO::Draw::processMeshAssimp(aiMesh* mesh, const aiScene* scene)
 {
-   for ( int i = 0; i < mesh->mNumVertices; i++ )
-   {
-	  glm::vec3 v;
-	  v.x = mesh->mVertices[i].x;
-	  v.y = mesh->mVertices[i].y;
-	  v.z = mesh->mVertices[i].z;
-	  _vertices.push_back ( v );
+	for (int i = 0; i < mesh->mNumVertices; i++)
+	{
+		glm::vec3 v;
+		v.x = mesh->mVertices[i].x;
+		v.y = mesh->mVertices[i].y;
+		v.z = mesh->mVertices[i].z;
+		_vertices.push_back(v);
 
-	  glm::vec3 n;
-	  n.x = mesh->mNormals[i].x;
-	  n.y = mesh->mNormals[i].y;
-	  n.z = mesh->mNormals[i].z;
-	  _normals.push_back ( n );
+		glm::vec3 n;
+		n.x = mesh->mNormals[i].x;
+		n.y = mesh->mNormals[i].y;
+		n.z = mesh->mNormals[i].z;
+		_normals.push_back(n);
 
-//      if ( malla->mTextureCoords[0] )
-//      {
-//         glm::vec2 ct;
-//         ct.x = malla->mTextureCoords[0][i].x;
-//         ct.y = malla->mTextureCoords[0][i].y;
-//         _cTextura.push_back ( ct );
-//      }
-   }
+		//      if ( malla->mTextureCoords[0] )
+		//      {
+		//         glm::vec2 ct;
+		//         ct.x = malla->mTextureCoords[0][i].x;
+		//         ct.y = malla->mTextureCoords[0][i].y;
+		//         _cTextura.push_back ( ct );
+		//      }
+	}
 
-   for ( int i = 0; i < mesh->mNumFaces; i++ )
-   {
-	  aiFace cara = mesh->mFaces[i];
-	  for ( int j = 0; j < cara.mNumIndices; j++ )
-	  {
-		 _indices.push_back ( cara.mIndices[j] );
-	  }
-   }
+	for (int i = 0; i < mesh->mNumFaces; i++)
+	{
+		const aiFace cara = mesh->mFaces[i];
+		for (int j = 0; j < cara.mNumIndices; j++)
+		{
+			_indices.push_back(cara.mIndices[j]);
+		}
+	}
 }
-
-
 
 
 /**
  * Método para eliminar la geometría que hubiera cargada en el modelo, así como
  * los buffers de OpenGL asociados
  */
-void GEO::Draw::cleaning ( )
+void GEO::Draw::cleaning()
 {
-   _vertices.clear ();
-   _normals.clear ();
-//   _cTextura.clear ();
-   _indices.clear ();
+	_vertices.clear();
+	_normals.clear();
+	//   _cTextura.clear ();
+	_indices.clear();
 
-   if ( _idVAO != 0 )
-   {
-	  glDeleteBuffers ( 1, &_idVBO );
-	  glDeleteBuffers ( 1, &_idIBO );
-	  glDeleteBuffers ( 1, &_idVBOnorm );
-	  if ( _idVBOcTex != 0 )
-	  {
-		 glDeleteBuffers ( 1, &_idVBOcTex );
-	  }
-	  glDeleteVertexArrays ( 1, &_idVAO );
-   }
-}
-
-
-/**
- * Carga un nuevo shader program para el modelo, leyendo los shaders desde
- * archivos
- * @param nombre Nombre base para los archivos. A este nombre se le añadirán
- *               sufijos (por ejemplo "-vs.glsl") para vertex shader y fragment
- *               shader
- * @return Una referencia al propio modelo, para permitir el encadenamiento de
- *         llamadas
- * @throw std::runtime_error Si hay algún error cargando los shaders
- * @post Si el modelo tenía un shader asignado previamente, lo destruye
- */
-GEO::Draw& GEO::Draw::setColorActivo ( glm::vec4 col )
-{
-   colorAct = col; 
-
-   return *this;
-}
-
-
-GEO::Draw& GEO::Draw::setColorActivo ( glm::vec3 col )
-{
-   colorAct = glm::vec4(col,1.0); 
-
-   return *this;
-}
-
-GEO::Draw& GEO::Draw::setColorActivo ( TypeColor col )
-{
-   colorAct = col; 
-
-   return *this;
+	if (_idVAO != 0)
+	{
+		glDeleteBuffers(1, &_idVBO);
+		glDeleteBuffers(1, &_idIBO);
+		glDeleteBuffers(1, &_idVBOnorm);
+		if (_idVBOcTex != 0)
+		{
+			glDeleteBuffers(1, &_idVBOcTex);
+		}
+		glDeleteVertexArrays(1, &_idVAO);
+	}
 }
 
 void GEO::Draw::addVertices(std::vector<glm::vec3> vertices)
@@ -724,7 +519,7 @@ void GEO::Draw::addDefaultNormals(int numNormals)
 {
 	for (int i = 0; i < numNormals; ++i)
 	{
-		_normals.emplace_back(0,0,1);
+		_normals.emplace_back(0, 0, 1);
 	}
 }
 
@@ -740,5 +535,3 @@ void GEO::Draw::addSequencialIndices(int numIndices, int initialIndex)
 		_indices.push_back(i);
 	}
 }
-
-

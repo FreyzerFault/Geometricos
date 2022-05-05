@@ -477,17 +477,28 @@ void callbackKey(GLFWwindow* window, int tecla, int scancode, int accion,
 		break;
 		*/
 		// ============================ PRACTICA 6: =================================
-		//							TRIANGULACION de DELAUNAY
+		//							TRIANGULACION de DELAUNAY con CGAL
 	case GLFW_KEY_Q:
 		if (accion == GLFW_PRESS)
 		{
 			const PointCloud2D pc(100, -3, 3);
 			const TDelaunay delaunay(pc);
 
-			//glDisable(GL_BLEND);
-
 			test2D.drawTDelaunay(delaunay, grey, red);
 			test2D.drawPointCloud2D(pc, white);
+
+			refreshWindow(window);
+		}
+		break;
+		//							CONVEX HULL con CGAL
+	case GLFW_KEY_W:
+		if (accion == GLFW_PRESS)
+		{
+			const ConvexHull3D convexHull(vaca);
+
+			test3D.drawConvexHull(convexHull, orange, red);
+			test3D.drawModel(vaca);
+
 
 			refreshWindow(window);
 		}
@@ -559,7 +570,7 @@ void callbackKey(GLFWwindow* window, int tecla, int scancode, int accion,
 	case GLFW_KEY_S:
 		if (accion == GLFW_PRESS)
 		{
-			test3D.drawModel(vaca);
+			test3D.drawModel(vaca, white);
 
 			// 50 puntos random dentro del AABB
 			PointCloud3D pc(50, vaca.getAABB());

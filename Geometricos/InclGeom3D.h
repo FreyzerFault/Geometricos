@@ -14,3 +14,4 @@
 #include "Voxel.h"
 #include "VoxelGrid.h"
 #include "VoxelModel.h"
+#include "ConvexHull3D.h"

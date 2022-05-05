@@ -270,6 +270,18 @@ GEO::Light& GEO::Light::operator = ( const Light& orig )
    return *this;
 }
 
+GEO::Light& GEO::Light::setGamma(float gamma)
+{
+    _gamma = gamma;
+    return *this;
+}
+
+GEO::Light& GEO::Light::setS(float s)
+{
+    _s = s;
+    return *this;
+}
+
 
 GEO::Material::Material ( const Material& orig ): _ambient ( orig._ambient ),
                                                   _diffuse ( orig._diffuse ), _specular ( orig._specular ),
@@ -289,46 +301,6 @@ GEO::Material::~Material ( )
 //      delete ( _textura );
 //      _textura = nullptr;
 //   }
-}
-
-
-/**
- * Método para consultar el color ambiente
- * @return El color ambiente en formato RGBA
- */
-glm::vec4 GEO::Material::getAmbient ( )
-{
-   return _ambient;
-}
-
-
-/**
- * Método para consultar el color difuso
- * @return El color difuso en formato RGBA
- */
-glm::vec4 GEO::Material::getDiffuse ( )
-{
-   return _diffuse;
-}
-
-
-/**
- * Método para consultar el color especular
- * @return El color especular en formato RGBA
- */
-glm::vec4 GEO::Material::getSpecular ( )
-{
-   return _specular;
-}
-
-
-/**
- * Método para consultar el exponente para el cálculo de los brillos
- * @return El exponente para el cálculo de los brillos
- */
-GLfloat GEO::Material::getExpBright ( )
-{
-   return _bright;
 }
 
 
