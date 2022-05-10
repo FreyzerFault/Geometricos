@@ -264,6 +264,8 @@ void resetScene()
 }
 
 static TriangleModel vaca("vaca");
+static TriangleModel cuenco("cuenco");
+static TriangleModel perro("perro");
 
 static double error = 0.001;
 static int k = 20;
@@ -494,15 +496,59 @@ void callbackKey(GLFWwindow* window, int tecla, int scancode, int accion,
 	case GLFW_KEY_W:
 		if (accion == GLFW_PRESS)
 		{
-			const ConvexHull3D convexHull(vaca);
 
-			test3D.drawConvexHull(convexHull, orange, red);
+			const ConvexHull3D convexHullVaca(vaca);
+
+			test3D.drawConvexHull(convexHullVaca, orange, red);
+
 			test3D.drawModel(vaca);
 
 
 			refreshWindow(window);
 		}
 		break;
+		case GLFW_KEY_A:
+		if (accion == GLFW_PRESS)
+		{
+
+			const ConvexHull3D convexHullVaca(vaca);
+
+			test3D.drawConvexHull(convexHullVaca, orange, red);
+
+			test3D.drawModel(vaca);
+
+			refreshWindow(window);
+		}
+		break;
+		case GLFW_KEY_S:
+			if (accion == GLFW_PRESS)
+			{
+				
+				const ConvexHull3D convexHullCuenco(cuenco);
+				const ConvexHull3D convexHullPerro(perro);
+				
+				test3D.drawConvexHull(convexHullCuenco, orange, red);
+				
+				test3D.drawModel(cuenco);
+
+
+				refreshWindow(window);
+			}
+			break;
+		case GLFW_KEY_D:
+			if (accion == GLFW_PRESS)
+			{
+				
+				const ConvexHull3D convexHullPerro(perro);
+				
+				test3D.drawConvexHull(convexHullPerro, orange, red);
+				
+				test3D.drawModel(perro);
+
+
+				refreshWindow(window);
+			}
+			break;
 
 		
 		// ============================ PRACTICA 2: PointCloud3D + TriangleMesh =================================
